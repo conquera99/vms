@@ -1,0 +1,49 @@
+datasource db {
+    provider             = "mysql"
+    url                  = env("DATABASE_URL")
+    shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+    referentialIntegrity = "prisma"
+}
+
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["referentialIntegrity", "interactiveTransactions"]
+}
+
+model User {
+    id       String  @id @default(cuid()) @map("user_id")
+    name     String? @map("user_name")
+    username String? @map("user_username")
+    email    String? @unique @map("user_email")
+    image    String? @map("user_image")
+
+    @@map("users")
+}
+
+model Location {
+    id        String   @id @default(cuid()) @map("loc_id")
+    name      String   @map("loc_name")
+    createdAt DateTime @default(now()) @map("loc_created_at")
+    createdBy String   @map("loc_created_by")
+    updatedAt DateTime @updatedAt @map("loc_updated_at")
+    updatedBy String?  @map("loc_updated_by")
+
+    @@map("locations")
+}
+
+model ItemCategory {
+    id        String   @id @default(cuid()) @map("ic_id")
+    name      String   @map("ic_name")
+    createdAt DateTime @default(now()) @map("ic_created_at")
+    createdBy String   @map("ic_created_by")
+    updatedAt DateTime @updatedAt @map("ic_updated_at")
+    updatedBy String?  @map("ic_updated_by")
+
+    @@map("item_categories")
+}
+
+model Item {
+    id String @id @default(cuid()) @map("item_id")
+
+    @@map("items")
+}
