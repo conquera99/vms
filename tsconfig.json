@@ -1,19 +1,55 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+	"compilerOptions": {
+		"target": "es6",
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"baseUrl": "./src",
+		"paths": {
+			"components/*": [
+				"components/*"
+			],
+			"hooks/*": [
+				"hooks/*"
+			],
+			"utils/*": [
+				"utils/*"
+			],
+			"interfaces/*": [
+				"interfaces/*"
+			],
+			"styles/*": [
+				"styles/*"
+			],
+			"contexts/*": [
+				"contexts/*"
+			]
+		},
+		"incremental": true
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"postcss.config.js"
+	],
+	"exclude": [
+		"node_modules",
+		".next",
+		"out",
+		"**/*.spect.ts"
+	]
 }

@@ -1,3 +1,6 @@
 module.exports = {
-  reactStrictMode: true,
-}
+	reactStrictMode: false,
+	poweredByHeader: false,
+	productionBrowserSourceMaps: true,
+	swcMinify: true,
+};
