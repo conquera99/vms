@@ -6,3 +6,13 @@ html,
 body {
 	font-family: Arial, Helvetica, sans-serif;
 }
+
+.breadcrumb .breadcrumb-item {
+	position: relative;
+}
+.breadcrumb .breadcrumb-item:first-child {
+	margin-left: 0 !important;
+}
+.breadcrumb .breadcrumb-item:not(:last-child):after {
+	content: '/';
+}

@@ -3,6 +3,8 @@ import { signOut, useSession } from 'next-auth/react';
 
 import Navigation from 'components/navigation';
 import Title from 'components/display/title';
+import Button from 'components/general/button';
+import { LeftOutline } from 'antd-mobile-icons';
 
 const Desc: FC<{ label: string; value?: string }> = ({ label, children, value }) => {
 	return (
@@ -27,12 +29,14 @@ const Profile = () => {
 				<Desc label="Email">{session?.user?.email}</Desc>
 			</div>
 
-			<button
-				className="py-2 text-center bg-red-400 w-full text-white rounded-md"
+			<Button
+				icon={<LeftOutline />}
+				buttonType="danger"
+				className="w-full"
 				onClick={onSignOut}
 			>
 				Sign Out
-			</button>
+			</Button>
 		</Navigation>
 	);
 };

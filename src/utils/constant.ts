@@ -8,11 +8,13 @@ export const successResponse = {
 export const forbiddenResponse = {
 	code: 403,
 	message: 'forbidden access',
+	data: [],
 };
 
 export const stillInUseResponse = {
 	code: 501,
 	message: 'data still in use in another record',
+	data: [],
 };
 
 export const datetimeFormat = 'DD MMM YYYY HH:mm';

@@ -14,6 +14,7 @@ model User {
     id       String  @id @default(cuid()) @map("user_id")
     name     String? @map("user_name")
     username String? @map("user_username")
+    password String  @map("user_password")
     email    String? @unique @map("user_email")
     image    String? @map("user_image")
 
@@ -45,11 +46,52 @@ model ItemCategory {
 model Item {
     id        String   @id @default(cuid()) @map("item_id")
     name      String   @map("item_name")
-    desc      String   @map("item_desc")
+    desc      String?  @map("item_desc")
     createdAt DateTime @default(now()) @map("item_created_at")
     createdBy String   @map("item_created_by")
     updatedAt DateTime @updatedAt @map("item_updated_at")
     updatedBy String?  @map("item_updated_by")
 
     @@map("items")
+}
+
+model ItemHistory {
+    id        String   @default(cuid()) @map("ih_id")
+    itemId    String   @map("ih_item_id")
+    date      DateTime @map("ih_date") @db.Date
+    qty       Decimal  @map("ih_qty") @db.Decimal(13, 2)
+    price     Decimal  @map("ih_price") @db.Decimal(20, 3)
+    createdAt DateTime @default(now()) @map("ih_created_at")
+    createdBy String   @map("ih_created_by")
+    updatedAt DateTime @updatedAt @map("ih_updated_at")
+    updatedBy String?  @map("ih_updated_by")
+
+    @@unique([id, itemId])
+    @@map("item_history")
+}
+
+model ItemLocation {
+    locId     String   @map("il_loc_id")
+    itemId    String   @map("il_item_id")
+    qty       Decimal  @map("il_qty") @db.Decimal(13, 2)
+    createdAt DateTime @default(now()) @map("il_created_at")
+    createdBy String   @map("il_created_by")
+    updatedAt DateTime @updatedAt @map("il_updated_at")
+    updatedBy String?  @map("il_updated_by")
+
+    @@unique([locId, itemId])
+    @@map("item_location")
+}
+
+model Member {
+    id          String    @id @default(cuid()) @map("member_id")
+    name        String    @map("member_name")
+    address     String?   @map("member_address")
+    dateOfBirth DateTime? @map("member_date_of_birth") @db.Date
+    email       String?   @map("member_email")
+    phone       String?   @map("member_phone")
+    createdAt   DateTime  @default(now()) @map("member_created_at")
+    createdBy   String    @map("member_created_by")
+    updatedAt   DateTime  @updatedAt @map("member_updated_at")
+    updatedBy   String?   @map("member_updated_by")
 }

@@ -1,9 +1,10 @@
 import { useSession } from 'next-auth/react';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
-
 import type { UrlObject } from 'url';
+
 import BaseNavInterface from 'interfaces/navigation';
 
 import PageHead from 'components/general/page-head';
@@ -38,16 +39,23 @@ const MenuItem: FC<{
 	);
 };
 
-const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children }) => {
+const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children, isAdmin }) => {
+	const router = useRouter();
 	const { status } = useSession();
 
+	useEffect(() => {
+		if (isAdmin === true && router.isReady && status === 'unauthenticated') {
+			router.push('/');
+		}
+	}, [isAdmin, status, router, router.isReady]);
+
 	return (
-		<div>
+		<div className="bg-white">
 			<PageHead title={title} desc={desc} />
 
 			<div className="px-4 pt-16 pb-20 min-h-screen">{children}</div>
 
-			<div className="bottom-2 shadow-md mx-2 rounded-lg right-0 left-0 py-1 md:py-2 fixed md:px-7 bg-white">
+			<div className="bottom-0 bg-white/60 backdrop-filter backdrop-blur-md rounded-lg right-0 left-0 py-1 md:py-2 fixed md:px-7">
 				<div className="flex">
 					<MenuItem
 						active={active === 'home'}
