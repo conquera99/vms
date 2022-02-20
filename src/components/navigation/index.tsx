@@ -20,8 +20,8 @@ const MenuItem: FC<{
 		<div className="flex-1 group">
 			<Link href={href}>
 				<a
-					className={`flex items-end justify-center text-center mx-auto px-2 md:px-4 pt-1 w-full text-gray-400 ${
-						active ? ACTIVE_TEXT_COLOR : ''
+					className={`flex items-end justify-center text-center mx-auto px-2 md:px-4 pt-1 w-full ${
+						active ? ACTIVE_TEXT_COLOR : 'text-gray-400'
 					} group-hover:text-indigo-500`}
 				>
 					<span className="px-1 pt-1 pb-1 flex flex-col items-center">
@@ -47,7 +47,7 @@ const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children }) => 
 
 			<div className="px-4 pt-16 pb-20 min-h-screen">{children}</div>
 
-			<div className="bottom-2 shadow-md mx-2 rounded-lg right-0 left-0 fixed md:px-7 bg-white">
+			<div className="bottom-2 shadow-md mx-2 rounded-lg right-0 left-0 py-1 md:py-2 fixed md:px-7 bg-white">
 				<div className="flex">
 					<MenuItem
 						active={active === 'home'}

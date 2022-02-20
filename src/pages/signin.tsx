@@ -3,11 +3,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getSession, getCsrfToken, signIn } from 'next-auth/react';
 import Form from 'rc-field-form';
+import { useRouter } from 'next/router';
 
 import PageHead from 'components/general/page-head';
 import Input from 'components/entry/input';
 
 const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
+	const router = useRouter();
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
@@ -49,6 +51,7 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 								<Input name="csrfToken" type="hidden" />
 								<Input name="username" label="Username" />
 								<Input name="password" type="password" label="Password" />
+								<span className="text-red-400">{router.query.error}</span>
 								<button
 									type="submit"
 									className="px-6 py-4 rounded-lg bg-indigo-500 text-white mt-2 w-full border border-indigo-500 hover:bg-white hover:text-indigo-500"
