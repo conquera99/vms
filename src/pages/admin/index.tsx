@@ -53,28 +53,28 @@ const AdminHome = () => {
 					icon={<LocationOutline className="text-4xl" />}
 					title="Lokasi"
 					desc="data-data lokasi item"
-					extra={<CountInfo value={10} desc="Lokasi" />}
+					extra={<CountInfo value={5} desc="Lokasi" />}
 				/>
 				<Card
 					href="/item-category"
 					icon={<TagOutline className="text-4xl" />}
 					title="Kategori Item"
 					desc="data-data kategori item"
-					extra={<CountInfo value={10} desc="Kategori" />}
+					extra={<CountInfo value={25} desc="Kategori" />}
 				/>
 				<Card
 					href="/item"
 					icon={<AppOutline className="text-4xl" />}
 					title="Item"
 					desc="data-data item dan detailnya"
-					extra={<CountInfo value={10} desc="Item" />}
+					extra={<CountInfo value={102} desc="Item" />}
 				/>
 				<Card
 					href="/member"
 					icon={<TeamOutline className="text-4xl" />}
 					title="Anggota"
 					desc="data-data umat vihara"
-					extra={<CountInfo value={10} desc="Orang" />}
+					extra={<CountInfo value={200} desc="Orang" />}
 				/>
 			</div>
 		</Navigation>
