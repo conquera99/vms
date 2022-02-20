@@ -41,7 +41,7 @@ export const authOptions = {
 				console.log('req', req);
 
 				if (credentials?.username === 'admin' && credentials?.password === 'admin') {
-					const user = { id: 1, name: 'Admin', email: 'admin@vsg.com' };
+					const user = { id: 'sysadm', name: 'Admin', email: 'admin@vsg.com' };
 
 					// Any object returned will be saved in `user` property of the JWT
 					return user;
@@ -79,16 +79,17 @@ export const authOptions = {
 
 			return token;
 		},
-		async session({ session, user }: sessionInterface) {
+		async session({ session, token, user }: sessionInterface) {
 			const sess = {
 				...session,
 				user: {
 					...session.user,
 					...user,
+					id: token.id as string,
 				},
 			};
 
-			console.log('session', session, user, sess);
+			console.log('session', session, token, user, sess);
 
 			return sess;
 		},

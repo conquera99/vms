@@ -7,13 +7,14 @@ import { useRouter } from 'next/router';
 
 import PageHead from 'components/general/page-head';
 import Input from 'components/entry/input';
+import Button from 'components/general/button';
+import { RightOutline } from 'antd-mobile-icons';
 
 const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 	const router = useRouter();
 	const [form] = Form.useForm();
 
 	const onFinish = (values: any) => {
-		console.log(values);
 		signIn('credentials', { username: values.username, password: values.password });
 	};
 
@@ -52,12 +53,15 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 								<Input name="username" label="Username" />
 								<Input name="password" type="password" label="Password" />
 								<span className="text-red-400">{router.query.error}</span>
-								<button
+								<Button
+									icon={<RightOutline />}
+									iconLocation="right"
+									buttonType="primary"
+									className="w-full"
 									type="submit"
-									className="px-6 py-4 rounded-lg bg-indigo-500 text-white mt-2 w-full border border-indigo-500 hover:bg-white hover:text-indigo-500"
 								>
 									Masuk
-								</button>
+								</Button>
 								<Link href="/">
 									<a className="block mt-2 text-sm text-blue-400 text-center">
 										Kembali

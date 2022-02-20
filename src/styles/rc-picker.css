@@ -1,0 +1,77 @@
+/* rc-picker */
+/* purgecss start ignore */
+.rc-picker-input > input {
+	@apply px-4;
+	@apply py-3;
+	@apply w-full;
+	@apply border;
+	@apply border-gray-600;
+	@apply rounded-md;
+	@apply outline-none;
+}
+
+.rc-picker-input > input:focus {
+	@apply border-gray-700;
+	@apply outline-none;
+	@apply shadow-inner;
+}
+
+.rc-picker-dropdown {
+	position: absolute;
+	@apply shadow-lg;
+	@apply bg-white;
+	@apply w-64;
+	@apply rounded;
+	@apply border;
+	z-index: 10000;
+}
+.rc-picker-dropdown-hidden {
+	display: none;
+}
+.rc-picker-panel-container {
+	@apply p-3;
+}
+.rc-picker-header-view {
+	@apply w-20;
+}
+.rc-picker-header,
+.rc-picker-header-view {
+	@apply flex;
+	@apply justify-between;
+	@apply items-center;
+}
+.rc-picker-content {
+	@apply mt-2;
+	@apply w-full;
+}
+.rc-picker-cell-inner {
+	@apply text-center;
+	@apply w-full;
+	@apply rounded;
+	@apply cursor-pointer;
+}
+.rc-picker-cell {
+	@apply text-gray-300;
+	@apply py-2;
+}
+.rc-picker-cell-in-view {
+	@apply text-gray-700;
+}
+.rc-picker-cell-inner:hover,
+.rc-picker-cell-range-start > .rc-picker-cell-inner,
+.rc-picker-cell-range-end > .rc-picker-cell-inner,
+.rc-picker-cell-selected > .rc-picker-cell-inner {
+	@apply bg-blue-400;
+	@apply text-white;
+}
+
+.rc-picker-cell-disabled {
+	background-color: #efefef;
+}
+
+.rc-picker-cell-today > .rc-picker-cell-inner {
+	@apply border;
+	@apply rounded-md;
+	@apply border-gray-700;
+}
+/* purgecss end ignore */

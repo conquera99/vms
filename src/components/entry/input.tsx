@@ -6,9 +6,9 @@ const Input = ({ value = '', placeholder = '', type = 'text', ...props }) => {
 		<Field name={props.name} rules={props.rules}>
 			{(control, meta) => (
 				<div className={`mb-2 ${props.className || ''}`}>
-					<label className="block">{props.label}</label>
+					<label className="block mb-1">{props.label}</label>
 					<input
-						className="px-6 py-4 rounded-lg border w-full text-black border-gray-600"
+						className="px-4 py-3 mb-1 rounded-lg border w-full text-black border-gray-600"
 						value={value}
 						placeholder={placeholder || props.label}
 						type={type}
@@ -31,7 +31,7 @@ export const InputNumber = ({ value = '', placeholder = '', ...props }) => {
 		<Field name={props.name} rules={props.rules}>
 			{(control, meta) => (
 				<div className={`mb-2 ${props.className}`}>
-					<label className="block">{props.label}</label>
+					<label className="block mb-1">{props.label}</label>
 					<RCInputNumber
 						// className="px-4 py-2 rounded-md border w-full text-black max-w-lg border-gray-600"
 						value={value}
