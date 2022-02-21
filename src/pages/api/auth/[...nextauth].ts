@@ -44,11 +44,20 @@ export const authOptions = {
 					credentials?.username === 'sysadm' &&
 					credentials?.password === dayjs().format('MMDD')
 				) {
+					const permissions = await prisma.permissions.findMany();
+
+					const permissionsData: Record<string, boolean> = {};
+
+					for (let i = 0; i < permissions.length; i++) {
+						permissionsData[permissions[i].name] = true;
+					}
+
 					const user = {
 						id: 'sysadm',
 						name: 'System Administrator',
 						username: 'sysadm',
 						email: 'admin@vsg.com',
+						permissions: permissionsData,
 					};
 
 					// Any object returned will be saved in `user` property of the JWT
@@ -64,7 +73,17 @@ export const authOptions = {
 							throw new Error('password tidak sesuai');
 						}
 
-						return user;
+						const permissions = await prisma.userPermissions.findMany({
+							where: { userId: user.id },
+						});
+
+						const permissionsData: Record<string, boolean> = {};
+
+						for (let i = 0; i < permissions.length; i++) {
+							permissionsData[permissions[i].name] = true;
+						}
+
+						return { ...user, permissions: permissionsData };
 					}
 
 					// If you return null then an error will be displayed advising the user to check their details.
@@ -83,29 +102,40 @@ export const authOptions = {
 	secret: process.env.SECRET,
 	callbacks: {
 		async redirect({ url, baseUrl }: redirectInterface) {
-			console.log('redirect', url, baseUrl);
+			console.log('redirect:url', url);
+			console.log('redirect:baseUrl', baseUrl);
 			return url.startsWith(baseUrl) ? url : baseUrl;
 		},
 		async jwt({ token, user }: jwtInterface) {
 			if (user) {
 				token.id = user.id;
+				token.username = user.username;
+				token.permissions = user.permissions;
 			}
 
-			console.log('jwt', token, user);
+			console.log('jwt:token', token);
+			console.log('jwt:user', user);
 
 			return token;
 		},
 		async session({ session, token, user }: sessionInterface) {
+			console.log('session:session', session);
+			console.log('session:token', token);
+			console.log('session:user', user);
+
 			const sess = {
 				...session,
 				user: {
 					...session.user,
 					...user,
 					id: token.id as string,
+					username: token.username as string,
+					permissions: token.permissions,
 				},
 			};
 
-			console.log('session', session, token, user, sess);
+			console.log('session:sess', sess);
+			console.log('======');
 
 			return sess;
 		},

@@ -41,7 +41,7 @@ const Page = () => {
 			.then((response) => {
 				if (response.data.code === 0) {
 					toast.success(successMessage);
-					form.resetFields();
+					if (!router.query.id) form.resetFields();
 				} else {
 					toast.error(response.data.message);
 				}
@@ -60,7 +60,7 @@ const Page = () => {
 	}, [router.query.id, form]);
 
 	return (
-		<Navigation active="admin" isAdmin>
+		<Navigation active="admin" access="item_category" isAdmin>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />

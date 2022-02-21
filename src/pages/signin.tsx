@@ -9,13 +9,19 @@ import PageHead from 'components/general/page-head';
 import Input from 'components/entry/input';
 import Button from 'components/general/button';
 import { RightOutline } from 'antd-mobile-icons';
+import { useState } from 'react';
 
 const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 	const router = useRouter();
 	const [form] = Form.useForm();
 
+	const [loading, setLoading] = useState(false);
+
 	const onFinish = (values: any) => {
-		signIn('credentials', { username: values.username, password: values.password });
+		setLoading(true);
+		signIn('credentials', { username: values.username, password: values.password }).finally(
+			() => setLoading(false),
+		);
 	};
 
 	return (
@@ -59,6 +65,7 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 									buttonType="primary"
 									className="w-full"
 									type="submit"
+									loading={loading}
 								>
 									Masuk
 								</Button>
