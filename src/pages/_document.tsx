@@ -7,7 +7,7 @@ const APP_DESC =
 
 const Document = () => {
 	return (
-		<Html>
+		<Html lang="id">
 			<Head>
 				<meta name="application-name" content={APP_NAME} />
 				<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -44,10 +44,7 @@ const Document = () => {
 				<meta name="twitter:url" content={APP_URL} />
 				<meta name="twitter:title" content={APP_NAME} />
 				<meta name="twitter:description" content={APP_DESC} />
-				<meta
-					name="twitter:image"
-					content="/icons/android-chrome-192x192.png"
-				/>
+				<meta name="twitter:image" content="/icons/android-chrome-192x192.png" />
 				<meta name="twitter:creator" content="@conquera99" />
 
 				<meta property="og:type" content="website" />
@@ -55,10 +52,7 @@ const Document = () => {
 				<meta property="og:description" content={APP_DESC} />
 				<meta property="og:site_name" content={APP_NAME} />
 				<meta property="og:url" content={APP_URL} />
-				<meta
-					property="og:image"
-					content="/icons/apple-touch-icon.png"
-				/>
+				<meta property="og:image" content="/icons/apple-touch-icon.png" />
 
 				<link
 					rel="apple-touch-startup-image"
