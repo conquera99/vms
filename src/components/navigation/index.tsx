@@ -153,7 +153,7 @@ const Navigation: FC<BaseNavInterface> = ({
 
 			<div className="px-4 pt-16 pb-20 min-h-screen">{children}</div>
 
-			<div className="bottom-0 border-t bg-white/50 backdrop-filter backdrop-blur-md rounded-lg right-0 left-0 py-1 md:py-2 fixed md:px-7">
+			<div className="bottom-0 border-t bg-white/50 backdrop-filter backdrop-blur-md right-0 left-0 py-1 md:py-2 fixed md:px-7">
 				<div className="flex">
 					<MenuItem
 						active={active === 'home'}

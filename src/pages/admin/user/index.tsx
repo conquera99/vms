@@ -107,7 +107,9 @@ const Home = () => {
 											{item.username}
 										</span>
 									</p>
-									<small>{dayjs(item.createdAt).format(datetimeFormat)}</small>
+									<small className="text-xs text-gray-600">
+										{dayjs(item.createdAt).format(datetimeFormat)}
+									</small>
 								</div>
 								<div>
 									<Link href={`/admin/user/detail?id=${item.id}`}>

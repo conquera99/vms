@@ -136,7 +136,7 @@ const AdminHome = () => {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{session?.user?.permissions?.item_history === true && (
 					<Card
-						href="#"
+						href="/admin/buy-item"
 						icon={<ShopbagOutline className="text-4xl" />}
 						title="Beli Item"
 						desc="tambah jumlah item"
@@ -144,9 +144,9 @@ const AdminHome = () => {
 				)}
 				{session?.user?.permissions?.item_location === true && (
 					<Card
-						href="#"
+						href="/admin/assign-item"
 						icon={<AppOutline className="text-4xl" />}
-						title="Lokasi Item"
+						title="Atur Lokasi"
 						desc="atur dan ubah lokasi item"
 					/>
 				)}

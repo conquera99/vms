@@ -17,12 +17,13 @@ import List from 'components/display/list';
 import useOnScreen from 'hooks/useOnScreen';
 
 import fetcher from 'utils/fetcher';
-import { datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
+import { dateFormat, datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
+import { numberFormatter } from 'utils/helper';
 
 const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
 	if (previousPageData?.data && !previousPageData.data.length) return null;
 
-	return `/api/admin/location?s=${pageSize}&p=${page + 1}`;
+	return `/api/admin/buy-item?s=${pageSize}&p=${page + 1}`;
 };
 
 const breadcrumb = [
@@ -31,12 +32,12 @@ const breadcrumb = [
 		href: '/admin',
 	},
 	{
-		title: 'Lokasi',
-		href: '/admin/location',
+		title: 'Beli Item',
+		href: '/admin/buy-item',
 	},
 ];
 
-const Page = () => {
+const Home = () => {
 	const ref = useRef() as LegacyRef<HTMLDivElement>;
 
 	const isVisible = useOnScreen(ref);
@@ -65,7 +66,7 @@ const Page = () => {
 	}, [isVisible, isRefreshing]);
 
 	const onRemove = (id: string) => {
-		axios.post('/api/admin/location/remove', { id }).then((response) => {
+		axios.post('/api/admin/buy-item/remove', { id }).then((response) => {
 			if (response.data.code === 0) {
 				toast.success(successMessage);
 				setSize(1);
@@ -76,12 +77,12 @@ const Page = () => {
 	};
 
 	return (
-		<Navigation active="admin" access="location" isAdmin>
+		<Navigation active="admin" access="item_history" isAdmin>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />
 					<LinkButton
-						href="/admin/location/detail"
+						href="/admin/buy-item/detail"
 						size="small"
 						buttonType="success"
 						icon={<AddOutline />}
@@ -97,16 +98,32 @@ const Page = () => {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{data?.map((item: Record<string, any>) => {
 					return (
-						<List key={item.id}>
+						<List key={item.ih_id}>
 							<div className="flex justify-between">
 								<div>
-									<small className="text-xs">ID:&nbsp;{item.id}</small>
-									<p className="font-bold text-lg">{item.name}</p>
-									<small className="text-xs text-gray-600">{dayjs(item.createdAt).format(datetimeFormat)}</small>
+									<small className="text-xs">ID:&nbsp;{item.ih_id}</small>
+									<p className="font-bold text-lg">{item.item_name}</p>
+									<div className="text-sm mt-1 mb-3 grid grid-cols-3 gap-2">
+										<div>
+											<small>Tanggal</small>
+											<p>{dayjs(item.ih_date).format(dateFormat)}</p>
+										</div>
+										<div className="text-right">
+											<small>Qty</small>
+											<p>{item.ih_qty}</p>
+										</div>
+										<div className="text-right">
+											<small>Harga</small>
+											<p>{numberFormatter(item.ih_price)}</p>
+										</div>
+									</div>
+									<small className="text-xs text-gray-600">
+										{dayjs(item.createdAt).format(datetimeFormat)}
+									</small>
 								</div>
 								<div>
-									<Link href={`/admin/location/detail?id=${item.id}`}>
-										<a className="text-blue-500 mr-2">edit</a>
+									<Link href={`/admin/buy-item/detail?id=${item.ih_id}`}>
+										<a className="text-blue-500 mr-2">lihat</a>
 									</Link>
 									<button
 										className="text-red-500"
@@ -132,4 +149,4 @@ const Page = () => {
 	);
 };
 
-export default Page;
+export default Home;
