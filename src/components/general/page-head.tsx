@@ -10,7 +10,7 @@ const PageHead: FC<PageHeadInterface> = ({ title, desc }) => {
 			<meta name="description" content={desc || 'app for vihara sasana graha nunukan'} />
 			<meta
 				name="viewport"
-				content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+				content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
 			/>
 			<link rel="icon" href="/favicon.ico" />
 		</Head>
