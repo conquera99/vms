@@ -1,8 +1,10 @@
 import NextAuth, { Awaitable, IncomingRequest, Session, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { NextApiHandler } from 'next';
+import bcrypt from 'bcryptjs';
 
 import type { JWT } from 'next-auth/jwt';
+import dayjs from 'dayjs';
 
 interface redirectInterface {
 	url: string;
@@ -40,12 +42,23 @@ export const authOptions = {
 				console.log('credentials', credentials);
 				console.log('req', req);
 
-				if (credentials?.username === 'admin' && credentials?.password === 'admin') {
-					const user = { id: 'sysadm', name: 'Admin', email: 'admin@vsg.com' };
+				if (
+					credentials?.username === 'sysadm' &&
+					credentials?.password === dayjs().format('MMDD')
+				) {
+					const user = {
+						id: 'sysadm',
+						name: 'System Administrator',
+						username: 'sysadm',
+						email: 'admin@vsg.com',
+					};
 
 					// Any object returned will be saved in `user` property of the JWT
 					return user;
 				} else {
+					// find in database
+					// bcrypt.compareSync('not_bacon', hash);
+
 					// If you return null then an error will be displayed advising the user to check their details.
 					throw new Error(
 						'User does not exists. Please make sure you insert the correct email & password.',

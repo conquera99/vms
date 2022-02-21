@@ -22,7 +22,7 @@ import { datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
 const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
 	if (previousPageData?.data && !previousPageData.data.length) return null;
 
-	return `/api/admin/location?s=${pageSize}&p=${page + 1}`;
+	return `/api/admin/user?s=${pageSize}&p=${page + 1}`;
 };
 
 const breadcrumb = [
@@ -31,12 +31,12 @@ const breadcrumb = [
 		href: '/admin',
 	},
 	{
-		title: 'Lokasi',
-		href: '/admin/location',
+		title: 'User',
+		href: '/admin/user',
 	},
 ];
 
-const Page = () => {
+const Home = () => {
 	const ref = useRef() as LegacyRef<HTMLDivElement>;
 
 	const isVisible = useOnScreen(ref);
@@ -65,7 +65,7 @@ const Page = () => {
 	}, [isVisible, isRefreshing]);
 
 	const onRemove = (id: string) => {
-		axios.post('/api/admin/location/remove', { id }).then((response) => {
+		axios.post('/api/admin/user/remove', { id }).then((response) => {
 			if (response.data.code === 0) {
 				toast.success(successMessage);
 				setSize(1);
@@ -81,7 +81,7 @@ const Page = () => {
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />
 					<LinkButton
-						href="/admin/location/detail"
+						href="/admin/user/detail"
 						size="small"
 						buttonType="success"
 						icon={<AddOutline />}
@@ -101,11 +101,16 @@ const Page = () => {
 							<div className="flex justify-between">
 								<div>
 									<small className="text-xs">ID:&nbsp;{item.id}</small>
-									<p className="font-bold text-lg">{item.name}</p>
+									<p className="font-bold text-lg my-1">
+										{item.name}&nbsp;
+										<span className="bg-slate-500 text-white font-light px-2 text-xs rounded-md py-1">
+											{item.username}
+										</span>
+									</p>
 									<small>{dayjs(item.createdAt).format(datetimeFormat)}</small>
 								</div>
 								<div>
-									<Link href={`/admin/location/detail?id=${item.id}`}>
+									<Link href={`/admin/user/detail?id=${item.id}`}>
 										<a className="text-blue-500 mr-2">edit</a>
 									</Link>
 									<button
@@ -132,4 +137,4 @@ const Page = () => {
 	);
 };
 
-export default Page;
+export default Home;

@@ -112,7 +112,7 @@ const Home = () => {
 										className="text-red-500"
 										onClick={() => onRemove(item.id)}
 									>
-										remove
+										hapus
 									</button>
 								</div>
 							</div>

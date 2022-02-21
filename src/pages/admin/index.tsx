@@ -3,12 +3,17 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import { UrlObject } from 'url';
 import {
 	AppOutline,
+	CalendarOutline,
 	GiftOutline,
+	GlobalOutline,
 	HistogramOutline,
 	LocationOutline,
+	PayCircleOutline,
 	ShopbagOutline,
 	TagOutline,
 	TeamOutline,
+	UserAddOutline,
+	UserContactOutline,
 } from 'antd-mobile-icons';
 
 import Title from 'components/display/title';
@@ -49,7 +54,13 @@ const CountInfo: FC<{ value?: number; desc?: string }> = ({ value, desc }) => {
 };
 
 const AdminHome = () => {
-	const [count, setCount] = useState({ location: 0, itemCategory: 0, item: 0, member: 0 });
+	const [count, setCount] = useState({
+		location: 0,
+		itemCategory: 0,
+		item: 0,
+		member: 0,
+		user: 0,
+	});
 
 	useEffect(() => {
 		axios.get('/api/admin').then((response) => {
@@ -66,8 +77,8 @@ const AdminHome = () => {
 				<Image src="/images/welcome.svg" width="200" height="100" alt="welcome-image" />
 			</div>
 
+			<h3 className="font-bold text-lg">Data-data</h3>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<h3 className="font-bold text-lg">Data-data</h3>
 				<Card
 					href="/admin/location"
 					icon={<LocationOutline className="text-4xl" />}
@@ -96,7 +107,10 @@ const AdminHome = () => {
 					desc="data-data umat vihara"
 					extra={<CountInfo value={count.member} desc="Orang" />}
 				/>
-				<h3 className="font-bold text-lg">Atur Item</h3>
+			</div>
+
+			<h3 className="font-bold text-lg my-3">Atur Item</h3>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<Card
 					href="#"
 					icon={<ShopbagOutline className="text-4xl" />}
@@ -109,12 +123,59 @@ const AdminHome = () => {
 					title="Lokasi Item"
 					desc="atur dan ubah lokasi item"
 				/>
-				<h3 className="font-bold text-lg">Laporan</h3>
+			</div>
+
+			<h3 className="font-bold text-lg my-3">Administrasi</h3>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<Card
+					href="/admin/user"
+					icon={<UserAddOutline className="text-4xl" />}
+					title="User"
+					desc="atur data pengguna"
+					extra={<CountInfo value={count.user} desc="User" />}
+				/>
+				<Card
+					href="#"
+					icon={<GlobalOutline className="text-4xl" />}
+					title="Organisasi"
+					desc="atur data organisasi"
+					extra={<CountInfo value={0} desc="Data" />}
+				/>
+				<Card
+					href="#"
+					icon={<CalendarOutline className="text-4xl" />}
+					title="Periode"
+					desc="atur periode organisasi"
+					extra={<CountInfo value={0} desc="Data" />}
+				/>
+				<Card
+					href="#"
+					icon={<UserContactOutline className="text-4xl" />}
+					title="Struktur Organisasi"
+					desc="atur struktur organisasi"
+				/>
+				<Card
+					href="#"
+					icon={<PayCircleOutline className="text-4xl" />}
+					title="Keuangan"
+					desc="atur data keuangan"
+					extra={<CountInfo value={0} desc="Data" />}
+				/>
+			</div>
+
+			<h3 className="font-bold text-lg my-3">Laporan</h3>
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<Card
 					href="#"
 					icon={<HistogramOutline className="text-4xl" />}
 					title="Laporan Lokasi Item"
 					desc="laporan jumlah dan lokasi item"
+				/>
+				<Card
+					href="#"
+					icon={<HistogramOutline className="text-4xl" />}
+					title="Laporan Keuangan"
+					desc="laporan keluar masuk dana"
 				/>
 			</div>
 		</Navigation>
