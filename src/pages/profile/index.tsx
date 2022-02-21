@@ -26,6 +26,7 @@ const Profile = () => {
 
 			<div className="bg-blue-50 p-6 rounded-lg mb-4">
 				<Desc label="Name">{session?.user?.name}</Desc>
+				<Desc label="Username">{session?.user?.username || '-'}</Desc>
 				<Desc label="Email">{session?.user?.email || '-'}</Desc>
 			</div>
 

@@ -12,6 +12,7 @@ import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
 
 import { successMessage } from 'utils/constant';
+import Select from 'components/entry/select';
 
 const breadcrumb = [
 	{
@@ -28,6 +29,7 @@ const Page = () => {
 	const router = useRouter();
 	const [form] = Form.useForm();
 
+	const [permission, setPermisison] = useState<Record<string, string>[]>([]);
 	const [loading, setLoading] = useState(false);
 
 	const onFinish = (values: any) => {
@@ -41,7 +43,7 @@ const Page = () => {
 			.then((response) => {
 				if (response.data.code === 0) {
 					toast.success(successMessage);
-					form.resetFields();
+					if (!router.query.id) form.resetFields();
 				} else {
 					toast.error(response.data.message);
 				}
@@ -51,18 +53,26 @@ const Page = () => {
 
 	useEffect(() => {
 		if (router.query.id) {
+			axios.get('/api/admin/permission?s=1000').then((response) => {
+				if (response.data.code === 0) {
+					setPermisison(response.data.data);
+				}
+			});
+
 			axios.get(`/api/admin/user?id=${router.query.id}`).then((response) => {
 				if (response.data.code === 0) {
 					delete response.data.data.password;
 
 					form.setFieldsValue(response.data.data);
+
+					form.setFieldsValue({ access: response.data.permissions });
 				}
 			});
 		}
 	}, [router.query.id, form]);
 
 	return (
-		<Navigation active="admin" isAdmin>
+		<Navigation active="admin" isAdmin isSuperAdminOnly>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />
@@ -81,7 +91,13 @@ const Page = () => {
 			<Form
 				form={form}
 				onFinish={onFinish}
-				initialValues={{ name: '', username: '', password: '', email: '' }}
+				initialValues={{
+					name: '',
+					username: '',
+					password: '',
+					email: '',
+					access: undefined,
+				}}
 			>
 				<Input
 					name="name"
@@ -99,11 +115,23 @@ const Page = () => {
 					name="password"
 					label="Password"
 					required={!router.query.id}
+					type="password"
 					rules={
 						!router.query.id && [{ required: true, message: 'password wajib diisi' }]
 					}
 				/>
 				<Input name="email" type="email" label="Email" />
+				{router.query.id && (
+					<Select
+						name="access"
+						label="Hak Akses"
+						mode="multiple"
+						options={permission}
+						placeholder="Pilih Hak Akses"
+						labelKey="name"
+						valueKey="name"
+					/>
+				)}
 				<Button
 					type="submit"
 					className="w-full"

@@ -6,7 +6,7 @@ import { prisma } from 'db';
 import { forbiddenResponse, successResponse } from 'utils/constant';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const { id, name, username, password, email } = req.body;
+	const { id, name, username, password, email, access } = req.body;
 
 	const session = await getSession({ req });
 
@@ -34,12 +34,33 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			updatedData.password = encryptedPassword;
 		}
 
-		const update = await prisma.user.update({
-			where: { id },
-			data: updatedData,
+		let permissionData = [];
+
+		// revert permission to N
+		const revertPermission = await prisma.userPermissions.deleteMany({
+			where: { userId: id },
 		});
 
-		return res.json({ ...successResponse, data: update });
+		if (access.length > 0) {
+			for (let i = 0; i < access.length; i++) {
+				permissionData.push({
+					name: access[i],
+					userId: id,
+					access: 'Y',
+					createdBy: session.user.id,
+				});
+			}
+		}
+
+		const [update, savePermissions] = await prisma.$transaction([
+			prisma.user.update({ where: { id }, data: updatedData }),
+			prisma.userPermissions.createMany({ data: permissionData }),
+		]);
+
+		return res.json({
+			...successResponse,
+			data: { revertPermission, update, savePermissions },
+		});
 	}
 
 	const create = await prisma.user.create({

@@ -10,6 +10,7 @@ import type { UrlObject } from 'url';
 import BaseNavInterface from 'interfaces/navigation';
 
 import PageHead from 'components/general/page-head';
+import Forbidden from 'components/display/forbidden';
 
 const ACTIVE_TEXT_COLOR = 'text-indigo-500';
 
@@ -41,7 +42,15 @@ const MenuItem: FC<{
 	);
 };
 
-const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children, isAdmin }) => {
+const Navigation: FC<BaseNavInterface> = ({
+	title,
+	desc,
+	active,
+	access,
+	children,
+	isSuperAdminOnly,
+	isAdmin,
+}) => {
 	const router = useRouter();
 	const { data: session, status } = useSession();
 
@@ -49,7 +58,11 @@ const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children, isAdm
 		if (isAdmin === true && router.isReady && status === 'unauthenticated') {
 			router.push('/');
 		}
-	}, [isAdmin, status, router, router.isReady]);
+
+		if (typeof access !== 'undefined' && !session?.user?.permissions?.[access as string]) {
+			router.push('/');
+		}
+	}, [isAdmin, status, router, access, session?.user?.permissions, router.isReady]);
 
 	// This hook only run once in browser after the component is rendered for the first time.
 	// It has same effect as the old componentDidMount lifecycle callback.
@@ -129,6 +142,10 @@ const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children, isAdm
 			wb.register();
 		}
 	}, []);
+
+	if (isSuperAdminOnly && status === 'authenticated' && session.user.username !== 'sysadm') {
+		return <Forbidden />;
+	}
 
 	return (
 		<div className="bg-white">

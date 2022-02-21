@@ -15,7 +15,13 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	if (id) {
 		const data = await prisma.user.findFirst({ where: { id: id as string } });
 
-		return res.json({ ...successResponse, data });
+		const permissions = await prisma.userPermissions.findMany({
+			where: { userId: id as string },
+		});
+
+		const permissionsData = permissions?.map((item) => item.name);
+
+		return res.json({ ...successResponse, data, permissions: permissionsData });
 	}
 
 	//for list

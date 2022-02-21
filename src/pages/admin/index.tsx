@@ -84,55 +84,81 @@ const AdminHome = () => {
 				<Image src="/images/welcome.svg" width="200" height="100" alt="welcome-image" />
 			</div>
 
-			<h3 className="font-bold text-lg">Data-data</h3>
+			{(session?.user?.permissions?.location === true ||
+				session?.user?.permissions?.item_category === true ||
+				session?.user?.permissions?.item === true ||
+				session?.user?.permissions?.member === true) && (
+				<h3 className="font-bold text-lg">Data-data</h3>
+			)}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<Card
-					href="/admin/location"
-					icon={<LocationOutline className="text-4xl" />}
-					title="Lokasi"
-					desc="data-data lokasi item"
-					extra={<CountInfo value={count.location} desc="Lokasi" />}
-				/>
-				<Card
-					href="/admin/item-category"
-					icon={<TagOutline className="text-4xl" />}
-					title="Kategori Item"
-					desc="data-data kategori item"
-					extra={<CountInfo value={count.itemCategory} desc="Kategori" />}
-				/>
-				<Card
-					href="/admin/item"
-					icon={<GiftOutline className="text-4xl" />}
-					title="Item"
-					desc="data-data item"
-					extra={<CountInfo value={count.item} desc="Item" />}
-				/>
-				<Card
-					href="/admin/member"
-					icon={<TeamOutline className="text-4xl" />}
-					title="Anggota"
-					desc="data-data umat vihara"
-					extra={<CountInfo value={count.member} desc="Orang" />}
-				/>
+				{session?.user?.permissions?.location === true && (
+					<Card
+						href="/admin/location"
+						icon={<LocationOutline className="text-4xl" />}
+						title="Lokasi"
+						desc="data-data lokasi item"
+						extra={<CountInfo value={count.location} desc="Lokasi" />}
+					/>
+				)}
+				{session?.user?.permissions?.item_category === true && (
+					<Card
+						href="/admin/item-category"
+						icon={<TagOutline className="text-4xl" />}
+						title="Kategori Item"
+						desc="data-data kategori item"
+						extra={<CountInfo value={count.itemCategory} desc="Kategori" />}
+					/>
+				)}
+				{session?.user?.permissions?.item === true && (
+					<Card
+						href="/admin/item"
+						icon={<GiftOutline className="text-4xl" />}
+						title="Item"
+						desc="data-data item"
+						extra={<CountInfo value={count.item} desc="Item" />}
+					/>
+				)}
+				{session?.user?.permissions?.member === true && (
+					<Card
+						href="/admin/member"
+						icon={<TeamOutline className="text-4xl" />}
+						title="Anggota"
+						desc="data-data umat vihara"
+						extra={<CountInfo value={count.member} desc="Orang" />}
+					/>
+				)}
 			</div>
 
-			<h3 className="font-bold text-lg my-3">Atur Item</h3>
+			{(session?.user?.permissions?.item_history === true ||
+				session?.user?.permissions?.item_location === true) && (
+				<h3 className="font-bold text-lg my-3">Atur Item</h3>
+			)}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<Card
-					href="#"
-					icon={<ShopbagOutline className="text-4xl" />}
-					title="Beli Item"
-					desc="tambah jumlah item"
-				/>
-				<Card
-					href="#"
-					icon={<AppOutline className="text-4xl" />}
-					title="Lokasi Item"
-					desc="atur dan ubah lokasi item"
-				/>
+				{session?.user?.permissions?.item_history === true && (
+					<Card
+						href="#"
+						icon={<ShopbagOutline className="text-4xl" />}
+						title="Beli Item"
+						desc="tambah jumlah item"
+					/>
+				)}
+				{session?.user?.permissions?.item_location === true && (
+					<Card
+						href="#"
+						icon={<AppOutline className="text-4xl" />}
+						title="Lokasi Item"
+						desc="atur dan ubah lokasi item"
+					/>
+				)}
 			</div>
 
-			<h3 className="font-bold text-lg my-3">Administrasi</h3>
+			{(session?.user?.id === 'sysadm' ||
+				session?.user?.permissions?.organization === true ||
+				session?.user?.permissions?.period === true ||
+				session?.user?.permissions?.org_structure === true ||
+				session?.user?.permissions?.financial === true) && (
+				<h3 className="font-bold text-lg my-3">Administrasi</h3>
+			)}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{session?.user?.id === 'sysadm' && (
 					<>
@@ -152,49 +178,64 @@ const AdminHome = () => {
 						/>
 					</>
 				)}
-				<Card
-					href="#"
-					icon={<GlobalOutline className="text-4xl" />}
-					title="Organisasi"
-					desc="atur data organisasi"
-					extra={<CountInfo value={0} desc="Data" />}
-				/>
-				<Card
-					href="#"
-					icon={<CalendarOutline className="text-4xl" />}
-					title="Periode"
-					desc="atur periode organisasi"
-					extra={<CountInfo value={0} desc="Data" />}
-				/>
-				<Card
-					href="#"
-					icon={<UserContactOutline className="text-4xl" />}
-					title="Struktur Organisasi"
-					desc="atur struktur organisasi"
-				/>
-				<Card
-					href="#"
-					icon={<PayCircleOutline className="text-4xl" />}
-					title="Keuangan"
-					desc="atur data keuangan"
-					extra={<CountInfo value={0} desc="Data" />}
-				/>
+				{session?.user?.permissions?.organization === true && (
+					<Card
+						href="#"
+						icon={<GlobalOutline className="text-4xl" />}
+						title="Organisasi"
+						desc="atur data organisasi"
+						extra={<CountInfo value={0} desc="Data" />}
+					/>
+				)}
+				{session?.user?.permissions?.period === true && (
+					<Card
+						href="#"
+						icon={<CalendarOutline className="text-4xl" />}
+						title="Periode"
+						desc="atur periode organisasi"
+						extra={<CountInfo value={0} desc="Data" />}
+					/>
+				)}
+				{session?.user?.permissions?.org_structure === true && (
+					<Card
+						href="#"
+						icon={<UserContactOutline className="text-4xl" />}
+						title="Struktur Organisasi"
+						desc="atur struktur organisasi"
+					/>
+				)}
+				{session?.user?.permissions?.financial === true && (
+					<Card
+						href="#"
+						icon={<PayCircleOutline className="text-4xl" />}
+						title="Keuangan"
+						desc="atur data keuangan"
+						extra={<CountInfo value={0} desc="Data" />}
+					/>
+				)}
 			</div>
 
-			<h3 className="font-bold text-lg my-3">Laporan</h3>
+			{(session?.user?.permissions?.report_item === true ||
+				session?.user?.permissions?.report_financial === true) && (
+				<h3 className="font-bold text-lg my-3">Laporan</h3>
+			)}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<Card
-					href="#"
-					icon={<HistogramOutline className="text-4xl" />}
-					title="Laporan Lokasi Item"
-					desc="laporan jumlah dan lokasi item"
-				/>
-				<Card
-					href="#"
-					icon={<HistogramOutline className="text-4xl" />}
-					title="Laporan Keuangan"
-					desc="laporan keluar masuk dana"
-				/>
+				{session?.user?.permissions?.report_item === true && (
+					<Card
+						href="#"
+						icon={<HistogramOutline className="text-4xl" />}
+						title="Laporan Lokasi Item"
+						desc="laporan jumlah dan lokasi item"
+					/>
+				)}
+				{session?.user?.permissions?.report_financial === true && (
+					<Card
+						href="#"
+						icon={<HistogramOutline className="text-4xl" />}
+						title="Laporan Keuangan"
+						desc="laporan keluar masuk dana"
+					/>
+				)}
 			</div>
 		</Navigation>
 	);
