@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CloseOutline, RightOutline } from 'antd-mobile-icons';
 import Form from 'rc-field-form';
 import axios from 'axios';
@@ -30,6 +30,8 @@ const Page = () => {
 	const router = useRouter();
 	const [form] = Form.useForm();
 
+	const [reset, setReset] = useState(0);
+
 	const [usedQty, setUsedQty] = useState(0);
 	const [maxQty, setMaxQty] = useState(0);
 	const [item, setItem] = useState<Record<string, any>[]>([]);
@@ -49,6 +51,9 @@ const Page = () => {
 			.then((response) => {
 				if (response.data.code === 0) {
 					toast.success(successMessage);
+					setReset((prev) => prev + 1);
+					setUsedQty(0);
+					setMaxQty(0);
 					if (!router.query.id) form.resetFields();
 				} else {
 					toast.error(response.data.message);
@@ -58,7 +63,6 @@ const Page = () => {
 	};
 
 	const onSelect = (_: any, options: Record<string, any>) => {
-		console.log(options);
 		setMaxQty(Number(options.totalQty) - Number(options.assignQty));
 		setUsedQty(Number(options.assignQty));
 	};
@@ -75,7 +79,9 @@ const Page = () => {
 				setLocation(response.data.data);
 			}
 		});
+	}, [reset]);
 
+	useEffect(() => {
 		if (router.query.locId && router.query.itemId) {
 			axios
 				.get(
@@ -121,7 +127,7 @@ const Page = () => {
 					rules={[{ required: true, message: 'item harus dipilih' }]}
 					disabled={router.query.locId && router.query.itemId ? true : false}
 				/>
-				{!router.query.locId && router.query.itemId && (
+				{!router.query.locId && !router.query.itemId && (
 					<div className="flex justify-between mb-4">
 						<div className="text-center">
 							<p className="text-sm">Total Qty</p>
@@ -149,7 +155,7 @@ const Page = () => {
 					max={maxQty}
 					input={{ disabled: router.query.locId && router.query.itemId ? true : false }}
 				/>
-				{!router.query.locId && router.query.itemId && (
+				{!router.query.locId && !router.query.itemId && (
 					<Button
 						type="submit"
 						className="w-full"

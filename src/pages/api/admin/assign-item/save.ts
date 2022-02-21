@@ -11,6 +11,16 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	if (!session) return res.json(forbiddenResponse);
 
+	const detailItem = await prisma.item.findUnique({ where: { id: itemId } });
+
+	if (!detailItem) {
+		return res.json({ code: 404, message: 'item not found' });
+	}
+
+	if (Number(detailItem.assignQty) + qty > Number(detailItem.totalQty)) {
+		return res.json({ code: 500, message: 'tidak ada qty yang tersisa' });
+	}
+
 	const [create, updateItem] = await prisma.$transaction([
 		prisma.itemLocation.create({
 			data: { itemId, locId, qty, createdBy: session.user.id },

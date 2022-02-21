@@ -13,6 +13,7 @@ import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
 
 import { successMessage } from 'utils/constant';
+import Select from 'components/entry/select';
 
 const breadcrumb = [
 	{
@@ -29,6 +30,9 @@ const Page = () => {
 	const router = useRouter();
 	const [form] = Form.useForm();
 
+	const [category, setCategory] = useState<Record<string, any>[]>([]);
+	const [totalQty, setTotalQty] = useState(0);
+	const [usedQty, setUsedQty] = useState(0);
 	const [loading, setLoading] = useState(false);
 
 	const onFinish = (values: any) => {
@@ -53,11 +57,17 @@ const Page = () => {
 	};
 
 	useEffect(() => {
+		axios.get('/api/admin/item-category?s=10000').then((response) => {
+			if (response.data.code === 0) {
+				setCategory(response.data.data);
+			}
+		});
+
 		if (router.query.id) {
 			axios.get(`/api/admin/item?id=${router.query.id}`).then((response) => {
 				if (response.data.code === 0) {
-					if (response.data.data.dateOfBirth)
-						response.data.data.dateOfBirth = dayjs(response.data.data.dateOfBirth);
+					setTotalQty(response.data.data.totalQty);
+					setUsedQty(response.data.data.assignQty);
 
 					form.setFieldsValue(response.data.data);
 				}
@@ -89,7 +99,29 @@ const Page = () => {
 					required
 					rules={[{ required: true, message: 'nama item wajib diisi' }]}
 				/>
+				<Select
+					options={category}
+					name="categoryId"
+					label="Pilih Kategori"
+					labelKey="name"
+					valueKey="id"
+					rules={[{ required: true, message: 'kategori harus dipilih' }]}
+				/>
 				<Input name="desc" label="Keterangan" />
+
+				{router.query.id && (
+					<div className="flex justify-between mb-4">
+						<div className="text-center">
+							<p className="text-sm">Total Qty</p>
+							<p className="text-lg">{totalQty}</p>
+						</div>
+						<div className="text-center">
+							<p className="text-sm">Qty Ditempatkan</p>
+							<p className="text-lg">{usedQty}</p>
+						</div>
+					</div>
+				)}
+
 				<Button
 					type="submit"
 					className="w-full"
