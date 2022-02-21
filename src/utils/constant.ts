@@ -17,6 +17,7 @@ export const stillInUseResponse = {
 	data: [],
 };
 
+export const dateFormat = 'DD MMM YYYY';
 export const datetimeFormat = 'DD MMM YYYY HH:mm';
 
 export const successMessage = 'Successfully to save data!';

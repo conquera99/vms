@@ -37,7 +37,7 @@ const Select = ({
 					<InputSelect
 						className="px-4 py-3 bg-white rounded-md border w-full text-black border-gray-600"
 						value={value}
-						placeholder={placeholder || props.label}
+						placeholder={placeholder || label}
 						getPopupContainer={() =>
 							document.getElementById(containerId) as HTMLElement
 						}
@@ -52,6 +52,7 @@ const Select = ({
 						}}
 						onSelect={onSelect}
 						mode={props.mode}
+						disabled={props.disabled}
 						{...control}
 					>
 						{props.options?.length > 0 &&

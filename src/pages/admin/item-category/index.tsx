@@ -102,7 +102,9 @@ const Page = () => {
 								<div>
 									<small className="text-xs">ID:&nbsp;{item.id}</small>
 									<p className="font-bold text-lg">{item.name}</p>
-									<small>{dayjs(item.createdAt).format(datetimeFormat)}</small>
+									<small className="text-xs text-gray-600">
+										{dayjs(item.createdAt).format(datetimeFormat)}
+									</small>
 								</div>
 								<div>
 									<Link href={`/admin/item-category/detail?id=${item.id}`}>

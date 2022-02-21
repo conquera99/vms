@@ -18,6 +18,7 @@ const DatePicker = ({ ...props }) => (
 					generateConfig={dayjsGenerateConfig}
 					className="text-black"
 					format="DD MMM YYYY"
+					disabled={props.disabled}
 					{...control}
 				/>
 				{meta.errors?.length > 0 && meta.errors.join(',') !== '' && (
