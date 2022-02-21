@@ -143,7 +143,7 @@ const Navigation: FC<BaseNavInterface> = ({
 		}
 	}, []);
 
-	if (isSuperAdminOnly && status === 'authenticated' && session.user.username !== 'sysadm') {
+	if (isSuperAdminOnly && status === 'authenticated' && session?.user?.username !== 'sysadm') {
 		return <Forbidden />;
 	}
 
@@ -180,7 +180,7 @@ const Navigation: FC<BaseNavInterface> = ({
 						href={status === 'authenticated' ? '/profile' : '/signin'}
 						title={
 							status === 'authenticated'
-								? session.user.name?.substring(0, 10) || 'Akun'
+								? session?.user?.name?.substring(0, 10) || 'Akun'
 								: 'Masuk'
 						}
 						icon={<UserOutline />}
