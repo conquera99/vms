@@ -11,14 +11,36 @@ generator client {
 }
 
 model User {
-    id       String  @id @default(cuid()) @map("user_id")
-    name     String? @map("user_name")
-    username String? @map("user_username")
-    password String  @map("user_password")
-    email    String? @unique @map("user_email")
-    image    String? @map("user_image")
+    id        String   @id @default(cuid()) @map("user_id")
+    name      String?  @map("user_name")
+    username  String?  @unique @map("user_username")
+    password  String   @map("user_password")
+    email     String?  @map("user_email")
+    image     String?  @map("user_image")
+    createdAt DateTime @default(now()) @map("user_created_at")
+    createdBy String   @map("user_created_by")
+    updatedAt DateTime @default(now()) @map("user_updated_at")
+    updatedBy String?  @map("user_updated_by")
 
     @@map("users")
+}
+
+model Permissions {
+    name      String   @id @map("permission_name") @db.VarChar(100)
+    createdAt DateTime @default(now()) @map("permission_created_at")
+}
+
+model UserPermissions {
+    userId    String   @map("up_user_id")
+    name      String   @map("up_permission_name") @db.VarChar(100)
+    access    String   @default("N") @map("up_access") @db.Char(1)
+    createdAt DateTime @default(now()) @map("up_created_at")
+    createdBy String   @map("up_created_by")
+    updatedAt DateTime @default(now()) @map("up_updated_at")
+    updatedBy String?  @map("up_updated_by")
+
+    @@unique([userId, name])
+    @@map("user_permissions")
 }
 
 model Location {

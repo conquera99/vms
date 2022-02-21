@@ -13,6 +13,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	const itemCategoryCount = await prisma.itemCategory.count();
 	const itemCount = await prisma.item.count();
 	const memberCount = await prisma.member.count();
+	const userCount = await prisma.user.count();
 
 	res.json({
 		...successResponse,
@@ -21,6 +22,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			itemCategory: itemCategoryCount,
 			item: itemCount,
 			member: memberCount,
+			user: userCount,
 		},
 	});
 }

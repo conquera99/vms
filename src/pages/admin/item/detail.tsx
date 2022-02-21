@@ -86,6 +86,7 @@ const Page = () => {
 				<Input
 					name="name"
 					label="Nama Item"
+					required
 					rules={[{ required: true, message: 'nama item wajib diisi' }]}
 				/>
 				<Input name="desc" label="Keterangan" />

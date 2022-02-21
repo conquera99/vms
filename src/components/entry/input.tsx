@@ -1,12 +1,15 @@
 import { Field } from 'rc-field-form';
 import RCInputNumber from 'rc-input-number';
 
-const Input = ({ value = '', placeholder = '', type = 'text', ...props }) => {
+const Input = ({ value = '', placeholder = '', required = false, type = 'text', ...props }) => {
 	return (
 		<Field name={props.name} rules={props.rules}>
 			{(control, meta) => (
 				<div className={`mb-2 ${props.className || ''}`}>
-					<label className="block mb-1">{props.label}</label>
+					<label className="block mb-1">
+						{props.label}
+						{required && <span className="text-red-500">*</span>}
+					</label>
 					<input
 						className="px-4 py-3 mb-1 rounded-lg border w-full text-black border-gray-600"
 						value={value}

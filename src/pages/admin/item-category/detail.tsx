@@ -80,6 +80,7 @@ const Page = () => {
 				<Input
 					name="name"
 					label="Nama Kategori"
+					required
 					rules={[{ required: true, message: 'nama kategori wajib diisi' }]}
 				/>
 				<Button

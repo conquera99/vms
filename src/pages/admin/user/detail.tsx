@@ -4,14 +4,12 @@ import Form from 'rc-field-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import dayjs from 'dayjs';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
-import DatePicker from 'components/entry/date-picker';
 
 import { successMessage } from 'utils/constant';
 
@@ -21,8 +19,8 @@ const breadcrumb = [
 		href: '/admin',
 	},
 	{
-		title: 'Anggota',
-		href: '/admin/member',
+		title: 'User',
+		href: '/admin/user',
 	},
 ];
 
@@ -35,10 +33,8 @@ const Page = () => {
 	const onFinish = (values: any) => {
 		setLoading(true);
 
-		if (values.date) values.date = dayjs(values.date).toDate();
-
 		axios
-			.post('/api/admin/member/save', {
+			.post('/api/admin/user/save', {
 				id: router.query.id || null,
 				...values,
 			})
@@ -55,10 +51,9 @@ const Page = () => {
 
 	useEffect(() => {
 		if (router.query.id) {
-			axios.get(`/api/admin/member?id=${router.query.id}`).then((response) => {
+			axios.get(`/api/admin/user?id=${router.query.id}`).then((response) => {
 				if (response.data.code === 0) {
-					if (response.data.data.dateOfBirth)
-						response.data.data.dateOfBirth = dayjs(response.data.data.dateOfBirth);
+					delete response.data.data.password;
 
 					form.setFieldsValue(response.data.data);
 				}
@@ -72,7 +67,7 @@ const Page = () => {
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />
 					<LinkButton
-						href="/admin/member"
+						href="/admin/user"
 						size="small"
 						buttonType="warning"
 						icon={<CloseOutline />}
@@ -86,7 +81,7 @@ const Page = () => {
 			<Form
 				form={form}
 				onFinish={onFinish}
-				initialValues={{ name: '', dateOfBirth: null, address: '', phone: '', email: '' }}
+				initialValues={{ name: '', username: '', password: '', email: '' }}
 			>
 				<Input
 					name="name"
@@ -94,9 +89,20 @@ const Page = () => {
 					required
 					rules={[{ required: true, message: 'nama lengkap wajib diisi' }]}
 				/>
-				<DatePicker name="dateOfBirth" label="Tanggal Lahir" />
-				<Input name="address" label="Alamat" />
-				<Input name="phone" label="Nomor Telepon/HP" />
+				<Input
+					name="username"
+					label="Username"
+					required
+					rules={[{ required: true, message: 'username wajib diisi' }]}
+				/>
+				<Input
+					name="password"
+					label="Password"
+					required={!router.query.id}
+					rules={
+						!router.query.id && [{ required: true, message: 'password wajib diisi' }]
+					}
+				/>
 				<Input name="email" type="email" label="Email" />
 				<Button
 					type="submit"
