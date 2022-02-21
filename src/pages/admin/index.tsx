@@ -4,6 +4,7 @@ import { UrlObject } from 'url';
 import {
 	AppOutline,
 	CalendarOutline,
+	CollectMoneyOutline,
 	GiftOutline,
 	GlobalOutline,
 	HistogramOutline,
@@ -20,6 +21,7 @@ import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Image from 'next/image';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 const Card: FC<{
 	href: string | UrlObject;
@@ -54,12 +56,15 @@ const CountInfo: FC<{ value?: number; desc?: string }> = ({ value, desc }) => {
 };
 
 const AdminHome = () => {
+	const { data: session } = useSession();
+
 	const [count, setCount] = useState({
 		location: 0,
 		itemCategory: 0,
 		item: 0,
 		member: 0,
 		user: 0,
+		permission: 0,
 	});
 
 	useEffect(() => {
@@ -69,6 +74,8 @@ const AdminHome = () => {
 			}
 		});
 	}, []);
+
+	console.log(session);
 
 	return (
 		<Navigation active="admin" isAdmin>
@@ -127,13 +134,24 @@ const AdminHome = () => {
 
 			<h3 className="font-bold text-lg my-3">Administrasi</h3>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<Card
-					href="/admin/user"
-					icon={<UserAddOutline className="text-4xl" />}
-					title="User"
-					desc="atur data pengguna"
-					extra={<CountInfo value={count.user} desc="User" />}
-				/>
+				{session?.user?.id === 'sysadm' && (
+					<>
+						<Card
+							href="/admin/user"
+							icon={<UserAddOutline className="text-4xl" />}
+							title="User"
+							desc="atur data pengguna"
+							extra={<CountInfo value={count.user} desc="User" />}
+						/>
+						<Card
+							href="/admin/permission"
+							icon={<CollectMoneyOutline className="text-4xl" />}
+							title="Hak Akses"
+							desc="atur data hak akses"
+							extra={<CountInfo value={count.permission} desc="Akses" />}
+						/>
+					</>
+				)}
 				<Card
 					href="#"
 					icon={<GlobalOutline className="text-4xl" />}

@@ -28,6 +28,7 @@ model User {
 model Permissions {
     name      String   @id @map("permission_name") @db.VarChar(100)
     createdAt DateTime @default(now()) @map("permission_created_at")
+    updatedAt DateTime @default(now()) @map("permission_updated_at")
 }
 
 model UserPermissions {

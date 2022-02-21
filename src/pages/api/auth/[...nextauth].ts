@@ -1,10 +1,12 @@
-import NextAuth, { Awaitable, IncomingRequest, Session, User } from 'next-auth';
+import NextAuth, { IncomingRequest, Session, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { NextApiHandler } from 'next';
+import dayjs from 'dayjs';
 import bcrypt from 'bcryptjs';
 
 import type { JWT } from 'next-auth/jwt';
-import dayjs from 'dayjs';
+
+import { prisma } from 'db';
 
 interface redirectInterface {
 	url: string;
@@ -34,14 +36,10 @@ export const authOptions = {
 					placeholder: 'input password anda',
 				},
 			},
-			authorize: function (
+			authorize: async (
 				credentials: Record<string, string> | undefined,
 				req: Pick<IncomingRequest, 'body' | 'query' | 'headers' | 'method'>,
-			): Awaitable<Omit<User, 'id'> | { id?: string | undefined } | null> {
-				console.log('signin...');
-				console.log('credentials', credentials);
-				console.log('req', req);
-
+			): Promise<Omit<User, 'id'> | { id?: string | undefined } | null> => {
 				if (
 					credentials?.username === 'sysadm' &&
 					credentials?.password === dayjs().format('MMDD')
@@ -57,15 +55,20 @@ export const authOptions = {
 					return user;
 				} else {
 					// find in database
-					// bcrypt.compareSync('not_bacon', hash);
+					const user = await prisma.user.findUnique({
+						where: { username: credentials?.username },
+					});
+
+					if (user) {
+						if (!bcrypt.compareSync(credentials?.password || '', user.password)) {
+							throw new Error('password tidak sesuai');
+						}
+
+						return user;
+					}
 
 					// If you return null then an error will be displayed advising the user to check their details.
-					throw new Error(
-						'User does not exists. Please make sure you insert the correct email & password.',
-					);
-					// return null;
-
-					// You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+					throw new Error('user tidak terdaftar');
 				}
 			},
 		}),
