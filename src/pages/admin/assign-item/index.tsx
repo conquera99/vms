@@ -77,7 +77,7 @@ const Home = () => {
 	};
 
 	return (
-		<Navigation active="admin" access="item_history" isAdmin>
+		<Navigation title="VMS: Data Lokasi Item" active="admin" access="item_history" isAdmin>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />

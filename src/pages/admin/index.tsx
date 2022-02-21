@@ -78,7 +78,7 @@ const AdminHome = () => {
 	console.log(session);
 
 	return (
-		<Navigation active="admin" isAdmin>
+		<Navigation title="VMS: Menu Admin" active="admin" isAdmin>
 			<Title>Administrator</Title>
 			<div className="p-4 mb-4 text-center">
 				<Image src="/images/welcome.svg" width="200" height="100" alt="welcome-image" />

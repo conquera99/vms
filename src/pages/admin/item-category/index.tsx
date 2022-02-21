@@ -76,7 +76,7 @@ const Page = () => {
 	};
 
 	return (
-		<Navigation active="admin" access="item_category" isAdmin>
+		<Navigation title="VMS: Data Kategori" active="admin" access="item_category" isAdmin>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />

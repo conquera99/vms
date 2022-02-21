@@ -21,7 +21,7 @@ const Profile = () => {
 	const onSignOut = () => signOut({ redirect: true, callbackUrl: '/' });
 
 	return (
-		<Navigation active="account">
+		<Navigation title="VMS: Profile" active="account">
 			<Title>Profile</Title>
 
 			<div className="bg-blue-50 p-6 rounded-lg mb-4">

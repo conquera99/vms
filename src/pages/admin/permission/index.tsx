@@ -76,7 +76,7 @@ const Page = () => {
 	};
 
 	return (
-		<Navigation active="admin" isAdmin isSuperAdminOnly>
+		<Navigation title="VMS: Data Hak Akses" active="admin" isAdmin isSuperAdminOnly>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />
@@ -102,7 +102,9 @@ const Page = () => {
 								<div>
 									<small className="text-xs">ID:&nbsp;{item.id}</small>
 									<p className="font-bold text-lg">{item.name}</p>
-									<small className="text-xs text-gray-600">{dayjs(item.createdAt).format(datetimeFormat)}</small>
+									<small className="text-xs text-gray-600">
+										{dayjs(item.createdAt).format(datetimeFormat)}
+									</small>
 								</div>
 								<div>
 									<Link href={`/admin/permission/detail?id=${item.id}`}>
