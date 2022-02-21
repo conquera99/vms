@@ -76,7 +76,7 @@ const Home = () => {
 	};
 
 	return (
-		<Navigation active="admin" isAdmin isSuperAdminOnly>
+		<Navigation title="VMS: Data User" active="admin" isAdmin isSuperAdminOnly>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />

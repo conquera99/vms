@@ -60,7 +60,7 @@ const Page = () => {
 	}, [router.query.id, form]);
 
 	return (
-		<Navigation active="admin" access="location" isAdmin>
+		<Navigation title="VMS: Lokasi Detail" active="admin" access="location" isAdmin>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />

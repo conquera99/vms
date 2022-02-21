@@ -18,7 +18,7 @@ const Gallery = () => {
 	}, []);
 
 	return (
-		<Navigation active="gallery">
+		<Navigation title="VMS: Galeri" active="gallery">
 			<Title>Galeri</Title>
 
 			{data?.map((item) => {
