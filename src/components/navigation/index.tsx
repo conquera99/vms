@@ -43,7 +43,7 @@ const MenuItem: FC<{
 
 const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children, isAdmin }) => {
 	const router = useRouter();
-	const { status } = useSession();
+	const { data: session, status } = useSession();
 
 	useEffect(() => {
 		if (isAdmin === true && router.isReady && status === 'unauthenticated') {
@@ -136,7 +136,7 @@ const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children, isAdm
 
 			<div className="px-4 pt-16 pb-20 min-h-screen">{children}</div>
 
-			<div className="bottom-0 bg-white/60 backdrop-filter backdrop-blur-md rounded-lg right-0 left-0 py-1 md:py-2 fixed md:px-7">
+			<div className="bottom-0 border-t bg-white/50 backdrop-filter backdrop-blur-md rounded-lg right-0 left-0 py-1 md:py-2 fixed md:px-7">
 				<div className="flex">
 					<MenuItem
 						active={active === 'home'}
@@ -161,7 +161,11 @@ const Navigation: FC<BaseNavInterface> = ({ title, desc, active, children, isAdm
 					<MenuItem
 						active={active === 'account'}
 						href={status === 'authenticated' ? '/profile' : '/signin'}
-						title={status === 'authenticated' ? 'Akun' : 'Masuk'}
+						title={
+							status === 'authenticated'
+								? session.user.name?.substring(0, 10) || 'Akun'
+								: 'Masuk'
+						}
 						icon={<UserOutline />}
 					/>
 				</div>
