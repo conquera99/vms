@@ -12,17 +12,40 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	if (!session) return res.json(forbiddenResponse);
 
 	if (id) {
-		// const employees = await prisma.location.findMany({ where: { titleId: id } });
-
-		// if (employees.length > 0) {
-		// 	return res.json({ ...stillInUseResponse });
-		// }
-
-		const update = await prisma.itemHistory.deleteMany({
+		const detail = await prisma.itemHistory.findFirst({
 			where: { id },
 		});
 
-		return res.json({ ...successResponse, data: update });
+		if (!detail) {
+			return res.json({ code: 404, message: 'data not found' });
+		}
+
+		const itemDetail = await prisma.item.findUnique({
+			where: { id: detail.itemId },
+		});
+
+		if (!itemDetail) {
+			return res.json({ code: 404, message: 'item not found' });
+		}
+
+		if (Number(itemDetail.totalQty) - Number(detail.qty) < Number(itemDetail.assignQty)) {
+			return res.json({
+				code: 404,
+				message: 'total qty lebih kecil dibandingkan qty yang digunakan',
+			});
+		}
+
+		const process = await prisma.$transaction([
+			prisma.itemHistory.deleteMany({
+				where: { id },
+			}),
+			prisma.item.updateMany({
+				where: { id: detail.itemId },
+				data: { totalQty: { decrement: detail.qty || 0 } },
+			}),
+		]);
+
+		return res.json({ ...successResponse, data: process });
 	}
 
 	return res.json({ code: 500, message: 'id is required' });

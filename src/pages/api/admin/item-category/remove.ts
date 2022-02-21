@@ -12,11 +12,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	if (!session) return res.json(forbiddenResponse);
 
 	if (id) {
-		// const employees = await prisma.location.findMany({ where: { titleId: id } });
+		const item = await prisma.item.findMany({ where: { categoryId: id } });
 
-		// if (employees.length > 0) {
-		// 	return res.json({ ...stillInUseResponse });
-		// }
+		if (item.length > 0) {
+			return res.json({ ...stillInUseResponse });
+		}
 
 		const update = await prisma.itemCategory.delete({
 			where: { id },

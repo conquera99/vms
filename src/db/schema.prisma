@@ -67,15 +67,16 @@ model ItemCategory {
 }
 
 model Item {
-    id        String   @id @default(cuid()) @map("item_id")
-    name      String   @map("item_name")
-    desc      String?  @map("item_desc")
-    totalQty  Decimal  @default(0) @map("item_total_qty")
-    assignQty Decimal  @default(0) @map("item_assign_qty")
-    createdAt DateTime @default(now()) @map("item_created_at")
-    createdBy String   @map("item_created_by")
-    updatedAt DateTime @updatedAt @map("item_updated_at")
-    updatedBy String?  @map("item_updated_by")
+    id         String   @id @default(cuid()) @map("item_id")
+    name       String   @map("item_name")
+    categoryId String   @map("item_ic_id")
+    desc       String?  @map("item_desc")
+    totalQty   Decimal  @default(0) @map("item_total_qty")
+    assignQty  Decimal  @default(0) @map("item_assign_qty")
+    createdAt  DateTime @default(now()) @map("item_created_at")
+    createdBy  String   @map("item_created_by")
+    updatedAt  DateTime @updatedAt @map("item_updated_at")
+    updatedBy  String?  @map("item_updated_by")
 
     @@map("items")
 }

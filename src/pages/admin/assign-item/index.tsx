@@ -125,7 +125,7 @@ const Home = () => {
 									</Link>
 									<button
 										className="text-red-500"
-										onClick={() => onRemove(item.locId, item.itemId)}
+										onClick={() => onRemove(item.il_loc_id, item.item_id)}
 									>
 										hapus
 									</button>
