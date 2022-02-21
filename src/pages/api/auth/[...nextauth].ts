@@ -123,14 +123,14 @@ export const authOptions = {
 			console.log('session:token', token);
 			console.log('session:user', user);
 
-			const sess = {
+			const sess: Session = {
 				...session,
 				user: {
 					...session.user,
 					...user,
 					id: token.id as string,
 					username: token.username as string,
-					permissions: token.permissions,
+					permissions: token.permissions as Record<string, any>,
 				},
 			};
 
