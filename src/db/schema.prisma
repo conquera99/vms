@@ -87,6 +87,8 @@ model ItemHistory {
     date      DateTime @map("ih_date") @db.Date
     qty       Decimal  @map("ih_qty") @db.Decimal(13, 2)
     price     Decimal  @map("ih_price") @db.Decimal(20, 3)
+    imageId   String?  @map("ih_image_id") @db.Text()
+    image     String?  @map("ih_image") @db.Text()
     createdAt DateTime @default(now()) @map("ih_created_at")
     createdBy String   @map("ih_created_by")
     updatedAt DateTime @updatedAt @map("ih_updated_at")
@@ -116,6 +118,8 @@ model Member {
     dateOfBirth DateTime? @map("member_date_of_birth") @db.Date
     email       String?   @map("member_email")
     phone       String?   @map("member_phone")
+    imageId     String?   @map("member_image_id") @db.Text()
+    image       String?   @map("member_image") @db.Text()
     createdAt   DateTime  @default(now()) @map("member_created_at")
     createdBy   String    @map("member_created_by")
     updatedAt   DateTime  @updatedAt @map("member_updated_at")

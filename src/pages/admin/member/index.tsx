@@ -98,24 +98,42 @@ const Home = () => {
 				{data?.map((item: Record<string, any>) => {
 					return (
 						<List key={item.id}>
-							<div className="flex justify-between">
-								<div>
-									<small className="text-xs">ID:&nbsp;{item.id}</small>
-									<p className="font-bold text-lg">{item.name}</p>
-									<small className="text-xs text-gray-600">
-										{dayjs(item.createdAt).format(datetimeFormat)}
-									</small>
+							<div className="grid grid-cols-12 gap-2">
+								<div className="col-span-4 lg:col-span-3 overflow-hidden">
+									<div className="bg-slate-100 w-28 h-28 rounded-full flex items-center justify-center">
+										{item.image ? (
+											<img
+												src={item.image}
+												alt="member-image"
+												className="object-cover w-28 h-28 rounded-full"
+											/>
+										) : (
+											<div className="text-gray-500">
+												No Image
+											</div>
+										)}
+									</div>
 								</div>
-								<div>
-									<Link href={`/admin/member/detail?id=${item.id}`}>
-										<a className="text-blue-500 mr-2">edit</a>
-									</Link>
-									<button
-										className="text-red-500"
-										onClick={() => onRemove(item.id)}
-									>
-										hapus
-									</button>
+
+								<div className="col-span-8 lg:col-span-9 flex flex-col justify-between">
+									<div>
+										<small className="text-xs">ID:&nbsp;{item.id}</small>
+										<p className="font-bold text-lg">{item.name}</p>
+										<small className="text-xs text-gray-600">
+											{dayjs(item.createdAt).format(datetimeFormat)}
+										</small>
+									</div>
+									<div>
+										<Link href={`/admin/member/detail?id=${item.id}`}>
+											<a className="text-blue-500 mr-2">edit</a>
+										</Link>
+										<button
+											className="text-red-500"
+											onClick={() => onRemove(item.id)}
+										>
+											hapus
+										</button>
+									</div>
 								</div>
 							</div>
 						</List>

@@ -1,5 +1,6 @@
 import { Field } from 'rc-field-form';
 import RCInputNumber from 'rc-input-number';
+import { numberFormatter, numberParser } from 'utils/helper';
 
 const Input = ({ value = '', placeholder = '', required = false, type = 'text', ...props }) => {
 	return (
@@ -29,17 +30,21 @@ const Input = ({ value = '', placeholder = '', required = false, type = 'text', 
 
 export default Input;
 
-export const InputNumber = ({ value = '', placeholder = '', ...props }) => {
+export const InputNumber = ({ value = '', placeholder = '', required = false, ...props }) => {
 	return (
 		<Field name={props.name} rules={props.rules}>
 			{(control, meta) => (
 				<div className={`mb-2 ${props.className}`}>
-					<label className="block mb-1">{props.label}</label>
+					<label className="block mb-1">
+						{props.label}
+						{required && <span className="text-red-500">*</span>}
+					</label>
 					<RCInputNumber
 						// className="px-4 py-2 rounded-md border w-full text-black max-w-lg border-gray-600"
 						value={value}
 						placeholder={placeholder || props.label}
-						formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+						formatter={numberFormatter}
+						parser={numberParser}
 						{...props.input}
 						{...control}
 					/>

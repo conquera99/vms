@@ -3,13 +3,14 @@ import Picker from 'rc-picker';
 import dayjsGenerateConfig from 'rc-picker/lib/generate/dayjs';
 import locale from 'rc-picker/lib/locale/en_US';
 
-const DatePicker = ({ ...props }) => (
+const DatePicker = ({ required = false, ...props }) => (
 	<Field name={props.name} rules={props.rules}>
 		{(control, meta) => (
 			<div className={`mb-2 ${props.className}`}>
 				{props.label && (
 					<label htmlFor={props.id || props.name} className="mb-1 block">
 						{props.label}
+						{required && <span className="text-red-500">*</span>}
 					</label>
 				)}
 				<Picker

@@ -57,7 +57,7 @@ const Button: FC<ButtonProps> = ({
 			{...rest}
 		>
 			{iconLocation === 'left' && (loading ? <Loading /> : icon)}
-			{children}
+			&nbsp;{children}&nbsp;
 			{iconLocation === 'right' && (loading ? <Loading /> : icon)}
 		</button>
 	);
