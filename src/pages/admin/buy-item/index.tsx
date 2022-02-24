@@ -10,7 +10,7 @@ import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
-import { LinkButton } from 'components/general/button';
+import Button, { LinkButton } from 'components/general/button';
 import { Loading } from 'components/general/icon';
 import List from 'components/display/list';
 
@@ -19,6 +19,7 @@ import useOnScreen from 'hooks/useOnScreen';
 import fetcher from 'utils/fetcher';
 import { dateFormat, datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
 import { numberFormatter } from 'utils/helper';
+import Image from 'next/image';
 
 const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
 	if (previousPageData?.data && !previousPageData.data.length) return null;
@@ -99,38 +100,55 @@ const Home = () => {
 				{data?.map((item: Record<string, any>) => {
 					return (
 						<List key={item.ih_id}>
-							<div className="flex justify-between">
-								<div>
-									<small className="text-xs">ID:&nbsp;{item.ih_id}</small>
-									<p className="font-bold text-lg">{item.item_name}</p>
-									<div className="text-sm mt-1 mb-3 grid grid-cols-3 gap-2">
-										<div>
-											<small>Tanggal</small>
-											<p>{dayjs(item.ih_date).format(dateFormat)}</p>
-										</div>
-										<div className="text-right">
-											<small>Qty</small>
-											<p>{item.ih_qty}</p>
-										</div>
-										<div className="text-right">
-											<small>Harga</small>
-											<p>{numberFormatter(item.ih_price)}</p>
-										</div>
+							<div className="grid grid-cols-12 gap-2">
+								<div className="col-span-4 lg:col-span-3 overflow-hidden">
+									<div className="bg-slate-100 w-full h-full rounded-lg">
+										<img
+											src={item.ih_image}
+											alt="item-image"
+											className="object-cover h-40 rounded-lg"
+										/>
 									</div>
-									<small className="text-xs text-gray-600">
-										{dayjs(item.createdAt).format(datetimeFormat)}
-									</small>
 								</div>
-								<div>
-									<Link href={`/admin/buy-item/detail?id=${item.ih_id}`}>
-										<a className="text-blue-500 mr-2">lihat</a>
-									</Link>
-									<button
-										className="text-red-500"
-										onClick={() => onRemove(item.ih_id)}
-									>
-										hapus
-									</button>
+
+								<div className="col-span-8 lg:col-span-9 flex flex-col justify-between">
+									<div>
+										<small className="text-xs">ID:&nbsp;{item.ih_id}</small>
+										<p className="font-bold text-lg">{item.item_name}</p>
+										<div className="text-sm mt-1 mb-3 grid grid-cols-3 gap-2">
+											<div>
+												<small>Tanggal</small>
+												<p>{dayjs(item.ih_date).format(dateFormat)}</p>
+											</div>
+											<div className="text-right">
+												<small>Qty</small>
+												<p>{item.ih_qty}</p>
+											</div>
+											<div className="text-right">
+												<small>Harga</small>
+												<p>{numberFormatter(item.ih_price)}</p>
+											</div>
+										</div>
+										<small className="text-xs text-gray-600">
+											{dayjs(item.createdAt).format(datetimeFormat)}
+										</small>
+									</div>
+									<div className="mt-2 flex justify-between items-center">
+										<LinkButton
+											size="small"
+											buttonType="info"
+											href={`/admin/buy-item/detail?id=${item.ih_id}`}
+										>
+											Lihat
+										</LinkButton>
+										<Button
+											buttonType="danger"
+											size="small"
+											onClick={() => onRemove(item.ih_id)}
+										>
+											hapus
+										</Button>
+									</div>
 								</div>
 							</div>
 						</List>

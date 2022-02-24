@@ -19,6 +19,9 @@ module.exports = withPWA({
 		skipWaiting: false,
 		runtimeCaching,
 	},
+	images: {
+		domains: ['res.cloudinary.com'],
+	},
 	reactStrictMode: false,
 	poweredByHeader: false,
 	productionBrowserSourceMaps: true,

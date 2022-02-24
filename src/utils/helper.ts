@@ -11,3 +11,11 @@ export const formatNumber = (
 
 export const numberFormatter = (value: number | undefined): string =>
 	value && !Number.isNaN(Number(value)) ? formatNumber(value) : '0';
+
+export const numberParser = (value: string | undefined, locale: 'en' | 'id' = 'en'): number => {
+	if (locale === 'en') {
+		return value ? Number(value.replace(/\$\s?|(,*)/g, '')) : 0;
+	}
+
+	return value ? Number(value.replace(/\$\s?|(\.*)/g, '').replace(',', '.')) : 0;
+};
