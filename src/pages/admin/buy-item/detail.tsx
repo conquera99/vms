@@ -15,6 +15,7 @@ import DatePicker from 'components/entry/date-picker';
 import Select from 'components/entry/select';
 
 import { successMessage } from 'utils/constant';
+import Upload from 'components/entry/upload';
 
 const breadcrumb = [
 	{
@@ -33,21 +34,47 @@ const Page = () => {
 
 	const [item, setItem] = useState<Record<string, any>[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [file, setFile] = useState<File | null>(null);
+	const [image, setImage] = useState<string | undefined>(undefined);
+
+	const removeImage = () => setFile(null);
+
+	const beforeUpload = (file: File) => {
+		setFile(file);
+		const img = URL.createObjectURL(file);
+		setImage(img);
+		return false;
+	};
 
 	const onFinish = (values: any) => {
 		setLoading(true);
 
 		if (values.date) values.date = dayjs(values.date).toDate();
 
+		const formData = new FormData();
+
+		if (router.query.id) formData.append('id', router.query.id as string);
+
+		formData.append('itemId', values.itemId);
+		formData.append('date', values.date);
+		formData.append('price', values.price);
+		formData.append('qty', values.qty);
+		formData.append('qty', values.qty);
+
+		if (file) {
+			formData.append('img', file);
+		}
+
 		axios
-			.post('/api/admin/buy-item/save', {
-				id: router.query.id || null,
-				...values,
-			})
+			.post('/api/admin/buy-item/save', formData)
 			.then((response) => {
 				if (response.data.code === 0) {
 					toast.success(successMessage);
-					if (!router.query.id) form.resetFields();
+					if (!router.query.id) {
+						form.resetFields();
+						setFile(null);
+						setImage(undefined);
+					}
 				} else {
 					toast.error(response.data.message);
 				}
@@ -67,6 +94,10 @@ const Page = () => {
 				if (response.data.code === 0) {
 					if (response.data.data.date)
 						response.data.data.date = dayjs(response.data.data.date);
+
+					if (response.data.data.image) {
+						setImage(response.data.data.image);
+					}
 
 					form.setFieldsValue(response.data.data);
 				}
@@ -102,24 +133,40 @@ const Page = () => {
 					label="Pilih Item"
 					labelKey="name"
 					valueKey="id"
+					required
 					rules={[{ required: true, message: 'item harus dipilih' }]}
 					disabled={router.query.id ? true : false}
 				/>
 				<DatePicker
 					name="date"
 					label="Tanggal Beli"
+					required
+					rules={[{ required: true, message: 'tanggal harus dipilih' }]}
 					disabled={router.query.id ? true : false}
 				/>
 				<InputNumber
 					name="price"
 					label="Harga"
+					required
+					rules={[{ required: true, message: 'harga harus diisi' }]}
 					input={{ disabled: router.query.id ? true : false }}
 				/>
 				<InputNumber
 					name="qty"
 					label="Qty"
+					required
+					rules={[{ required: true, message: 'qty harus diisi' }]}
 					input={{ disabled: router.query.id ? true : false }}
 				/>
+				<Upload
+					file={file}
+					image={image}
+					disabled={!router.query.id ? false : true}
+					showPreview={router.query.id ? true : false}
+					onRemoveImage={removeImage}
+					beforeUpload={beforeUpload}
+				/>
+
 				{!router.query.id && (
 					<Button
 						type="submit"

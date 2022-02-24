@@ -2,7 +2,8 @@ import { getSession } from 'next-auth/react';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from 'db';
-import { forbiddenResponse, stillInUseResponse, successResponse } from 'utils/constant';
+import { forbiddenResponse, successResponse } from 'utils/constant';
+import cloudinary from 'utils/cloudinary';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const { id } = req.body;
@@ -45,7 +46,13 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			}),
 		]);
 
-		return res.json({ ...successResponse, data: process });
+		let deleteImage = null;
+
+		if (detail.imageId) {
+			deleteImage = await cloudinary.v2.api.delete_resources([detail.imageId]);
+		}
+
+		return res.json({ ...successResponse, data: { process, deleteImage } });
 	}
 
 	return res.json({ code: 500, message: 'id is required' });

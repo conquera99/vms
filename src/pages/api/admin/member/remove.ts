@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from 'db';
 import { forbiddenResponse, stillInUseResponse, successResponse } from 'utils/constant';
+import cloudinary from 'utils/cloudinary';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const { id } = req.body;
@@ -12,6 +13,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	if (!session) return res.json(forbiddenResponse);
 
 	if (id) {
+		const detail = await prisma.member.findFirst({
+			where: { id },
+		});
+
+		if (!detail) {
+			return res.json({ code: 404, message: 'data not found' });
+		}
+
 		// const employees = await prisma.location.findMany({ where: { titleId: id } });
 
 		// if (employees.length > 0) {
@@ -22,7 +31,13 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			where: { id },
 		});
 
-		return res.json({ ...successResponse, data: update });
+		let deleteImage = null;
+
+		if (detail.imageId) {
+			deleteImage = await cloudinary.v2.api.delete_resources([detail.imageId]);
+		}
+
+		return res.json({ ...successResponse, data: { update, deleteImage } });
 	}
 
 	return res.json({ code: 500, message: 'id is required' });

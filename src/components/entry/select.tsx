@@ -11,6 +11,7 @@ const Select = ({
 	valueKey = 'value',
 	labelKey = 'label',
 	label = '',
+	required = false,
 	...props
 }) => {
 	const containerId = `select-container-${props.name}`;
@@ -33,7 +34,10 @@ const Select = ({
 		<Field name={props.name} rules={props.rules}>
 			{(control, meta) => (
 				<div id={containerId} className={`mb-2 ${props.className}`}>
-					<label className="block">{label}</label>
+					<label className="block">
+						{label}
+						{required && <span className="text-red-500">*</span>}
+					</label>
 					<InputSelect
 						className="px-4 py-3 bg-white rounded-md border w-full text-black border-gray-600"
 						value={value}

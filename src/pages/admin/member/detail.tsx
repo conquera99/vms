@@ -12,6 +12,7 @@ import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
 import DatePicker from 'components/entry/date-picker';
+import Upload from 'components/entry/upload';
 
 import { successMessage } from 'utils/constant';
 
@@ -31,17 +32,39 @@ const Page = () => {
 	const [form] = Form.useForm();
 
 	const [loading, setLoading] = useState(false);
+	const [file, setFile] = useState<File | null>(null);
+	const [image, setImage] = useState<string | undefined>(undefined);
+
+	const removeImage = () => setFile(null);
+
+	const beforeUpload = (file: File) => {
+		setFile(file);
+		const img = URL.createObjectURL(file);
+		setImage(img);
+		return false;
+	};
 
 	const onFinish = (values: any) => {
 		setLoading(true);
 
-		if (values.date) values.date = dayjs(values.date).toDate();
+		if (values.dateOfBirth) values.date = dayjs(values.dateOfBirth).toDate();
+
+		const formData = new FormData();
+
+		if (router.query.id) formData.append('id', router.query.id as string);
+
+		formData.append('name', values.name);
+		formData.append('dateOfBirth', values.dateOfBirth);
+		formData.append('address', values.address);
+		formData.append('phone', values.phone);
+		formData.append('email', values.email);
+
+		if (file) {
+			formData.append('img', file);
+		}
 
 		axios
-			.post('/api/admin/member/save', {
-				id: router.query.id || null,
-				...values,
-			})
+			.post('/api/admin/member/save', formData)
 			.then((response) => {
 				if (response.data.code === 0) {
 					toast.success(successMessage);
@@ -59,6 +82,10 @@ const Page = () => {
 				if (response.data.code === 0) {
 					if (response.data.data.dateOfBirth)
 						response.data.data.dateOfBirth = dayjs(response.data.data.dateOfBirth);
+
+					if (response.data.data.image) {
+						setImage(response.data.data.image);
+					}
 
 					form.setFieldsValue(response.data.data);
 				}
@@ -98,6 +125,13 @@ const Page = () => {
 				<Input name="address" label="Alamat" />
 				<Input name="phone" label="Nomor Telepon/HP" />
 				<Input name="email" type="email" label="Email" />
+				<Upload
+					file={file}
+					image={image}
+					showPreview={router.query.id ? true : false}
+					onRemoveImage={removeImage}
+					beforeUpload={beforeUpload}
+				/>
 				<Button
 					type="submit"
 					className="w-full"
