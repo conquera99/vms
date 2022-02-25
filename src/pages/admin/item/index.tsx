@@ -100,8 +100,8 @@ const Home = () => {
 						<List key={item.id}>
 							<div className="flex justify-between">
 								<div>
-									<small className="text-xs">ID:&nbsp;{item.id}</small>
-									<p className="font-bold text-lg">{item.name}</p>
+									<small className="text-xs">Kode:&nbsp;{item.code}</small>
+									<p className="font-bold text-lg my-1">{item.name}</p>
 									<small className="text-xs text-gray-600">
 										{dayjs(item.createdAt).format(datetimeFormat)}
 									</small>
