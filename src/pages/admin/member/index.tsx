@@ -10,7 +10,7 @@ import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
-import { LinkButton } from 'components/general/button';
+import Button, { LinkButton } from 'components/general/button';
 import { Loading } from 'components/general/icon';
 import List from 'components/display/list';
 
@@ -108,9 +108,7 @@ const Home = () => {
 												className="object-cover w-28 h-28 rounded-full"
 											/>
 										) : (
-											<div className="text-gray-500">
-												No Image
-											</div>
+											<div className="text-gray-500">No Image</div>
 										)}
 									</div>
 								</div>
@@ -123,16 +121,21 @@ const Home = () => {
 											{dayjs(item.createdAt).format(datetimeFormat)}
 										</small>
 									</div>
-									<div>
-										<Link href={`/admin/member/detail?id=${item.id}`}>
-											<a className="text-blue-500 mr-2">edit</a>
-										</Link>
-										<button
-											className="text-red-500"
+									<div className="mt-2 flex justify-between items-center">
+										<LinkButton
+											size="small"
+											buttonType="info"
+											href={`/admin/member/detail?id=${item.id}`}
+										>
+											Lihat
+										</LinkButton>
+										<Button
+											buttonType="danger"
+											size="small"
 											onClick={() => onRemove(item.id)}
 										>
 											hapus
-										</button>
+										</Button>
 									</div>
 								</div>
 							</div>
