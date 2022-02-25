@@ -68,7 +68,11 @@ const Page = () => {
 			.then((response) => {
 				if (response.data.code === 0) {
 					toast.success(successMessage);
-					if (!router.query.id) form.resetFields();
+					if (!router.query.id) {
+						form.resetFields();
+						setFile(null);
+						setImage(undefined);
+					}
 				} else {
 					toast.error(response.data.message);
 				}
