@@ -21,7 +21,7 @@ import { datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
 const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
 	if (previousPageData?.data && !previousPageData.data.length) return null;
 
-	return `/api/admin/member?s=${pageSize}&p=${page + 1}`;
+	return `/api/admin/post?s=${pageSize}&p=${page + 1}`;
 };
 
 const breadcrumb = [
@@ -30,10 +30,16 @@ const breadcrumb = [
 		href: '/admin',
 	},
 	{
-		title: 'Anggota',
-		href: '/admin/member',
+		title: 'Post',
+		href: '/admin/post',
 	},
 ];
+
+const status: Record<string, string> = {
+	D: 'Draft',
+	P: 'Terpublikasi',
+	H: 'Tersembunyi',
+};
 
 const Page = () => {
 	const ref = useRef() as LegacyRef<HTMLDivElement>;
@@ -64,7 +70,7 @@ const Page = () => {
 	}, [isVisible, isRefreshing]);
 
 	const onRemove = (id: string) => {
-		axios.post('/api/admin/member/remove', { id }).then((response) => {
+		axios.post('/api/post/member/remove', { id }).then((response) => {
 			if (response.data.code === 0) {
 				toast.success(successMessage);
 				setSize(1);
@@ -75,12 +81,12 @@ const Page = () => {
 	};
 
 	return (
-		<Navigation title="VMS: Data Anggota" active="admin" access="member" isAdmin>
+		<Navigation title="VMS: Data Post" active="admin" access="post" isAdmin>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />
 					<LinkButton
-						href="/admin/member/detail"
+						href="/admin/post/detail"
 						size="small"
 						buttonType="success"
 						icon={<AddOutline />}
@@ -93,18 +99,18 @@ const Page = () => {
 
 			{isEmpty && <Empty />}
 
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+			<div className="grid grid-cols-1 gap-4">
 				{data?.map((item: Record<string, any>) => {
 					return (
 						<List key={item.id}>
 							<div className="grid grid-cols-12 gap-2">
 								<div className="col-span-4 lg:col-span-3 overflow-hidden">
-									<div className="bg-slate-100 w-28 h-28 rounded-full flex items-center justify-center">
+									<div className="bg-slate-100 w-24 h-32 md:w-36 md:h-36 rounded-lg flex items-center justify-center">
 										{item.image ? (
 											<img
 												src={item.image}
-												alt="member-image"
-												className="object-cover w-28 h-28 rounded-full"
+												alt="post-image"
+												className="object-cover w-24 h-32 md:w-36 md:h-36 rounded-lg"
 											/>
 										) : (
 											<div className="text-gray-500">No Image</div>
@@ -114,20 +120,32 @@ const Page = () => {
 
 								<div className="col-span-8 lg:col-span-9 flex flex-col justify-between">
 									<div>
-										<small className="text-xs">ID:&nbsp;{item.id}</small>
-										<p className="font-bold text-lg">{item.name}</p>
+										<p className="font-bold text-lg whitespace-nowrap overflow-hidden text-ellipsis">
+											{item.title}
+										</p>
+										<p className="text-sm mb-2 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+											{item.summary}
+										</p>
 										<small className="text-xs text-gray-600">
 											{dayjs(item.createdAt).format(datetimeFormat)}
+											&nbsp;|&nbsp;
+											{status[item.status]}
 										</small>
 									</div>
 									<div className="mt-2 flex justify-between items-center">
-										<LinkButton
-											size="small"
-											buttonType="info"
-											href={`/admin/member/detail?id=${item.id}`}
-										>
-											Lihat
-										</LinkButton>
+										<div className="flex">
+											<LinkButton
+												size="small"
+												buttonType="info"
+												className="mr-2"
+												href={`/admin/post/detail?id=${item.id}`}
+											>
+												Lihat
+											</LinkButton>
+											<LinkButton size="small" href={`/post/${item.slug}`}>
+												Buka
+											</LinkButton>
+										</div>
 										<Button
 											buttonType="danger"
 											size="small"

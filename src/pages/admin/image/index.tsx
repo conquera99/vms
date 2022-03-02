@@ -21,7 +21,7 @@ import { datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
 const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
 	if (previousPageData?.data && !previousPageData.data.length) return null;
 
-	return `/api/admin/member?s=${pageSize}&p=${page + 1}`;
+	return `/api/admin/gallery/image?s=${pageSize}&p=${page + 1}`;
 };
 
 const breadcrumb = [
@@ -30,8 +30,8 @@ const breadcrumb = [
 		href: '/admin',
 	},
 	{
-		title: 'Anggota',
-		href: '/admin/member',
+		title: 'Gambar',
+		href: '/admin/image',
 	},
 ];
 
@@ -64,7 +64,7 @@ const Page = () => {
 	}, [isVisible, isRefreshing]);
 
 	const onRemove = (id: string) => {
-		axios.post('/api/admin/member/remove', { id }).then((response) => {
+		axios.post('/api/admin/gallery/image/remove', { id }).then((response) => {
 			if (response.data.code === 0) {
 				toast.success(successMessage);
 				setSize(1);
@@ -75,12 +75,12 @@ const Page = () => {
 	};
 
 	return (
-		<Navigation title="VMS: Data Anggota" active="admin" access="member" isAdmin>
+		<Navigation title="VMS: Data Gambar" active="admin" access="image" isAdmin>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />
 					<LinkButton
-						href="/admin/member/detail"
+						href="/admin/image/detail"
 						size="small"
 						buttonType="success"
 						icon={<AddOutline />}
@@ -99,12 +99,12 @@ const Page = () => {
 						<List key={item.id}>
 							<div className="grid grid-cols-12 gap-2">
 								<div className="col-span-4 lg:col-span-3 overflow-hidden">
-									<div className="bg-slate-100 w-28 h-28 rounded-full flex items-center justify-center">
+									<div className="bg-slate-100 w-28 h-28 rounded-lg flex items-center justify-center">
 										{item.image ? (
 											<img
 												src={item.image}
 												alt="member-image"
-												className="object-cover w-28 h-28 rounded-full"
+												className="object-cover w-28 h-28 rounded-lg"
 											/>
 										) : (
 											<div className="text-gray-500">No Image</div>
@@ -115,7 +115,7 @@ const Page = () => {
 								<div className="col-span-8 lg:col-span-9 flex flex-col justify-between">
 									<div>
 										<small className="text-xs">ID:&nbsp;{item.id}</small>
-										<p className="font-bold text-lg">{item.name}</p>
+										<p className="font-bold text-lg">{item.altText}</p>
 										<small className="text-xs text-gray-600">
 											{dayjs(item.createdAt).format(datetimeFormat)}
 										</small>
@@ -124,7 +124,7 @@ const Page = () => {
 										<LinkButton
 											size="small"
 											buttonType="info"
-											href={`/admin/member/detail?id=${item.id}`}
+											href={`/admin/image/detail?id=${item.id}`}
 										>
 											Lihat
 										</LinkButton>

@@ -5,11 +5,14 @@ import {
 	AppOutline,
 	CalendarOutline,
 	CollectMoneyOutline,
+	ContentOutline,
+	FolderOutline,
 	GiftOutline,
 	GlobalOutline,
 	HistogramOutline,
 	LocationOutline,
 	PayCircleOutline,
+	PicturesOutline,
 	ShopbagOutline,
 	TagOutline,
 	TeamOutline,
@@ -65,6 +68,9 @@ const AdminHome = () => {
 		member: 0,
 		user: 0,
 		permission: 0,
+		post: 0,
+		album: 0,
+		image: 0,
 	});
 
 	useEffect(() => {
@@ -148,6 +154,41 @@ const AdminHome = () => {
 						icon={<AppOutline className="text-4xl" />}
 						title="Atur Lokasi"
 						desc="atur dan ubah lokasi item"
+					/>
+				)}
+			</div>
+
+			{(session?.user?.permissions?.album === true ||
+				session?.user?.permissions?.post === true ||
+				session?.user?.permissions?.image === true) && (
+				<h3 className="font-bold text-lg my-3">Konten</h3>
+			)}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+				{session?.user?.permissions?.post === true && (
+					<Card
+						href="/admin/post"
+						icon={<ContentOutline className="text-4xl" />}
+						title="Post"
+						desc="atur dan buat post"
+						extra={<CountInfo value={count.post} desc="Post" />}
+					/>
+				)}
+				{session?.user?.permissions?.album === true && (
+					<Card
+						href="/admin/album"
+						icon={<FolderOutline className="text-4xl" />}
+						title="Album"
+						desc="atur dan buat album"
+						extra={<CountInfo value={count.album} desc="Album" />}
+					/>
+				)}
+				{session?.user?.permissions?.image === true && (
+					<Card
+						href="/admin/image"
+						icon={<PicturesOutline className="text-4xl" />}
+						title="Gambar"
+						desc="atur dan unggah gambar"
+						extra={<CountInfo value={count.image} desc="Gambar" />}
 					/>
 				)}
 			</div>
