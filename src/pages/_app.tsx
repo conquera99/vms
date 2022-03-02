@@ -12,7 +12,7 @@ import type { AppProps } from 'next/app';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 	return (
-		<SessionProvider session={session} refetchInterval={5 * 60}>
+		<SessionProvider session={session} refetchInterval={60 * 60}>
 			<SWRConfig
 				value={{
 					fetcher: (resource, init) => fetch(resource, init).then((res) => res.json()),

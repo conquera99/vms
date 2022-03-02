@@ -4,12 +4,13 @@ import useSWRInfinite from 'swr/infinite';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
-import Button, { LinkButton } from 'components/general/button';
+import { LinkButton } from 'components/general/button';
 import { Loading } from 'components/general/icon';
 import List from 'components/display/list';
 
@@ -21,7 +22,7 @@ import { datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
 const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
 	if (previousPageData?.data && !previousPageData.data.length) return null;
 
-	return `/api/admin/member?s=${pageSize}&p=${page + 1}`;
+	return `/api/admin/gallery/album?s=${pageSize}&p=${page + 1}`;
 };
 
 const breadcrumb = [
@@ -30,8 +31,8 @@ const breadcrumb = [
 		href: '/admin',
 	},
 	{
-		title: 'Anggota',
-		href: '/admin/member',
+		title: 'Album',
+		href: '/admin/album',
 	},
 ];
 
@@ -64,7 +65,7 @@ const Page = () => {
 	}, [isVisible, isRefreshing]);
 
 	const onRemove = (id: string) => {
-		axios.post('/api/admin/member/remove', { id }).then((response) => {
+		axios.post('/api/admin/gallery/album/remove', { id }).then((response) => {
 			if (response.data.code === 0) {
 				toast.success(successMessage);
 				setSize(1);
@@ -75,12 +76,12 @@ const Page = () => {
 	};
 
 	return (
-		<Navigation title="VMS: Data Anggota" active="admin" access="member" isAdmin>
+		<Navigation title="VMS: Data Album" active="admin" access="album" isAdmin>
 			<Title>
 				<div className="flex justify-between items-center">
 					<Breadcrumb data={breadcrumb} />
 					<LinkButton
-						href="/admin/member/detail"
+						href="/admin/album/detail"
 						size="small"
 						buttonType="success"
 						icon={<AddOutline />}
@@ -97,45 +98,24 @@ const Page = () => {
 				{data?.map((item: Record<string, any>) => {
 					return (
 						<List key={item.id}>
-							<div className="grid grid-cols-12 gap-2">
-								<div className="col-span-4 lg:col-span-3 overflow-hidden">
-									<div className="bg-slate-100 w-28 h-28 rounded-full flex items-center justify-center">
-										{item.image ? (
-											<img
-												src={item.image}
-												alt="member-image"
-												className="object-cover w-28 h-28 rounded-full"
-											/>
-										) : (
-											<div className="text-gray-500">No Image</div>
-										)}
-									</div>
+							<div className="flex justify-between">
+								<div>
+									<small className="text-xs">ID:&nbsp;{item.id}</small>
+									<p className="font-bold text-lg">{item.title}</p>
+									<small className="text-xs text-gray-600">
+										{dayjs(item.createdAt).format(datetimeFormat)}
+									</small>
 								</div>
-
-								<div className="col-span-8 lg:col-span-9 flex flex-col justify-between">
-									<div>
-										<small className="text-xs">ID:&nbsp;{item.id}</small>
-										<p className="font-bold text-lg">{item.name}</p>
-										<small className="text-xs text-gray-600">
-											{dayjs(item.createdAt).format(datetimeFormat)}
-										</small>
-									</div>
-									<div className="mt-2 flex justify-between items-center">
-										<LinkButton
-											size="small"
-											buttonType="info"
-											href={`/admin/member/detail?id=${item.id}`}
-										>
-											Lihat
-										</LinkButton>
-										<Button
-											buttonType="danger"
-											size="small"
-											onClick={() => onRemove(item.id)}
-										>
-											hapus
-										</Button>
-									</div>
+								<div>
+									<Link href={`/admin/album/detail?id=${item.id}`}>
+										<a className="text-blue-500 mr-2">edit</a>
+									</Link>
+									<button
+										className="text-red-500"
+										onClick={() => onRemove(item.id)}
+									>
+										hapus
+									</button>
 								</div>
 							</div>
 						</List>

@@ -44,6 +44,52 @@ model UserPermissions {
     @@map("user_permissions")
 }
 
+model Posts {
+    id        String   @id @default(cuid()) @map("post_id")
+    title     String   @map("post_title")
+    slug      String   @map("post_slug")
+    imageId   String?  @map("post_image_id")
+    image     String?  @map("post_image")
+    summary   String?  @map("post_summary")
+    keywords  String?  @map("post_keywords")
+    content   String   @map("post_content") @db.LongText()
+    status    String   @default("D") @map("post_status") @db.Char(1) // D: Draft, P: Posted, H: hidden
+    createdAt DateTime @default(now()) @map("post_created_at")
+    createdBy String   @map("post_created_by")
+    updatedAt DateTime @default(now()) @map("post_updated_at")
+    updatedBy String?  @map("post_updated_by")
+
+
+    @@unique([slug])
+    @@map("posts")
+}
+
+model Albums {
+    id        String   @id @default(cuid()) @map("album_id")
+    title     String   @map("album_title")
+    slug      String   @map("album_slug")
+    createdAt DateTime @default(now()) @map("album_created_at")
+    createdBy String   @map("album_created_by")
+    updatedAt DateTime @default(now()) @map("album_updated_at")
+    updatedBy String?  @map("album_updated_by")
+
+    @@unique([slug])
+    @@map("albums")
+}
+
+model Images {
+    id        String   @id @map("image_id")
+    albumId   String   @map("image_album_id")
+    image     String   @map("image")
+    altText   String?  @map("image_alt")
+    createdAt DateTime @default(now()) @map("image_created_at")
+    createdBy String   @map("image_created_by")
+    updatedAt DateTime @default(now()) @map("image_updated_at")
+    updatedBy String?  @map("image_updated_by")
+
+    @@map("images")
+}
+
 model Location {
     id        String   @id @default(cuid()) @map("loc_id")
     name      String   @map("loc_name")

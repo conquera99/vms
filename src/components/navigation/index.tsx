@@ -25,7 +25,7 @@ const MenuItem: FC<{
 			<Link href={href}>
 				<a
 					className={`flex items-end justify-center text-center mx-auto px-2 md:px-4 pt-1 w-full ${
-						active ? ACTIVE_TEXT_COLOR : 'text-gray-400'
+						active ? ACTIVE_TEXT_COLOR : 'text-gray-700'
 					} group-hover:text-indigo-500`}
 				>
 					<span className="px-1 pt-1 pb-1 flex flex-col items-center">
@@ -55,12 +55,21 @@ const Navigation: FC<BaseNavInterface> = ({
 	const { data: session, status } = useSession();
 
 	useEffect(() => {
-		if (isAdmin === true && router.isReady && status === 'unauthenticated') {
-			router.push('/');
-		}
+		if (status !== 'loading') {
+			console.log('-----');
+			console.log('isAdmin', isAdmin);
+			console.log('router:isReady', router.isReady);
+			console.log('access', access);
+			console.log('auth:status', status);
+			console.log('auth:session', session?.user?.permissions);
 
-		if (typeof access !== 'undefined' && !session?.user?.permissions?.[access as string]) {
-			router.push('/');
+			if (isAdmin === true && router.isReady && status === 'unauthenticated') {
+				router.push('/');
+			}
+
+			if (typeof access !== 'undefined' && !session?.user?.permissions?.[access as string]) {
+				router.push('/');
+			}
 		}
 	}, [isAdmin, status, router, access, session?.user?.permissions, router.isReady]);
 
@@ -153,7 +162,7 @@ const Navigation: FC<BaseNavInterface> = ({
 
 			<div className="px-4 pt-16 pb-20 min-h-screen">{children}</div>
 
-			<div className="bottom-0 border-t bg-white/50 backdrop-filter backdrop-blur-md right-0 left-0 py-1 md:py-2 fixed md:px-7">
+			<div className="bottom-0 border-t bg-white/70 backdrop-filter backdrop-blur-md right-0 left-0 py-1 md:py-2 fixed md:px-7">
 				<div className="flex">
 					<MenuItem
 						active={active === 'home'}
