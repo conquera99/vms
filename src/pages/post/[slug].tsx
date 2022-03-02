@@ -55,7 +55,7 @@ const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
 };
 
 const serialize = (node: any, first = false) => {
-	if (node.text) {
+	if (typeof node.text !== 'undefined') {
 		let string = escapeHtml(node.text);
 
 		if (node.bold) {
