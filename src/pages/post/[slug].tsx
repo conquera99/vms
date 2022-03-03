@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { GetServerSideProps } from 'next';
 import escapeHtml from 'escape-html';
 import dayjs from 'dayjs';
+import Image from 'next/image';
+import { CalendarOutline, UserOutline } from 'antd-mobile-icons';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
@@ -9,8 +11,6 @@ import Breadcrumb from 'components/display/breadcrumb';
 
 import { prisma } from 'db';
 import { datetimeFormat } from 'utils/constant';
-import Image from 'next/image';
-import { CalendarOutline, UserOutline } from 'antd-mobile-icons';
 
 const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
 	const breadcrumb = [
@@ -25,7 +25,7 @@ const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
 	];
 
 	return (
-		<Navigation title={data.title} desc={data.summary} active="home">
+		<Navigation title={data.title} desc={data.summary} image={data.image} active="home">
 			<Title>
 				<Breadcrumb data={breadcrumb} />
 			</Title>

@@ -45,6 +45,7 @@ const MenuItem: FC<{
 const Navigation: FC<BaseNavInterface> = ({
 	title,
 	desc,
+	image,
 	active,
 	access,
 	children,
@@ -158,7 +159,7 @@ const Navigation: FC<BaseNavInterface> = ({
 
 	return (
 		<div className="bg-white">
-			<PageHead title={title} desc={desc} />
+			<PageHead title={title} desc={desc} image={image} />
 
 			<div className="px-4 pt-16 pb-20 min-h-screen">{children}</div>
 
