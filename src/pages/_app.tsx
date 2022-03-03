@@ -1,6 +1,8 @@
 import { SessionProvider } from 'next-auth/react';
 import { SWRConfig } from 'swr';
 import { ToastContainer } from 'react-toastify';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 import 'styles/globals.css';
 import 'styles/rc-select.css';
@@ -9,8 +11,27 @@ import 'styles/rc-input-number.css';
 import 'styles/toastify.css';
 
 import type { AppProps } from 'next/app';
+import { pageview } from 'utils/ga';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+	const router = useRouter();
+
+	useEffect(() => {
+		const handleRouteChange = (url: string) => {
+			pageview(url);
+		};
+
+		//When the component is mounted, subscribe to router changes
+		//and log those page views
+		router.events.on('routeChangeComplete', handleRouteChange);
+
+		// If the component is unmounted, unsubscribe
+		// from the event with the `off` method
+		return () => {
+			router.events.off('routeChangeComplete', handleRouteChange);
+		};
+	}, [router.events]);
+
 	return (
 		<SessionProvider session={session} refetchInterval={60 * 60}>
 			<SWRConfig
