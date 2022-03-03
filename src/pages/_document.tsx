@@ -1,6 +1,6 @@
 import { Html, Head, Main, NextScript } from 'next/document';
 
-const APP_URL = 'https://vsg-nnk.vercel.app';
+const APP_URL = 'https://vsg.nunukan.net';
 const APP_NAME = 'VSG iApp';
 // const APP_DESC =
 // 	'Website STI Vihara Sasana Graha Nunukan yang digunakan untuk melihat kegiatan-kegiatan vihara serta dapat mengatur administrasi dan inventaris vihara';
