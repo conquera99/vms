@@ -21,6 +21,7 @@ const PageHead: FC<PageHeadInterface> = ({ title, desc, image }) => {
 			<meta property="og:title" content={title} />
 			<meta property="og:description" content={desc} />
 			<meta property="og:image" content={image || '/icons/apple-touch-icon.png'} />
+			<meta property="og:image:secure" content={image || '/icons/apple-touch-icon.png'} />
 		</Head>
 	);
 };
