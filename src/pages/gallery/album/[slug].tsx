@@ -66,7 +66,7 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 			href: '/gallery',
 		},
 		{
-			title: `Album: ${detail.title}`,
+			title: `Album`,
 			href: `/gallery/album/${detail.slug}`,
 		},
 	];
@@ -76,6 +76,9 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 			<Title>
 				<Breadcrumb data={breadcrumb} />
 			</Title>
+
+			<h1 className="text-3xl text-indigo-500 font-bold mb-4">{detail.title}</h1>
+
 			{isEmpty && <Empty />}
 
 			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
