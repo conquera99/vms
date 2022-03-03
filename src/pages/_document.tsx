@@ -2,8 +2,8 @@ import { Html, Head, Main, NextScript } from 'next/document';
 
 const APP_URL = 'https://vsg-nnk.vercel.app';
 const APP_NAME = 'VSG iApp';
-const APP_DESC =
-	'Website STI Vihara Sasana Graha Nunukan yang digunakan untuk melihat kegiatan-kegiatan vihara serta dapat mengatur administrasi dan inventaris vihara';
+// const APP_DESC =
+// 	'Website STI Vihara Sasana Graha Nunukan yang digunakan untuk melihat kegiatan-kegiatan vihara serta dapat mengatur administrasi dan inventaris vihara';
 
 const Document = () => {
 	return (
@@ -13,7 +13,6 @@ const Document = () => {
 				<meta name="apple-mobile-web-app-capable" content="yes" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 				<meta name="apple-mobile-web-app-title" content={APP_NAME} />
-				<meta name="description" content={APP_DESC} />
 				<meta name="format-detection" content="telephone=no" />
 				<meta name="mobile-web-app-capable" content="yes" />
 				<meta name="msapplication-config" content="/icons/browserconfig.xml" />
@@ -42,17 +41,17 @@ const Document = () => {
 
 				<meta name="twitter:card" content="summary" />
 				<meta name="twitter:url" content={APP_URL} />
-				<meta name="twitter:title" content={APP_NAME} />
+				{/* <meta name="twitter:title" content={APP_NAME} />
 				<meta name="twitter:description" content={APP_DESC} />
-				<meta name="twitter:image" content="/icons/android-chrome-192x192.png" />
+				<meta name="twitter:image" content="/icons/android-chrome-192x192.png" /> */}
 				<meta name="twitter:creator" content="@conquera99" />
 
 				<meta property="og:type" content="website" />
-				<meta property="og:title" content={APP_NAME} />
-				<meta property="og:description" content={APP_DESC} />
+				{/* <meta property="og:title" content={APP_NAME} />
+				<meta property="og:description" content={APP_DESC} /> */}
 				<meta property="og:site_name" content={APP_NAME} />
 				<meta property="og:url" content={APP_URL} />
-				<meta property="og:image" content="/icons/apple-touch-icon.png" />
+				{/* <meta property="og:image" content="/icons/apple-touch-icon.png" /> */}
 
 				<link
 					rel="apple-touch-startup-image"
