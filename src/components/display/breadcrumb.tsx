@@ -29,7 +29,7 @@ const Item: FC<{ title: string; href?: string | UrlObject; isCurrent?: boolean }
 
 const Breadcrumb: FC<{ data: Record<string, any>[] }> = ({ data }) => {
 	return (
-		<ol className="breadcrumb flex">
+		<ol className="-ml-2 breadcrumb flex">
 			{data.map((item, index) => {
 				return (
 					<Item

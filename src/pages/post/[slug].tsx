@@ -19,7 +19,7 @@ const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
 			href: '/',
 		},
 		{
-			title: `Post: ${data.title}`,
+			title: `Post`,
 			href: `/post/${data.slug}`,
 		},
 	];
@@ -39,13 +39,16 @@ const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
 					layout="responsive"
 				/>
 				<div className="my-5">
-					<div className="flex mb-2">
-						<UserOutline className="mr-2" />
-						{data.createdBy}
-					</div>
+					<h1 className="text-3xl text-indigo-500 font-bold">{data.title}</h1>
 					<div className="flex">
-						<CalendarOutline className="mr-2" />
-						{data.createdAt}
+						<div className="flex mb-2 mr-5">
+							<UserOutline className="mr-2" />
+							{data.createdBy}
+						</div>
+						<div className="flex">
+							<CalendarOutline className="mr-2" />
+							{data.createdAt}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -87,7 +90,7 @@ const serialize = (node: any, first = false) => {
 		case 'bulleted-list':
 			return `<ul class='list-disc list-inside'>${children}</ul>`;
 		case 'heading-one':
-			return `<h1 class='text-3xl my-4'>${children}</h1>`;
+			return `<h1 class='text-xl my-4'>${children}</h1>`;
 		case 'heading-two':
 			return `<h2 class='text-lg my-3'>${children}</h2>`;
 		case 'list-item':
