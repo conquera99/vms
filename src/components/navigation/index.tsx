@@ -1,9 +1,10 @@
 import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
 import { Workbox } from 'workbox-window';
+import Link from 'next/link';
+import Image from 'next/image';
 
 import type { UrlObject } from 'url';
 
@@ -19,20 +20,27 @@ const MenuItem: FC<{
 	href: string | UrlObject;
 	active?: boolean;
 	title: string;
-}> = ({ icon, title, href, active = false, children }) => {
+	className?: string;
+}> = ({ icon, className, title, href, active = false, children }) => {
 	return (
-		<div className="flex-1 group">
+		<div
+			className={`flex-1 group md:items-center md:flex md:h-full md:px-2 ${
+				active ? 'md:border-b-2 md:border-indigo-300' : ''
+			}`}
+		>
 			<Link href={href}>
 				<a
-					className={`flex items-end justify-center text-center mx-auto px-2 md:px-4 pt-1 w-full ${
+					className={`flex items-end md:items-center justify-center text-center mx-auto px-2 md:px-4 pt-1 w-full ${
 						active ? ACTIVE_TEXT_COLOR : 'text-gray-700'
-					} group-hover:text-indigo-500`}
+					} group-hover:text-indigo-500 transition-all duration-500 md:group-hover:text-indigo-700 md:hover:bg-indigo-100 md:rounded-lg ${className}`}
 				>
 					<span className="px-1 pt-1 pb-1 flex flex-col items-center">
 						{children || (
 							<>
-								{icon}
-								<span className="block text-xs pb-1">{title}</span>
+								<span className="md:hidden">{icon}</span>
+								<span className="block text-xs md:text-base md:font-bold pb-1">
+									{title}
+								</span>
 							</>
 						)}
 					</span>
@@ -78,6 +86,7 @@ const Navigation: FC<BaseNavInterface> = ({
 	// It has same effect as the old componentDidMount lifecycle callback.
 	useEffect(() => {
 		if (
+			false &&
 			typeof window !== 'undefined' &&
 			'serviceWorker' in navigator
 			// window.workbox !== undefined
@@ -161,40 +170,49 @@ const Navigation: FC<BaseNavInterface> = ({
 		<div className="bg-white">
 			<PageHead title={title} desc={desc} image={image} />
 
+			{/* <div className="hidden md:block md:h-16">&nbsp;</div> */}
+
 			<div className="px-4 pt-16 pb-20 min-h-screen">{children}</div>
 
-			<div className="bottom-0 border-t bg-white/70 backdrop-filter backdrop-blur-md right-0 left-0 py-1 md:py-2 fixed md:px-7">
-				<div className="flex">
-					<MenuItem
-						active={active === 'home'}
-						href="/"
-						title="Beranda"
-						icon={<AppstoreOutline />}
-					/>
-					<MenuItem
-						active={active === 'gallery'}
-						href="/gallery"
-						title="Galeri"
-						icon={<PictureOutline />}
-					/>
-					{status === 'authenticated' && (
+			<div className="md:top-0 md:bottom-auto md:border-b md:px-4 z-10 h-16 bottom-0 border-t bg-white/70 backdrop-filter backdrop-blur-md right-0 left-0 py-1 fixed">
+				<div className="flex h-full md:justify-between md:mx-auto md:max-w-5xl xl:max-w-7xl">
+					<div className="hidden md:flex items-center">
+						<Image src="/logo.png" width={45} height={45} alt="logo" />
+						<h1 className="ml-2 font-bold text-xl">VSG</h1>
+					</div>
+					<div className="flex w-full md:w-auto">
 						<MenuItem
-							active={active === 'admin'}
-							href="/admin"
-							title="Admin"
-							icon={<FolderOutline />}
+							active={active === 'home'}
+							href="/"
+							title="Beranda"
+							icon={<AppstoreOutline />}
 						/>
-					)}
-					<MenuItem
-						active={active === 'account'}
-						href={status === 'authenticated' ? '/profile' : '/signin'}
-						title={
-							status === 'authenticated'
-								? session?.user?.name?.substring(0, 10) || 'Akun'
-								: 'Masuk'
-						}
-						icon={<UserOutline />}
-					/>
+						<MenuItem
+							active={active === 'gallery'}
+							href="/gallery"
+							title="Galeri"
+							icon={<PictureOutline />}
+						/>
+						{status === 'authenticated' && (
+							<MenuItem
+								active={active === 'admin'}
+								href="/admin"
+								title="Admin"
+								icon={<FolderOutline />}
+							/>
+						)}
+						<MenuItem
+							active={active === 'account'}
+							href={status === 'authenticated' ? '/profile' : '/signin'}
+							className={status === 'authenticated' ? 'md:w-36' : ''}
+							title={
+								status === 'authenticated'
+									? session?.user?.name?.substring(0, 10) || 'Akun'
+									: 'Masuk'
+							}
+							icon={<UserOutline />}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>

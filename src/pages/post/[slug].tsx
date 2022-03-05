@@ -8,6 +8,7 @@ import { CalendarOutline, UserOutline } from 'antd-mobile-icons';
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
+import Container from 'components/general/container';
 
 import { prisma } from 'db';
 import { datetimeFormat } from 'utils/constant';
@@ -26,33 +27,35 @@ const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
 
 	return (
 		<Navigation title={data.title} desc={data.summary} image={data.image} active="home">
-			<Title>
-				<Breadcrumb data={breadcrumb} />
-			</Title>
-			<div className="">
-				<Image
-					src={data.image}
-					className="rounded-md object-cover"
-					alt={data.title}
-					height={250}
-					width={500}
-					layout="responsive"
-				/>
-				<div className="my-5">
-					<h1 className="text-3xl text-indigo-500 font-bold">{data.title}</h1>
-					<div className="flex">
-						<div className="flex mb-2 mr-5">
-							<UserOutline className="mr-2" />
-							{data.createdBy}
-						</div>
+			<Container>
+				<Title>
+					<Breadcrumb data={breadcrumb} />
+				</Title>
+				<div>
+					<Image
+						src={data.image}
+						className="rounded-md object-cover"
+						alt={data.title}
+						height={150}
+						width={400}
+						layout="responsive"
+					/>
+					<div className="my-5">
+						<h1 className="text-3xl text-indigo-500 font-bold">{data.title}</h1>
 						<div className="flex">
-							<CalendarOutline className="mr-2" />
-							{data.createdAt}
+							<div className="flex mb-2 mr-5">
+								<UserOutline className="mr-2" />
+								{data.createdBy}
+							</div>
+							<div className="flex">
+								<CalendarOutline className="mr-2" />
+								{data.createdAt}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div dangerouslySetInnerHTML={{ __html: data.content }} />
+				<div dangerouslySetInnerHTML={{ __html: data.content }} />
+			</Container>
 		</Navigation>
 	);
 };

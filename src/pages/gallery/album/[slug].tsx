@@ -1,13 +1,15 @@
-import { FC, LegacyRef, useEffect, useRef } from 'react';
+import { FC, LegacyRef, useEffect, useRef, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import useSWRInfinite from 'swr/infinite';
+import Dialog from 'rc-dialog';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
+import Container from 'components/general/container';
 import { Loading } from 'components/general/icon';
 
 import useOnScreen from 'hooks/useOnScreen';
@@ -33,6 +35,9 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 
 	const isVisible = useOnScreen(ref);
 
+	const [visible, setVisible] = useState(false);
+	const [image, setImage] = useState<Record<string, any> | null>(null);
+
 	const {
 		data: response,
 		error,
@@ -48,6 +53,16 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 	const isEmpty = response?.[0]?.length === 0;
 	const isReachingEnd = size === DEFAULT_LIMIT;
 	const isRefreshing = isValidating && response && response.length === size;
+
+	const openImage = (item: Record<string, any>) => {
+		setVisible(true);
+		setImage(item);
+	};
+
+	const closePreview = () => {
+		setVisible(false);
+		setImage(null);
+	};
 
 	useEffect(() => {
 		if (isVisible && !isReachingEnd && !isRefreshing) {
@@ -73,38 +88,60 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 
 	return (
 		<Navigation title={detail.title} desc={detail.title} active="gallery">
-			<Title>
-				<Breadcrumb data={breadcrumb} />
-			</Title>
+			<Container>
+				<Title>
+					<Breadcrumb data={breadcrumb} />
+				</Title>
 
-			<h1 className="text-3xl text-indigo-500 font-bold mb-4">{detail.title}</h1>
+				<h1 className="text-3xl text-indigo-500 font-bold mb-4">{detail.title}</h1>
 
-			{isEmpty && <Empty />}
+				{isEmpty && <Empty />}
 
-			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
-				{data?.map((item: Record<string, any>) => {
-					return (
-						<div key={item.id} className="rounded-lg shadow-md">
-							<Image
-								className="rounded-lg object-cover"
-								alt={item.altText}
-								src={item.image}
-								layout="responsive"
-								width={300}
-								height={300}
-							/>
-						</div>
-					);
-				})}
-			</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+					{data?.map((item: Record<string, any>) => {
+						return (
+							<div
+								key={item.id}
+								className="rounded-lg shadow-md cursor-pointer"
+								onClick={() => openImage(item)}
+							>
+								<Image
+									className="rounded-lg object-cover"
+									alt={item.altText}
+									src={item.image}
+									layout="responsive"
+									width={300}
+									height={300}
+								/>
+							</div>
+						);
+					})}
+				</div>
 
-			<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-				{isLoadingMore ? (
-					<Loading />
-				) : isReachingEnd ? (
-					<p className="text-gray-400">No more data</p>
-				) : null}
-			</div>
+				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
+					{isLoadingMore ? (
+						<Loading />
+					) : isReachingEnd ? (
+						<p className="text-gray-400">No more data</p>
+					) : null}
+				</div>
+
+				<Dialog
+					visible={visible}
+					onClose={closePreview}
+					style={{}}
+					bodyStyle={{ padding: 0 }}
+				>
+					<div>
+						<img
+							className="rounded-md"
+							alt={image?.altText}
+							src={image?.image}
+							style={{ minHeight: 'calc(100vh - 50px)' }}
+						/>
+					</div>
+				</Dialog>
+			</Container>
 		</Navigation>
 	);
 };

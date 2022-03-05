@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import 'styles/globals.css';
 import 'styles/rc-select.css';
 import 'styles/rc-picker.css';
+import 'styles/rc-dialog.css';
 import 'styles/rc-input-number.css';
 import 'styles/toastify.css';
 
