@@ -7,6 +7,7 @@ import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Empty from 'components/display/empty';
 import { Loading } from 'components/general/icon';
+import Container from 'components/general/container';
 
 import useOnScreen from 'hooks/useOnScreen';
 
@@ -49,34 +50,36 @@ const Gallery = () => {
 
 	return (
 		<Navigation title="VMS: Galeri" active="gallery">
-			<Title>Galeri</Title>
+			<Container>
+				<Title>Galeri</Title>
 
-			{isEmpty && <Empty />}
+				{isEmpty && <Empty />}
 
-			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
-				{data?.map((item: Record<string, any>) => {
-					return (
-						<Link key={item.slug} href={`/gallery/album/${item.slug}`}>
-							<a className="block rounded-lg bg-yellow-50 my-5 border border-transparent shadow-md relative transform transition-all duration-300 scale-100 hover:shadow-lg">
-								<div className="p-6 flex items-center">
-									<FolderOutline className="text-3xl mr-2" />
-									<h2 className="text-ellipsis overflow-hidden whitespace-nowrap text-xl font-bold leading-tight pr-5">
-										{item.title}
-									</h2>
-								</div>
-							</a>
-						</Link>
-					);
-				})}
-			</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+					{data?.map((item: Record<string, any>) => {
+						return (
+							<Link key={item.slug} href={`/gallery/album/${item.slug}`}>
+								<a className="block rounded-lg bg-yellow-50 my-5 border border-transparent shadow-md relative transform transition-all duration-300 scale-100 hover:shadow-lg">
+									<div className="p-6 flex items-center">
+										<FolderOutline className="text-3xl mr-2" />
+										<h2 className="text-ellipsis overflow-hidden whitespace-nowrap text-xl font-bold leading-tight pr-5">
+											{item.title}
+										</h2>
+									</div>
+								</a>
+							</Link>
+						);
+					})}
+				</div>
 
-			<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-				{isLoadingMore ? (
-					<Loading />
-				) : isReachingEnd ? (
-					<p className="text-gray-400">No more data</p>
-				) : null}
-			</div>
+				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
+					{isLoadingMore ? (
+						<Loading />
+					) : isReachingEnd ? (
+						<p className="text-gray-400">No more data</p>
+					) : null}
+				</div>
+			</Container>
 		</Navigation>
 	);
 };

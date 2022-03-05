@@ -1,10 +1,11 @@
-import Link from 'next/link';
 import { LegacyRef, useEffect, useRef } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Empty from 'components/display/empty';
+import Post from 'components/display/post';
+import Container from 'components/general/container';
 import { Loading } from 'components/general/icon';
 
 import useOnScreen from 'hooks/useOnScreen';
@@ -48,47 +49,25 @@ export default function Home() {
 
 	return (
 		<Navigation active="home">
-			<Title>Beranda</Title>
+			<Container>
+				<Title>Beranda</Title>
 
-			{isEmpty && <Empty />}
+				{isEmpty && <Empty />}
 
-			<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
-				{data?.map((item: Record<string, any>) => {
-					return (
-						<Link key={item.slug} href={`/post/${item.slug}`}>
-							<a
-								className="block rounded-lg my-5 border border-transparent shadow-md relative transform transition-all duration-300 scale-100 hover:shadow-lg hover:border-red-400"
-								style={{
-									background: `url(${item.image}) center`,
-									backgroundSize: 'cover',
-								}}
-							>
-								<div className="h-60" />
-								<div className="p-1">
-									<div className="bg-red-900/60 backdrop-blur-lg p-4 rounded-lg">
-										<h2 className="text-white text-ellipsis overflow-hidden whitespace-nowrap text-xl font-bold leading-tight mb-2 pr-5">
-											{item.title}
-										</h2>
-										<div className="flex w-full items-center text-sm text-gray-200 font-medium">
-											<div className="flex-1 flex items-center">
-												<div>{item.summary}</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</a>
-						</Link>
-					);
-				})}
-			</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-2">
+					{data?.map((item: Record<string, any>) => {
+						return <Post key={item.id} data={item} />;
+					})}
+				</div>
 
-			<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-				{isLoadingMore ? (
-					<Loading />
-				) : isReachingEnd ? (
-					<p className="text-gray-400">No more data</p>
-				) : null}
-			</div>
+				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
+					{isLoadingMore ? (
+						<Loading />
+					) : isReachingEnd ? (
+						<p className="text-gray-400">No more data</p>
+					) : null}
+				</div>
+			</Container>
 		</Navigation>
 	);
 }
