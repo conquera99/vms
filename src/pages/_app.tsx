@@ -3,6 +3,7 @@ import { SWRConfig } from 'swr';
 import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import NextNProgress from 'nextjs-progressbar';
 
 import 'styles/globals.css';
 import 'styles/rc-select.css';
@@ -40,6 +41,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 					fetcher: (resource, init) => fetch(resource, init).then((res) => res.json()),
 				}}
 			>
+				<NextNProgress color="#6366f1" stopDelayMs={50} height={2} startPosition={0.1} />
 				<ToastContainer position="top-center" />
 				<Component {...pageProps} />
 			</SWRConfig>

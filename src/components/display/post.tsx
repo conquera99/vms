@@ -11,7 +11,7 @@ const Post: FC<PostProps> = ({ data }) => {
 	return (
 		<Link key={data.slug} href={`/post/${data.slug}`}>
 			<a
-				className="block rounded-lg my-5 border border-transparent shadow-md shadow-neutral-500 hover:shadow-neutral-900 relative transform transition-all duration-700 hover:shadow-lg"
+				className="block rounded-lg my-5 border border-transparent shadow-md shadow-neutral-400 hover:shadow-neutral-500 relative transform transition-all duration-700 hover:shadow-lg"
 				style={{
 					background: `url(${data.image}) center`,
 					backgroundSize: 'cover',

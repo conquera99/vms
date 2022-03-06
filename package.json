@@ -29,6 +29,7 @@
         "next": "12.1.0",
         "next-auth": "^4.2.1",
         "next-pwa": "^5.4.5",
+        "nextjs-progressbar": "^0.0.14",
         "rc-dialog": "^8.6.0",
         "rc-field-form": "^1.24.0",
         "rc-input-number": "^7.3.4",

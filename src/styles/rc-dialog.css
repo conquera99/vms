@@ -20,11 +20,9 @@
 }
 .rc-dialog-content {
 	position: relative;
-	background-color: #fff;
 	border-radius: 6px;
 	background-clip: padding-box;
 	outline: 0;
-	@apply shadow-md;
 }
 .rc-dialog-header {
 	padding: 15px;
@@ -41,9 +39,8 @@
 	font-weight: 700;
 	line-height: 1;
 	color: #000;
-	text-shadow: 0 1px 0 #fff;
-	filter: alpha(opacity=20);
-	opacity: 0.2;
+	filter: alpha(opacity=70);
+	opacity: 0.7;
 	text-decoration: none;
 	z-index: 100;
 	@apply transition-all;
@@ -64,6 +61,8 @@
 .rc-dialog-body {
 	position: relative;
 	padding: 15px;
+	@apply rounded-md;
+	@apply bg-white;
 }
 .rc-dialog-footer {
 	padding: 15px;
@@ -85,10 +84,10 @@
 		width: 600px;
 		margin: 30px auto;
 	} */
-	.rc-dialog-content {
+	/* .rc-dialog-content {
 		@apply shadow-lg;
 		@apply shadow-neutral-700;
-	}
+	} */
 }
 .rc-dialog-slide-fade-enter,
 .rc-dialog-slide-fade-appear {
