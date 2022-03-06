@@ -36,7 +36,7 @@ const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
 						src={data.image}
 						className="rounded-md object-cover"
 						alt={data.title}
-						height={150}
+						height={230}
 						width={400}
 						layout="responsive"
 					/>

@@ -132,9 +132,9 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 					style={{}}
 					bodyStyle={{ padding: 0 }}
 				>
-					<div>
+					<div className="flex justify-center">
 						<img
-							className="rounded-md"
+							className="object-contain rounded-md"
 							alt={image?.altText}
 							src={image?.image}
 							style={{ minHeight: 'calc(100vh - 50px)' }}
