@@ -7,7 +7,7 @@ import { forbiddenResponse, successResponse } from 'utils/constant';
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const session = await getSession({ req });
 
-	if (!session) return res.json(forbiddenResponse);
+	if (!session) return res.status(403).json(forbiddenResponse);
 
 	const locationCount = await prisma.location.count();
 	const itemCategoryCount = await prisma.itemCategory.count();

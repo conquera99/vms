@@ -16,7 +16,7 @@ export const config = {
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const session = await getSession({ req });
 
-	if (!session) return res.json(forbiddenResponse);
+	if (!session) return res.status(403).json(forbiddenResponse);
 
 	const data: { fields: Record<string, any>; files: any } | undefined = await new Promise(
 		(resolve, reject) => {
