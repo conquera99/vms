@@ -10,7 +10,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	const session = await getSession({ req });
 
-	if (!session) return res.json(forbiddenResponse);
+	if (!session) return res.status(403).json(forbiddenResponse);
 
 	if (id) {
 		const detail = await prisma.images.findFirst({

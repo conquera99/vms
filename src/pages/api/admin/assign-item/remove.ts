@@ -9,7 +9,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	const session = await getSession({ req });
 
-	if (!session) return res.json(forbiddenResponse);
+	if (!session) return res.status(403).json(forbiddenResponse);
 
 	if (locId && itemId) {
 		const detail = await prisma.itemLocation.findUnique({

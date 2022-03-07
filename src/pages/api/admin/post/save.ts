@@ -16,7 +16,7 @@ export const config = {
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const session = await getSession({ req });
 
-	if (!session) return res.json(forbiddenResponse);
+	if (!session) return res.status(403).json(forbiddenResponse);
 
 	const data: { fields: Record<string, any>; files: any } | undefined = await new Promise(
 		(resolve, reject) => {
@@ -43,6 +43,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		};
 	}
 
+	const slug = slugify(data?.fields.title);
+
 	if (data?.fields.id) {
 		const detail = await prisma.posts.findFirst({
 			where: { id: data?.fields.id },
@@ -55,8 +57,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		const update = await prisma.posts.update({
 			where: { id: data?.fields.id },
 			data: {
+				slug,
 				title: data?.fields.title,
-				slug: slugify(data?.fields.title),
 				summary: data?.fields.summary,
 				keywords: data?.fields.keywords,
 				content: data?.fields.content,
@@ -77,8 +79,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	const create = await prisma.posts.create({
 		data: {
+			slug,
 			title: data?.fields.title,
-			slug: slugify(data?.fields.title),
 			summary: data?.fields.summary,
 			keywords: data?.fields.keywords,
 			content: data?.fields.content,
@@ -87,6 +89,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			...imageData,
 		},
 	});
+
+	await res.unstable_revalidate(`/post/${slug}`);
 
 	return res.json({ ...successResponse, data: create });
 }
