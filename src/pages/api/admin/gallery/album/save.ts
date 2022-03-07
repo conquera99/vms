@@ -10,20 +10,24 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	const session = await getSession({ req });
 
-	if (!session) return res.json(forbiddenResponse);
+	if (!session) return res.status(403).json(forbiddenResponse);
+
+	const slug = slugify(title);
 
 	if (id) {
 		const update = await prisma.albums.update({
 			where: { id },
-			data: { title, slug: slugify(title), updatedBy: session.user.id },
+			data: { title, slug, updatedBy: session.user.id },
 		});
 
 		return res.json({ ...successResponse, data: update });
 	}
 
 	const create = await prisma.albums.create({
-		data: { title, slug: slugify(title), createdBy: session.user.id },
+		data: { title, slug, createdBy: session.user.id },
 	});
+
+	await res.unstable_revalidate(`/gallery/album/${slug}`);
 
 	return res.json({ ...successResponse, data: create });
 }

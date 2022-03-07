@@ -1,5 +1,5 @@
 import { FC, LegacyRef, useEffect, useRef, useState } from 'react';
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import useSWRInfinite from 'swr/infinite';
@@ -146,8 +146,15 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-	const { slug } = query;
+export const getStaticPaths: GetStaticPaths = async () => {
+	return {
+		paths: [{ params: { slug: 'Magha-Puja-2022' } }],
+		fallback: 'blocking',
+	};
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+	const { slug } = params as Record<string, any>;
 
 	// redirect
 	if (!slug) {

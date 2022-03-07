@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps, GetStaticPaths } from 'next';
 import escapeHtml from 'escape-html';
 import dayjs from 'dayjs';
 import Image from 'next/image';
@@ -109,8 +109,15 @@ const serialize = (node: any, first = false) => {
 	}
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-	const { slug } = query;
+export const getStaticPaths: GetStaticPaths = async () => {
+	return {
+		paths: [{ params: { slug: 'Perayaan-Magha-Puja-2565-BE-2022' } }],
+		fallback: 'blocking',
+	};
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+	const { slug } = params as Record<string, any>;
 
 	// redirect
 	if (!slug) {
