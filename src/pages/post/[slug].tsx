@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import escapeHtml from 'escape-html';
 import dayjs from 'dayjs';
 import Image from 'next/image';
@@ -109,9 +109,9 @@ const serialize = (node: any, first = false) => {
 	}
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-	const { slug } = query;
-
+export const getStaticProps: GetStaticProps = async ({ params}) => {
+	const { slug } = params;
+	
 	// redirect
 	if (!slug) {
 		return {
@@ -140,6 +140,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 			},
 		},
 	};
-};
+}
 
 export default Home;
