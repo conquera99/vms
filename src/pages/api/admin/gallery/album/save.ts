@@ -20,6 +20,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			data: { title, slug, updatedBy: session.user.id },
 		});
 
+		await res.unstable_revalidate(`/gallery/album/${slug}`);
+
 		return res.json({ ...successResponse, data: update });
 	}
 

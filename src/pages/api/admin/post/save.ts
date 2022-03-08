@@ -74,6 +74,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			deleteImage = await cloudinary.v2.api.delete_resources([detail.imageId]);
 		}
 
+		await res.unstable_revalidate(`/post/${slug}`);
+
 		return res.json({ ...successResponse, data: { update, deleteImage } });
 	}
 
