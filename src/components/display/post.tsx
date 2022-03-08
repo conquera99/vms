@@ -28,7 +28,10 @@ const Post: FC<PostProps> = ({ data }) => {
 								{dayjs(data.createdAt).format(datetimeFormat)} WITA
 							</small>
 							<div className="flex w-full mt-2">
-								<div className="flex-1 h-14 overflow-hidden flex items-center">
+								<div
+									className="flex-1 h-12 overflow-hidden flex items-start"
+									title={data.summary}
+								>
 									<div>{data.summary}</div>
 								</div>
 							</div>
