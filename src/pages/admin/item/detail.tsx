@@ -11,9 +11,10 @@ import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
+import Select from 'components/entry/select';
+import { ContainerAdmin } from 'components/general/container';
 
 import { successMessage } from 'utils/constant';
-import Select from 'components/entry/select';
 
 const breadcrumb = [
 	{
@@ -77,62 +78,64 @@ const Page = () => {
 
 	return (
 		<Navigation title="VMS: Item Detail" active="admin" access="item" isAdmin>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/item"
-						size="small"
-						buttonType="warning"
-						icon={<CloseOutline />}
-						className="text-base"
-					>
-						Tutup
-					</LinkButton>
-				</div>
-			</Title>
-
-			<Form form={form} onFinish={onFinish} initialValues={{ name: '', desc: '' }}>
-				<Input
-					name="name"
-					label="Nama Item"
-					required
-					rules={[{ required: true, message: 'nama item wajib diisi' }]}
-				/>
-				<Select
-					options={category}
-					name="categoryId"
-					label="Pilih Kategori"
-					labelKey="name"
-					valueKey="id"
-					rules={[{ required: true, message: 'kategori harus dipilih' }]}
-				/>
-				<Input name="desc" label="Keterangan" />
-
-				{router.query.id && (
-					<div className="flex justify-between mb-4">
-						<div className="text-center">
-							<p className="text-sm">Total Qty</p>
-							<p className="text-lg">{totalQty}</p>
-						</div>
-						<div className="text-center">
-							<p className="text-sm">Qty Ditempatkan</p>
-							<p className="text-lg">{usedQty}</p>
-						</div>
+			<ContainerAdmin>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/item"
+							size="small"
+							buttonType="warning"
+							icon={<CloseOutline />}
+							className="text-base"
+						>
+							Tutup
+						</LinkButton>
 					</div>
-				)}
+				</Title>
 
-				<Button
-					type="submit"
-					className="w-full"
-					buttonType="primary"
-					loading={loading}
-					icon={<RightOutline />}
-					iconLocation="right"
-				>
-					Simpan
-				</Button>
-			</Form>
+				<Form form={form} onFinish={onFinish} initialValues={{ name: '', desc: '' }}>
+					<Input
+						name="name"
+						label="Nama Item"
+						required
+						rules={[{ required: true, message: 'nama item wajib diisi' }]}
+					/>
+					<Select
+						options={category}
+						name="categoryId"
+						label="Pilih Kategori"
+						labelKey="name"
+						valueKey="id"
+						rules={[{ required: true, message: 'kategori harus dipilih' }]}
+					/>
+					<Input name="desc" label="Keterangan" />
+
+					{router.query.id && (
+						<div className="flex justify-between mb-4">
+							<div className="text-center">
+								<p className="text-sm">Total Qty</p>
+								<p className="text-lg">{totalQty}</p>
+							</div>
+							<div className="text-center">
+								<p className="text-sm">Qty Ditempatkan</p>
+								<p className="text-lg">{usedQty}</p>
+							</div>
+						</div>
+					)}
+
+					<Button
+						type="submit"
+						className="w-full"
+						buttonType="primary"
+						loading={loading}
+						icon={<RightOutline />}
+						iconLocation="right"
+					>
+						Simpan
+					</Button>
+				</Form>
+			</ContainerAdmin>
 		</Navigation>
 	);
 };

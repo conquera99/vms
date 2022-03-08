@@ -1,4 +1,4 @@
-import { LegacyRef, useEffect, useRef, useState } from 'react';
+import { LegacyRef, useEffect, useRef } from 'react';
 import { AddOutline } from 'antd-mobile-icons';
 import useSWRInfinite from 'swr/infinite';
 import axios from 'axios';
@@ -13,12 +13,12 @@ import Empty from 'components/display/empty';
 import { LinkButton } from 'components/general/button';
 import { Loading } from 'components/general/icon';
 import List from 'components/display/list';
+import Container from 'components/general/container';
 
 import useOnScreen from 'hooks/useOnScreen';
 
 import fetcher from 'utils/fetcher';
-import { dateFormat, datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
-import { numberFormatter } from 'utils/helper';
+import { datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
 
 const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
 	if (previousPageData?.data && !previousPageData.data.length) return null;
@@ -78,71 +78,73 @@ const Home = () => {
 
 	return (
 		<Navigation title="VMS: Data Lokasi Item" active="admin" access="item_history" isAdmin>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/assign-item/detail"
-						size="small"
-						buttonType="success"
-						icon={<AddOutline />}
-						className="text-base"
-					>
-						Tambah
-					</LinkButton>
-				</div>
-			</Title>
+			<Container>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/assign-item/detail"
+							size="small"
+							buttonType="success"
+							icon={<AddOutline />}
+							className="text-base"
+						>
+							Tambah
+						</LinkButton>
+					</div>
+				</Title>
 
-			{isEmpty && <Empty />}
+				{isEmpty && <Empty />}
 
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				{data?.map((item: Record<string, any>) => {
-					return (
-						<List key={item.il_id}>
-							<div className="flex justify-between">
-								<div>
-									<small className="text-xs">ID:&nbsp;{item.il_id}</small>
-									<p className="font-bold text-lg">{item.item_name}</p>
-									<div className="text-sm mt-1 mb-3 grid grid-cols-3 gap-2">
-										<div>
-											<small>Lokasi</small>
-											<p>{item.loc_name}</p>
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					{data?.map((item: Record<string, any>) => {
+						return (
+							<List key={item.il_id}>
+								<div className="flex justify-between">
+									<div>
+										<small className="text-xs">ID:&nbsp;{item.il_id}</small>
+										<p className="font-bold text-lg">{item.item_name}</p>
+										<div className="text-sm mt-1 mb-3 grid grid-cols-3 gap-2">
+											<div>
+												<small>Lokasi</small>
+												<p>{item.loc_name}</p>
+											</div>
+											<div className="text-right">
+												<small>Qty</small>
+												<p>{item.il_qty}</p>
+											</div>
 										</div>
-										<div className="text-right">
-											<small>Qty</small>
-											<p>{item.il_qty}</p>
-										</div>
+										<small className="text-xs text-gray-600">
+											{dayjs(item.createdAt).format(datetimeFormat)}
+										</small>
 									</div>
-									<small className="text-xs text-gray-600">
-										{dayjs(item.createdAt).format(datetimeFormat)}
-									</small>
+									<div>
+										<Link
+											href={`/admin/assign-item/detail?locId=${item.il_loc_id}&itemId=${item.item_id}`}
+										>
+											<a className="text-blue-500 mr-2">lihat</a>
+										</Link>
+										<button
+											className="text-red-500"
+											onClick={() => onRemove(item.il_loc_id, item.item_id)}
+										>
+											hapus
+										</button>
+									</div>
 								</div>
-								<div>
-									<Link
-										href={`/admin/assign-item/detail?locId=${item.il_loc_id}&itemId=${item.item_id}`}
-									>
-										<a className="text-blue-500 mr-2">lihat</a>
-									</Link>
-									<button
-										className="text-red-500"
-										onClick={() => onRemove(item.il_loc_id, item.item_id)}
-									>
-										hapus
-									</button>
-								</div>
-							</div>
-						</List>
-					);
-				})}
-			</div>
+							</List>
+						);
+					})}
+				</div>
 
-			<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-				{isLoadingMore ? (
-					<Loading />
-				) : isReachingEnd ? (
-					<p className="text-gray-400">No more data</p>
-				) : null}
-			</div>
+				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
+					{isLoadingMore ? (
+						<Loading />
+					) : isReachingEnd ? (
+						<p className="text-gray-400">No more data</p>
+					) : null}
+				</div>
+			</Container>
 		</Navigation>
 	);
 };

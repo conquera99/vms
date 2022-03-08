@@ -1,4 +1,4 @@
-import { LegacyRef, useEffect, useRef, useState } from 'react';
+import { LegacyRef, useEffect, useRef } from 'react';
 import { AddOutline } from 'antd-mobile-icons';
 import useSWRInfinite from 'swr/infinite';
 import axios from 'axios';
@@ -13,6 +13,7 @@ import Empty from 'components/display/empty';
 import { LinkButton } from 'components/general/button';
 import { Loading } from 'components/general/icon';
 import List from 'components/display/list';
+import Container from 'components/general/container';
 
 import useOnScreen from 'hooks/useOnScreen';
 
@@ -77,59 +78,61 @@ const Home = () => {
 
 	return (
 		<Navigation title="VMS: Data Item" active="admin" access="item" isAdmin>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/item/detail"
-						size="small"
-						buttonType="success"
-						icon={<AddOutline />}
-						className="text-base"
-					>
-						Tambah
-					</LinkButton>
+			<Container>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/item/detail"
+							size="small"
+							buttonType="success"
+							icon={<AddOutline />}
+							className="text-base"
+						>
+							Tambah
+						</LinkButton>
+					</div>
+				</Title>
+
+				{isEmpty && <Empty />}
+
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					{data?.map((item: Record<string, any>) => {
+						return (
+							<List key={item.id}>
+								<div className="flex justify-between">
+									<div>
+										<small className="text-xs">Kode:&nbsp;{item.code}</small>
+										<p className="font-bold text-lg my-1">{item.name}</p>
+										<small className="text-xs text-gray-600">
+											{dayjs(item.createdAt).format(datetimeFormat)}
+										</small>
+									</div>
+									<div>
+										<Link href={`/admin/item/detail?id=${item.id}`}>
+											<a className="text-blue-500 mr-2">edit</a>
+										</Link>
+										<button
+											className="text-red-500"
+											onClick={() => onRemove(item.id)}
+										>
+											hapus
+										</button>
+									</div>
+								</div>
+							</List>
+						);
+					})}
 				</div>
-			</Title>
 
-			{isEmpty && <Empty />}
-
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				{data?.map((item: Record<string, any>) => {
-					return (
-						<List key={item.id}>
-							<div className="flex justify-between">
-								<div>
-									<small className="text-xs">Kode:&nbsp;{item.code}</small>
-									<p className="font-bold text-lg my-1">{item.name}</p>
-									<small className="text-xs text-gray-600">
-										{dayjs(item.createdAt).format(datetimeFormat)}
-									</small>
-								</div>
-								<div>
-									<Link href={`/admin/item/detail?id=${item.id}`}>
-										<a className="text-blue-500 mr-2">edit</a>
-									</Link>
-									<button
-										className="text-red-500"
-										onClick={() => onRemove(item.id)}
-									>
-										hapus
-									</button>
-								</div>
-							</div>
-						</List>
-					);
-				})}
-			</div>
-
-			<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-				{isLoadingMore ? (
-					<Loading />
-				) : isReachingEnd ? (
-					<p className="text-gray-400">No more data</p>
-				) : null}
-			</div>
+				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
+					{isLoadingMore ? (
+						<Loading />
+					) : isReachingEnd ? (
+						<p className="text-gray-400">No more data</p>
+					) : null}
+				</div>
+			</Container>
 		</Navigation>
 	);
 };

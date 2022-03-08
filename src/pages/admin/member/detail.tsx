@@ -13,6 +13,7 @@ import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
 import DatePicker from 'components/entry/date-picker';
 import Upload from 'components/entry/upload';
+import { ContainerAdmin } from 'components/general/container';
 
 import { successMessage } from 'utils/constant';
 
@@ -99,54 +100,62 @@ const Page = () => {
 
 	return (
 		<Navigation title="VMS: Anggota Detail" active="admin" access="member" isAdmin>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/member"
-						size="small"
-						buttonType="warning"
-						icon={<CloseOutline />}
-						className="text-base"
-					>
-						Tutup
-					</LinkButton>
-				</div>
-			</Title>
+			<ContainerAdmin>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/member"
+							size="small"
+							buttonType="warning"
+							icon={<CloseOutline />}
+							className="text-base"
+						>
+							Tutup
+						</LinkButton>
+					</div>
+				</Title>
 
-			<Form
-				form={form}
-				onFinish={onFinish}
-				initialValues={{ name: '', dateOfBirth: null, address: '', phone: '', email: '' }}
-			>
-				<Input
-					name="name"
-					label="Nama Lengkap"
-					required
-					rules={[{ required: true, message: 'nama lengkap wajib diisi' }]}
-				/>
-				<DatePicker name="dateOfBirth" label="Tanggal Lahir" />
-				<Input name="address" label="Alamat" />
-				<Input name="phone" label="Nomor Telepon/HP" />
-				<Input name="email" type="email" label="Email" />
-				<Upload
-					file={file}
-					image={image}
-					showPreview={router.query.id ? true : false}
-					onRemoveImage={removeImage}
-					beforeUpload={beforeUpload}
-				/>
-				<Button
-					type="submit"
-					className="w-full"
-					buttonType="primary"
-					loading={loading}
-					icon={<RightOutline />}
-					iconLocation="right"
+				<Form
+					form={form}
+					onFinish={onFinish}
+					initialValues={{
+						name: '',
+						dateOfBirth: null,
+						address: '',
+						phone: '',
+						email: '',
+					}}
 				>
-					Simpan
-				</Button>
-			</Form>
+					<Input
+						name="name"
+						label="Nama Lengkap"
+						required
+						rules={[{ required: true, message: 'nama lengkap wajib diisi' }]}
+					/>
+					<DatePicker name="dateOfBirth" label="Tanggal Lahir" />
+					<Input name="address" label="Alamat" />
+					<Input name="phone" label="Nomor Telepon/HP" />
+					<Input name="email" type="email" label="Email" />
+					<Upload
+						file={file}
+						image={image}
+						showPreview={router.query.id ? true : false}
+						onRemoveImage={removeImage}
+						beforeUpload={beforeUpload}
+					/>
+					<Button
+						type="submit"
+						className="w-full"
+						buttonType="primary"
+						loading={loading}
+						icon={<RightOutline />}
+						iconLocation="right"
+					>
+						Simpan
+					</Button>
+				</Form>
+			</ContainerAdmin>
 		</Navigation>
 	);
 };

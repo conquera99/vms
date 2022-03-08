@@ -13,9 +13,10 @@ import { InputNumber } from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
 import DatePicker from 'components/entry/date-picker';
 import Select from 'components/entry/select';
+import Upload from 'components/entry/upload';
+import { ContainerAdmin } from 'components/general/container';
 
 import { successMessage } from 'utils/constant';
-import Upload from 'components/entry/upload';
 
 const breadcrumb = [
 	{
@@ -107,79 +108,81 @@ const Page = () => {
 
 	return (
 		<Navigation title="VMS: Beli Item Detail" active="admin" access="item_history" isAdmin>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/buy-item"
-						size="small"
-						buttonType="warning"
-						icon={<CloseOutline />}
-						className="text-base"
-					>
-						Tutup
-					</LinkButton>
-				</div>
-			</Title>
+			<ContainerAdmin>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/buy-item"
+							size="small"
+							buttonType="warning"
+							icon={<CloseOutline />}
+							className="text-base"
+						>
+							Tutup
+						</LinkButton>
+					</div>
+				</Title>
 
-			<Form
-				form={form}
-				onFinish={onFinish}
-				initialValues={{ itemId: undefined, date: null, price: 0, qty: 0 }}
-			>
-				<Select
-					options={item}
-					name="itemId"
-					label="Pilih Item"
-					labelKey="name"
-					valueKey="id"
-					required
-					rules={[{ required: true, message: 'item harus dipilih' }]}
-					disabled={router.query.id ? true : false}
-				/>
-				<DatePicker
-					name="date"
-					label="Tanggal Beli"
-					required
-					rules={[{ required: true, message: 'tanggal harus dipilih' }]}
-					disabled={router.query.id ? true : false}
-				/>
-				<InputNumber
-					name="price"
-					label="Harga"
-					required
-					rules={[{ required: true, message: 'harga harus diisi' }]}
-					input={{ disabled: router.query.id ? true : false }}
-				/>
-				<InputNumber
-					name="qty"
-					label="Qty"
-					required
-					rules={[{ required: true, message: 'qty harus diisi' }]}
-					input={{ disabled: router.query.id ? true : false }}
-				/>
-				<Upload
-					file={file}
-					image={image}
-					disabled={!router.query.id ? false : true}
-					showPreview={router.query.id ? true : false}
-					onRemoveImage={removeImage}
-					beforeUpload={beforeUpload}
-				/>
+				<Form
+					form={form}
+					onFinish={onFinish}
+					initialValues={{ itemId: undefined, date: null, price: 0, qty: 0 }}
+				>
+					<Select
+						options={item}
+						name="itemId"
+						label="Pilih Item"
+						labelKey="name"
+						valueKey="id"
+						required
+						rules={[{ required: true, message: 'item harus dipilih' }]}
+						disabled={router.query.id ? true : false}
+					/>
+					<DatePicker
+						name="date"
+						label="Tanggal Beli"
+						required
+						rules={[{ required: true, message: 'tanggal harus dipilih' }]}
+						disabled={router.query.id ? true : false}
+					/>
+					<InputNumber
+						name="price"
+						label="Harga"
+						required
+						rules={[{ required: true, message: 'harga harus diisi' }]}
+						input={{ disabled: router.query.id ? true : false }}
+					/>
+					<InputNumber
+						name="qty"
+						label="Qty"
+						required
+						rules={[{ required: true, message: 'qty harus diisi' }]}
+						input={{ disabled: router.query.id ? true : false }}
+					/>
+					<Upload
+						file={file}
+						image={image}
+						disabled={!router.query.id ? false : true}
+						showPreview={router.query.id ? true : false}
+						onRemoveImage={removeImage}
+						beforeUpload={beforeUpload}
+					/>
 
-				{!router.query.id && (
-					<Button
-						type="submit"
-						className="w-full"
-						buttonType="primary"
-						loading={loading}
-						icon={<RightOutline />}
-						iconLocation="right"
-					>
-						Simpan
-					</Button>
-				)}
-			</Form>
+					{!router.query.id && (
+						<Button
+							type="submit"
+							className="w-full"
+							buttonType="primary"
+							loading={loading}
+							icon={<RightOutline />}
+							iconLocation="right"
+						>
+							Simpan
+						</Button>
+					)}
+				</Form>
+			</ContainerAdmin>
 		</Navigation>
 	);
 };

@@ -10,6 +10,7 @@ import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
+import { ContainerAdmin } from 'components/general/container';
 
 import { successMessage } from 'utils/constant';
 
@@ -61,39 +62,41 @@ const Page = () => {
 
 	return (
 		<Navigation title="VMS: Kategori Detail" active="admin" access="item_category" isAdmin>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/item-category"
-						size="small"
-						buttonType="warning"
-						icon={<CloseOutline />}
-						className="text-base"
-					>
-						Tutup
-					</LinkButton>
-				</div>
-			</Title>
+			<ContainerAdmin>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/item-category"
+							size="small"
+							buttonType="warning"
+							icon={<CloseOutline />}
+							className="text-base"
+						>
+							Tutup
+						</LinkButton>
+					</div>
+				</Title>
 
-			<Form form={form} onFinish={onFinish} initialValues={{ name: '' }}>
-				<Input
-					name="name"
-					label="Nama Kategori"
-					required
-					rules={[{ required: true, message: 'nama kategori wajib diisi' }]}
-				/>
-				<Button
-					type="submit"
-					className="w-full"
-					buttonType="primary"
-					loading={loading}
-					icon={<RightOutline />}
-					iconLocation="right"
-				>
-					Simpan
-				</Button>
-			</Form>
+				<Form form={form} onFinish={onFinish} initialValues={{ name: '' }}>
+					<Input
+						name="name"
+						label="Nama Kategori"
+						required
+						rules={[{ required: true, message: 'nama kategori wajib diisi' }]}
+					/>
+					<Button
+						type="submit"
+						className="w-full"
+						buttonType="primary"
+						loading={loading}
+						icon={<RightOutline />}
+						iconLocation="right"
+					>
+						Simpan
+					</Button>
+				</Form>
+			</ContainerAdmin>
 		</Navigation>
 	);
 };

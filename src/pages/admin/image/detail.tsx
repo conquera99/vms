@@ -4,18 +4,17 @@ import Form from 'rc-field-form';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import dayjs from 'dayjs';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
-import DatePicker from 'components/entry/date-picker';
 import Upload from 'components/entry/upload';
+import Select from 'components/entry/select';
+import { ContainerAdmin } from 'components/general/container';
 
 import { successMessage } from 'utils/constant';
-import Select from 'components/entry/select';
 
 const breadcrumb = [
 	{
@@ -99,56 +98,58 @@ const Page = () => {
 
 	return (
 		<Navigation title="VMS: Gambar Detail" active="admin" access="image" isAdmin>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/image"
-						size="small"
-						buttonType="warning"
-						icon={<CloseOutline />}
-						className="text-base"
-					>
-						Tutup
-					</LinkButton>
-				</div>
-			</Title>
+			<ContainerAdmin>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/image"
+							size="small"
+							buttonType="warning"
+							icon={<CloseOutline />}
+							className="text-base"
+						>
+							Tutup
+						</LinkButton>
+					</div>
+				</Title>
 
-			<Form
-				form={form}
-				onFinish={onFinish}
-				initialValues={{ altText: '', albumId: undefined }}
-			>
-				<Select
-					name="albumId"
-					label="Album"
-					options={album}
-					placeholder="Pilih Album"
-					labelKey="title"
-					valueKey="id"
-					required
-					rules={[{ required: true, message: 'album wajib dipilih' }]}
-				/>
-				<Input name="altText" label="Deskripsi" />
-				<Upload
-					file={file}
-					image={image}
-					disabled={!router.query.id ? false : true}
-					showPreview={router.query.id ? true : false}
-					onRemoveImage={removeImage}
-					beforeUpload={beforeUpload}
-				/>
-				<Button
-					type="submit"
-					className="w-full"
-					buttonType="primary"
-					loading={loading}
-					icon={<RightOutline />}
-					iconLocation="right"
+				<Form
+					form={form}
+					onFinish={onFinish}
+					initialValues={{ altText: '', albumId: undefined }}
 				>
-					Simpan
-				</Button>
-			</Form>
+					<Select
+						name="albumId"
+						label="Album"
+						options={album}
+						placeholder="Pilih Album"
+						labelKey="title"
+						valueKey="id"
+						required
+						rules={[{ required: true, message: 'album wajib dipilih' }]}
+					/>
+					<Input name="altText" label="Deskripsi" />
+					<Upload
+						file={file}
+						image={image}
+						disabled={!router.query.id ? false : true}
+						showPreview={router.query.id ? true : false}
+						onRemoveImage={removeImage}
+						beforeUpload={beforeUpload}
+					/>
+					<Button
+						type="submit"
+						className="w-full"
+						buttonType="primary"
+						loading={loading}
+						icon={<RightOutline />}
+						iconLocation="right"
+					>
+						Simpan
+					</Button>
+				</Form>
+			</ContainerAdmin>
 		</Navigation>
 	);
 };

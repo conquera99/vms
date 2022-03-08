@@ -5,3 +5,7 @@ const Container: FC = ({ children }) => {
 };
 
 export default Container;
+
+export const ContainerAdmin: FC = ({ children }) => {
+	return <div className="max-w-2xl xl:max-w-4xl mx-auto">{children}</div>;
+};

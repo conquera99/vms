@@ -12,6 +12,7 @@ import Breadcrumb from 'components/display/breadcrumb';
 import { InputNumber } from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
 import Select from 'components/entry/select';
+import { ContainerAdmin } from 'components/general/container';
 
 import { successMessage } from 'utils/constant';
 
@@ -97,77 +98,81 @@ const Page = () => {
 
 	return (
 		<Navigation title="VMS: Atur Lokasi Detail" active="admin" access="item_history" isAdmin>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/assign-item"
-						size="small"
-						buttonType="warning"
-						icon={<CloseOutline />}
-						className="text-base"
-					>
-						Tutup
-					</LinkButton>
-				</div>
-			</Title>
-
-			<Form
-				form={form}
-				onFinish={onFinish}
-				initialValues={{ itemId: undefined, locId: undefined, qty: 0 }}
-			>
-				<Select
-					options={item}
-					name="itemId"
-					label="Pilih Item"
-					labelKey="name"
-					valueKey="id"
-					onSelect={onSelect}
-					rules={[{ required: true, message: 'item harus dipilih' }]}
-					disabled={router.query.locId && router.query.itemId ? true : false}
-				/>
-				{!router.query.locId && !router.query.itemId && (
-					<div className="flex justify-between mb-4">
-						<div className="text-center">
-							<p className="text-sm">Total Qty</p>
-							<p className="text-lg">{maxQty}</p>
-						</div>
-						<div className="text-center">
-							<p className="text-sm">Qty Ditempatkan</p>
-							<p className="text-lg">{usedQty}</p>
-						</div>
+			<ContainerAdmin>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/assign-item"
+							size="small"
+							buttonType="warning"
+							icon={<CloseOutline />}
+							className="text-base"
+						>
+							Tutup
+						</LinkButton>
 					</div>
-				)}
-				<Select
-					options={location}
-					name="locId"
-					label="Pilih Lokasi"
-					labelKey="name"
-					valueKey="id"
-					rules={[{ required: true, message: 'lokasi harus dipilih' }]}
-					disabled={router.query.locId && router.query.itemId ? true : false}
-				/>
-				<InputNumber
-					name="qty"
-					label="Qty"
-					min={0}
-					max={maxQty}
-					input={{ disabled: router.query.locId && router.query.itemId ? true : false }}
-				/>
-				{!router.query.locId && !router.query.itemId && (
-					<Button
-						type="submit"
-						className="w-full"
-						buttonType="primary"
-						loading={loading}
-						icon={<RightOutline />}
-						iconLocation="right"
-					>
-						Simpan
-					</Button>
-				)}
-			</Form>
+				</Title>
+
+				<Form
+					form={form}
+					onFinish={onFinish}
+					initialValues={{ itemId: undefined, locId: undefined, qty: 0 }}
+				>
+					<Select
+						options={item}
+						name="itemId"
+						label="Pilih Item"
+						labelKey="name"
+						valueKey="id"
+						onSelect={onSelect}
+						rules={[{ required: true, message: 'item harus dipilih' }]}
+						disabled={router.query.locId && router.query.itemId ? true : false}
+					/>
+					{!router.query.locId && !router.query.itemId && (
+						<div className="flex justify-between mb-4">
+							<div className="text-center">
+								<p className="text-sm">Total Qty</p>
+								<p className="text-lg">{maxQty}</p>
+							</div>
+							<div className="text-center">
+								<p className="text-sm">Qty Ditempatkan</p>
+								<p className="text-lg">{usedQty}</p>
+							</div>
+						</div>
+					)}
+					<Select
+						options={location}
+						name="locId"
+						label="Pilih Lokasi"
+						labelKey="name"
+						valueKey="id"
+						rules={[{ required: true, message: 'lokasi harus dipilih' }]}
+						disabled={router.query.locId && router.query.itemId ? true : false}
+					/>
+					<InputNumber
+						name="qty"
+						label="Qty"
+						min={0}
+						max={maxQty}
+						input={{
+							disabled: router.query.locId && router.query.itemId ? true : false,
+						}}
+					/>
+					{!router.query.locId && !router.query.itemId && (
+						<Button
+							type="submit"
+							className="w-full"
+							buttonType="primary"
+							loading={loading}
+							icon={<RightOutline />}
+							iconLocation="right"
+						>
+							Simpan
+						</Button>
+					)}
+				</Form>
+			</ContainerAdmin>
 		</Navigation>
 	);
 };

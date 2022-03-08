@@ -14,9 +14,10 @@ import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
 import Upload from 'components/entry/upload';
+import Select from 'components/entry/select';
+import { ContainerAdmin } from 'components/general/container';
 
 import { successMessage } from 'utils/constant';
-import Select from 'components/entry/select';
 
 const TextEditor = dynamic(() => import('components/entry/text-editor'), { ssr: false });
 
@@ -114,71 +115,81 @@ const Page = () => {
 
 	return (
 		<Navigation title="VMS: Post Detail" active="admin" access="post" isAdmin>
-			<Head>
-				<link
-					rel="stylesheet"
-					href="https://fonts.googleapis.com/icon?family=Material+Icons"
-				/>
-			</Head>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/post"
-						size="small"
-						buttonType="warning"
-						icon={<CloseOutline />}
-						className="text-base"
-					>
-						Tutup
-					</LinkButton>
-				</div>
-			</Title>
+			<ContainerAdmin>
+				<Head>
+					<link
+						rel="stylesheet"
+						href="https://fonts.googleapis.com/icon?family=Material+Icons"
+					/>
+				</Head>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/post"
+							size="small"
+							buttonType="warning"
+							icon={<CloseOutline />}
+							className="text-base"
+						>
+							Tutup
+						</LinkButton>
+					</div>
+				</Title>
 
-			<Form
-				form={form}
-				onFinish={onFinish}
-				initialValues={{ title: '', summary: '', keywords: '', status: 'D', content: '' }}
-			>
-				<Input
-					name="title"
-					label="Judul"
-					required
-					rules={[{ required: true, message: 'judul wajib diisi' }]}
-				/>
-				<Input name="summary" label="Deskripsi Singkat" />
-				<Input name="keywords" label="Kata Kunci" />
-				<Select
-					name="status"
-					label="Status"
-					options={[
-						{ label: 'Draft', value: 'D' },
-						{ label: 'Terpublikasi', value: 'P' },
-						{ label: 'Tersembunyi', value: 'H' },
-					]}
-					labelKey="label"
-					valueKey="value"
-				/>
-				<TextEditor value={value} onChange={onTextEditorChange} />
-				<Upload
-					file={file}
-					image={image}
-					showPreview={router.query.id ? true : false}
-					onRemoveImage={removeImage}
-					beforeUpload={beforeUpload}
-				/>
-				<div className="h-8 md:h-12">&nbsp;</div>
-				<Button
-					type="submit"
-					className="fixed bottom-16 md:bottom-20 left-2 right-2 shadow-md"
-					buttonType="primary"
-					loading={loading}
-					icon={<RightOutline />}
-					iconLocation="right"
+				<Form
+					form={form}
+					onFinish={onFinish}
+					initialValues={{
+						title: '',
+						summary: '',
+						keywords: '',
+						status: 'D',
+						content: '',
+					}}
 				>
-					Simpan
-				</Button>
-			</Form>
+					<Input
+						name="title"
+						label="Judul"
+						required
+						rules={[{ required: true, message: 'judul wajib diisi' }]}
+					/>
+					<Input name="summary" label="Deskripsi Singkat" />
+					<Input name="keywords" label="Kata Kunci" />
+					<Select
+						name="status"
+						label="Status"
+						options={[
+							{ label: 'Draft', value: 'D' },
+							{ label: 'Terpublikasi', value: 'P' },
+							{ label: 'Tersembunyi', value: 'H' },
+						]}
+						labelKey="label"
+						valueKey="value"
+					/>
+					<TextEditor value={value} onChange={onTextEditorChange} />
+					<Upload
+						file={file}
+						image={image}
+						showPreview={router.query.id ? true : false}
+						onRemoveImage={removeImage}
+						beforeUpload={beforeUpload}
+					/>
+					<div className="h-12 md:h-0">&nbsp;</div>
+					<div className="flex justify-center">
+						<Button
+							type="submit"
+							className="fixed bottom-20 md:bottom-2 md:w-full left-4 right-4 md:right-auto md:left-auto max-w-2xl xl:max-w-4xl shadow-md"
+							buttonType="primary"
+							loading={loading}
+							icon={<RightOutline />}
+							iconLocation="right"
+						>
+							Simpan
+						</Button>
+					</div>
+				</Form>
+			</ContainerAdmin>
 		</Navigation>
 	);
 };

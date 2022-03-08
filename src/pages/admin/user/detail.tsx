@@ -10,9 +10,10 @@ import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
 import Button, { LinkButton } from 'components/general/button';
+import Select from 'components/entry/select';
+import { ContainerAdmin } from 'components/general/container';
 
 import { successMessage } from 'utils/constant';
-import Select from 'components/entry/select';
 
 const breadcrumb = [
 	{
@@ -73,76 +74,80 @@ const Page = () => {
 
 	return (
 		<Navigation title="VMS: User Detail" active="admin" isAdmin isSuperAdminOnly>
-			<Title>
-				<div className="flex justify-between items-center">
-					<Breadcrumb data={breadcrumb} />
-					<LinkButton
-						href="/admin/user"
-						size="small"
-						buttonType="warning"
-						icon={<CloseOutline />}
-						className="text-base"
-					>
-						Tutup
-					</LinkButton>
-				</div>
-			</Title>
+			<ContainerAdmin>
+				<Title>
+					<div className="flex justify-between items-center">
+						<Breadcrumb data={breadcrumb} />
+						<LinkButton
+							href="/admin/user"
+							size="small"
+							buttonType="warning"
+							icon={<CloseOutline />}
+							className="text-base"
+						>
+							Tutup
+						</LinkButton>
+					</div>
+				</Title>
 
-			<Form
-				form={form}
-				onFinish={onFinish}
-				initialValues={{
-					name: '',
-					username: '',
-					password: '',
-					email: '',
-					access: undefined,
-				}}
-			>
-				<Input
-					name="name"
-					label="Nama Lengkap"
-					required
-					rules={[{ required: true, message: 'nama lengkap wajib diisi' }]}
-				/>
-				<Input
-					name="username"
-					label="Username"
-					required
-					rules={[{ required: true, message: 'username wajib diisi' }]}
-				/>
-				<Input
-					name="password"
-					label="Password"
-					required={!router.query.id}
-					type="password"
-					rules={
-						!router.query.id && [{ required: true, message: 'password wajib diisi' }]
-					}
-				/>
-				<Input name="email" type="email" label="Email" />
-				{router.query.id && (
-					<Select
-						name="access"
-						label="Hak Akses"
-						mode="multiple"
-						options={permission}
-						placeholder="Pilih Hak Akses"
-						labelKey="name"
-						valueKey="name"
-					/>
-				)}
-				<Button
-					type="submit"
-					className="w-full"
-					buttonType="primary"
-					loading={loading}
-					icon={<RightOutline />}
-					iconLocation="right"
+				<Form
+					form={form}
+					onFinish={onFinish}
+					initialValues={{
+						name: '',
+						username: '',
+						password: '',
+						email: '',
+						access: undefined,
+					}}
 				>
-					Simpan
-				</Button>
-			</Form>
+					<Input
+						name="name"
+						label="Nama Lengkap"
+						required
+						rules={[{ required: true, message: 'nama lengkap wajib diisi' }]}
+					/>
+					<Input
+						name="username"
+						label="Username"
+						required
+						rules={[{ required: true, message: 'username wajib diisi' }]}
+					/>
+					<Input
+						name="password"
+						label="Password"
+						required={!router.query.id}
+						type="password"
+						rules={
+							!router.query.id && [
+								{ required: true, message: 'password wajib diisi' },
+							]
+						}
+					/>
+					<Input name="email" type="email" label="Email" />
+					{router.query.id && (
+						<Select
+							name="access"
+							label="Hak Akses"
+							mode="multiple"
+							options={permission}
+							placeholder="Pilih Hak Akses"
+							labelKey="name"
+							valueKey="name"
+						/>
+					)}
+					<Button
+						type="submit"
+						className="w-full"
+						buttonType="primary"
+						loading={loading}
+						icon={<RightOutline />}
+						iconLocation="right"
+					>
+						Simpan
+					</Button>
+				</Form>
+			</ContainerAdmin>
 		</Navigation>
 	);
 };
