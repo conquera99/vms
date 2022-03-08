@@ -13,9 +13,9 @@ generator client {
 model User {
     id        String   @id @default(cuid()) @map("user_id")
     name      String?  @map("user_name")
-    username  String?  @unique @map("user_username")
-    password  String   @map("user_password")
-    email     String?  @map("user_email")
+    username  String?  @unique @map("user_username") @db.VarChar(25)
+    password  String   @map("user_password") @db.VarChar(255)
+    email     String?  @map("user_email") @db.VarChar(254)
     image     String?  @map("user_image")
     createdAt DateTime @default(now()) @map("user_created_at")
     createdBy String   @map("user_created_by")
@@ -29,6 +29,8 @@ model Permissions {
     name      String   @id @map("permission_name") @db.VarChar(100)
     createdAt DateTime @default(now()) @map("permission_created_at")
     updatedAt DateTime @default(now()) @map("permission_updated_at")
+
+    @@map("permissions")
 }
 
 model UserPermissions {
@@ -46,12 +48,12 @@ model UserPermissions {
 
 model Posts {
     id        String   @id @default(cuid()) @map("post_id")
-    title     String   @map("post_title")
-    slug      String   @map("post_slug")
-    imageId   String?  @map("post_image_id")
-    image     String?  @map("post_image")
-    summary   String?  @map("post_summary")
-    keywords  String?  @map("post_keywords")
+    title     String   @map("post_title") @db.VarChar(200)
+    slug      String   @map("post_slug") @db.VarChar(255)
+    imageId   String?  @map("post_image_id") @db.VarChar(255)
+    image     String?  @map("post_image") @db.Text()
+    summary   String?  @map("post_summary") @db.VarChar(255)
+    keywords  String?  @map("post_keywords") @db.VarChar(255)
     content   String   @map("post_content") @db.LongText()
     status    String   @default("D") @map("post_status") @db.Char(1) // D: Draft, P: Posted, H: hidden
     createdAt DateTime @default(now()) @map("post_created_at")
@@ -66,8 +68,8 @@ model Posts {
 
 model Albums {
     id        String   @id @default(cuid()) @map("album_id")
-    title     String   @map("album_title")
-    slug      String   @map("album_slug")
+    title     String   @map("album_title") @db.VarChar(200)
+    slug      String   @map("album_slug") @db.VarChar(255)
     createdAt DateTime @default(now()) @map("album_created_at")
     createdBy String   @map("album_created_by")
     updatedAt DateTime @default(now()) @map("album_updated_at")
@@ -79,8 +81,8 @@ model Albums {
 
 model Images {
     id        String   @id @map("image_id")
-    albumId   String   @map("image_album_id")
-    image     String   @map("image")
+    albumId   String   @map("image_album_id") @db.VarChar(255)
+    image     String   @map("image") @db.Text()
     altText   String?  @map("image_alt")
     createdAt DateTime @default(now()) @map("image_created_at")
     createdBy String   @map("image_created_by")
@@ -135,7 +137,7 @@ model ItemHistory {
     date      DateTime @map("ih_date") @db.Date
     qty       Decimal  @map("ih_qty") @db.Decimal(13, 2)
     price     Decimal  @map("ih_price") @db.Decimal(20, 3)
-    imageId   String?  @map("ih_image_id") @db.Text()
+    imageId   String?  @map("ih_image_id") @db.VarChar(255)
     image     String?  @map("ih_image") @db.Text()
     createdAt DateTime @default(now()) @map("ih_created_at")
     createdBy String   @map("ih_created_by")
@@ -164,12 +166,14 @@ model Member {
     name        String    @map("member_name")
     address     String?   @map("member_address")
     dateOfBirth DateTime? @map("member_date_of_birth") @db.Date
-    email       String?   @map("member_email")
+    email       String?   @map("member_email") @db.VarChar(254)
     phone       String?   @map("member_phone")
-    imageId     String?   @map("member_image_id") @db.Text()
+    imageId     String?   @map("member_image_id") @db.VarChar(255)
     image       String?   @map("member_image") @db.Text()
     createdAt   DateTime  @default(now()) @map("member_created_at")
     createdBy   String    @map("member_created_by")
     updatedAt   DateTime  @updatedAt @map("member_updated_at")
     updatedBy   String?   @map("member_updated_by")
+
+    @@map("member")
 }
