@@ -1,51 +1,30 @@
-import { LegacyRef, useEffect, useRef } from 'react';
-import useSWRInfinite from 'swr/infinite';
-
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Empty from 'components/display/empty';
 import Post from 'components/display/post';
 import Container from 'components/general/container';
-import { Loading } from 'components/general/icon';
 
-import useOnScreen from 'hooks/useOnScreen';
+import useListData from 'hooks/useListData';
+import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
 
-import fetcher from 'utils/fetcher';
-import { DEFAULT_LIMIT } from 'utils/constant';
+const PostSkeleton = () => (
+	<div className="block bg-gray-200 animate-pulse rounded-lg my-5 border border-transparent relative">
+		<div className="h-60" />
+		<div className="p-1">
+			<div className="animate-pulse p-4 rounded-lg">
+				<div className="w-3/6 bg-gray-400 h-8 mb-2 rounded-md" />
+				<div className="w-2/6 bg-gray-400 mb-3 h-3 rounded-md" />
+				<div className="w-full bg-gray-400 mb-2 h-4 rounded-md" />
+				<div className="w-full bg-gray-400 h-4 rounded-md" />
+			</div>
+		</div>
+	</div>
+);
 
-const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
-	if (previousPageData?.data && !previousPageData.data.length) return null;
-
-	return `/api/post?s=${pageSize}&p=${page + 1}`;
-};
-
-export default function Home() {
-	const ref = useRef() as LegacyRef<HTMLDivElement>;
-
-	const isVisible = useOnScreen(ref);
-
-	const {
-		data: response,
-		error,
-		size,
-		setSize,
-		isValidating,
-	} = useSWRInfinite((...args) => getKey(...args, DEFAULT_LIMIT), fetcher);
-
-	const data = response ? [].concat(...response) : [];
-	const isLoadingInitialData = !response && !error;
-	const isLoadingMore =
-		isLoadingInitialData || (size > 0 && response && typeof response[size - 1] === 'undefined');
-	const isEmpty = response?.[0]?.length === 0;
-	const isReachingEnd = size === DEFAULT_LIMIT;
-	const isRefreshing = isValidating && response && response.length === size;
-
-	useEffect(() => {
-		if (isVisible && !isReachingEnd && !isRefreshing) {
-			setSize(size + 1);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isVisible, isRefreshing]);
+const Home = () => {
+	const { ref, data, isEmpty, isLoadingInitialData, isLoadingMore, isReachingEnd } = useListData({
+		url: '/api/post',
+	});
 
 	return (
 		<Navigation active="home">
@@ -55,19 +34,26 @@ export default function Home() {
 				{isEmpty && <Empty />}
 
 				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-2">
+					{isLoadingInitialData && (
+						<>
+							<PostSkeleton />
+							<PostSkeleton />
+						</>
+					)}
+
 					{data?.map((item: Record<string, any>) => {
 						return <Post key={item.id} data={item} />;
 					})}
 				</div>
 
-				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-					{isLoadingMore ? (
-						<Loading />
-					) : isReachingEnd ? (
-						<p className="text-gray-400">No more data</p>
-					) : null}
-				</div>
+				<InfiniteScrollTrigger
+					triggerRef={ref}
+					isLoadingMore={isLoadingMore}
+					isReachingEnd={isReachingEnd}
+				/>
 			</Container>
 		</Navigation>
 	);
-}
+};
+
+export default Home;

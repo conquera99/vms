@@ -1,52 +1,27 @@
 import Link from 'next/link';
 import { FolderOutline } from 'antd-mobile-icons';
-import { LegacyRef, useEffect, useRef } from 'react';
-import useSWRInfinite from 'swr/infinite';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Empty from 'components/display/empty';
-import { Loading } from 'components/general/icon';
 import Container from 'components/general/container';
+import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
 
-import useOnScreen from 'hooks/useOnScreen';
+import useListData from 'hooks/useListData';
 
-import fetcher from 'utils/fetcher';
-import { DEFAULT_LIMIT } from 'utils/constant';
-
-const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
-	if (previousPageData?.data && !previousPageData.data.length) return null;
-
-	return `/api/gallery/album?s=${pageSize}&p=${page + 1}`;
-};
+const AlbumSkeleton = () => (
+	<div className="animate-pulse block rounded-lg bg-gray-200 my-5 border border-transparent relative">
+		<div className="p-6 flex items-center">
+			<div className="w-8 bg-gray-300 h-8 mr-2 rounded-full" />
+			<div className="w-5/6 bg-gray-300 h-8 rounded-md" />
+		</div>
+	</div>
+);
 
 const Gallery = () => {
-	const ref = useRef() as LegacyRef<HTMLDivElement>;
-
-	const isVisible = useOnScreen(ref);
-
-	const {
-		data: response,
-		error,
-		size,
-		setSize,
-		isValidating,
-	} = useSWRInfinite((...args) => getKey(...args, DEFAULT_LIMIT), fetcher);
-
-	const data = response ? [].concat(...response) : [];
-	const isLoadingInitialData = !response && !error;
-	const isLoadingMore =
-		isLoadingInitialData || (size > 0 && response && typeof response[size - 1] === 'undefined');
-	const isEmpty = response?.[0]?.length === 0;
-	const isReachingEnd = size === DEFAULT_LIMIT;
-	const isRefreshing = isValidating && response && response.length === size;
-
-	useEffect(() => {
-		if (isVisible && !isReachingEnd && !isRefreshing) {
-			setSize(size + 1);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isVisible, isRefreshing]);
+	const { ref, data, isEmpty, isLoadingInitialData, isLoadingMore, isReachingEnd } = useListData({
+		url: '/api/gallery/album',
+	});
 
 	return (
 		<Navigation title="VMS: Galeri" active="gallery">
@@ -56,6 +31,13 @@ const Gallery = () => {
 				{isEmpty && <Empty />}
 
 				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+					{isLoadingInitialData && (
+						<>
+							<AlbumSkeleton />
+							<AlbumSkeleton />
+						</>
+					)}
+
 					{data?.map((item: Record<string, any>) => {
 						return (
 							<Link key={item.slug} href={`/gallery/album/${item.slug}`}>
@@ -72,13 +54,11 @@ const Gallery = () => {
 					})}
 				</div>
 
-				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-					{isLoadingMore ? (
-						<Loading />
-					) : isReachingEnd ? (
-						<p className="text-gray-400">No more data</p>
-					) : null}
-				</div>
+				<InfiniteScrollTrigger
+					triggerRef={ref}
+					isLoadingMore={isLoadingMore}
+					isReachingEnd={isReachingEnd}
+				/>
 			</Container>
 		</Navigation>
 	);

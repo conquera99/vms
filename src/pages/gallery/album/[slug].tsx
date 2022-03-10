@@ -1,8 +1,7 @@
-import { FC, LegacyRef, useEffect, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import dayjs from 'dayjs';
 import Image from 'next/image';
-import useSWRInfinite from 'swr/infinite';
 import Dialog from 'rc-dialog';
 
 import Title from 'components/display/title';
@@ -10,49 +9,28 @@ import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
 import Container from 'components/general/container';
-import { Loading } from 'components/general/icon';
+import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
 
-import useOnScreen from 'hooks/useOnScreen';
+import useListData from 'hooks/useListData';
 
 import { prisma } from 'db';
 import { datetimeFormat } from 'utils/constant';
-import fetcher from 'utils/fetcher';
-import { DEFAULT_LIMIT } from 'utils/constant';
 
-const getKey = (
-	page: number,
-	previousPageData: Record<string, any>,
-	pageSize: number,
-	albumId: string,
-) => {
-	if (previousPageData?.data && !previousPageData.data.length) return null;
-
-	return `/api/gallery/images?s=${pageSize}&p=${page + 1}&albumId=${albumId}`;
-};
+const ImageSkeleton = () => (
+	<div className="block bg-gray-200 h-full animate-pulse rounded-lg border border-transparent relative">
+		<div className="h-60" />
+		<div className="h-28" />
+	</div>
+);
 
 const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
-	const ref = useRef() as LegacyRef<HTMLDivElement>;
-
-	const isVisible = useOnScreen(ref);
+	const { ref, data, isEmpty, isLoadingInitialData, isLoadingMore, isReachingEnd } = useListData({
+		url: '/api/gallery/images',
+		param: `albumId=${detail.id}`,
+	});
 
 	const [visible, setVisible] = useState(false);
 	const [image, setImage] = useState<Record<string, any> | null>(null);
-
-	const {
-		data: response,
-		error,
-		size,
-		setSize,
-		isValidating,
-	} = useSWRInfinite((...args) => getKey(...args, DEFAULT_LIMIT, detail.id), fetcher);
-
-	const data = response ? [].concat(...response) : [];
-	const isLoadingInitialData = !response && !error;
-	const isLoadingMore =
-		isLoadingInitialData || (size > 0 && response && typeof response[size - 1] === 'undefined');
-	const isEmpty = response?.[0]?.length === 0;
-	const isReachingEnd = size === DEFAULT_LIMIT;
-	const isRefreshing = isValidating && response && response.length === size;
 
 	const openImage = (item: Record<string, any>) => {
 		setVisible(true);
@@ -63,13 +41,6 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 		setVisible(false);
 		setImage(null);
 	};
-
-	useEffect(() => {
-		if (isVisible && !isReachingEnd && !isRefreshing) {
-			setSize(size + 1);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isVisible, isRefreshing]);
 
 	const breadcrumb = [
 		{
@@ -98,6 +69,13 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 				{isEmpty && <Empty />}
 
 				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+					{isLoadingInitialData && (
+						<>
+							<ImageSkeleton />
+							<ImageSkeleton />
+						</>
+					)}
+
 					{data?.map((item: Record<string, any>) => {
 						return (
 							<div
@@ -118,13 +96,11 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 					})}
 				</div>
 
-				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-					{isLoadingMore ? (
-						<Loading />
-					) : isReachingEnd ? (
-						<p className="text-gray-400">No more data</p>
-					) : null}
-				</div>
+				<InfiniteScrollTrigger
+					triggerRef={ref}
+					isLoadingMore={isLoadingMore}
+					isReachingEnd={isReachingEnd}
+				/>
 
 				<Dialog
 					visible={visible}
