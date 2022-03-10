@@ -1,31 +1,21 @@
-import { LegacyRef, useEffect, useRef } from 'react';
-import { AddOutline } from 'antd-mobile-icons';
-import useSWRInfinite from 'swr/infinite';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
-import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { AddOutline } from 'antd-mobile-icons';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
-import Button, { LinkButton } from 'components/general/button';
-import { Loading } from 'components/general/icon';
 import List from 'components/display/list';
 import Container from 'components/general/container';
+import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
+import Button, { LinkButton } from 'components/general/button';
 
-import useOnScreen from 'hooks/useOnScreen';
+import useListData from 'hooks/useListData';
 
-import fetcher from 'utils/fetcher';
-import { dateFormat, datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
+import { dateFormat, datetimeFormat, successMessage } from 'utils/constant';
 import { numberFormatter } from 'utils/helper';
-
-const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
-	if (previousPageData?.data && !previousPageData.data.length) return null;
-
-	return `/api/admin/buy-item?s=${pageSize}&p=${page + 1}`;
-};
 
 const breadcrumb = [
 	{
@@ -39,32 +29,9 @@ const breadcrumb = [
 ];
 
 const Home = () => {
-	const ref = useRef() as LegacyRef<HTMLDivElement>;
-
-	const isVisible = useOnScreen(ref);
-
-	const {
-		data: response,
-		error,
-		size,
-		setSize,
-		isValidating,
-	} = useSWRInfinite((...args) => getKey(...args, DEFAULT_LIMIT), fetcher);
-
-	const data = response ? [].concat(...response) : [];
-	const isLoadingInitialData = !response && !error;
-	const isLoadingMore =
-		isLoadingInitialData || (size > 0 && response && typeof response[size - 1] === 'undefined');
-	const isEmpty = response?.[0]?.length === 0;
-	const isReachingEnd = size === DEFAULT_LIMIT;
-	const isRefreshing = isValidating && response && response.length === size;
-
-	useEffect(() => {
-		if (isVisible && !isReachingEnd && !isRefreshing) {
-			setSize(size + 1);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isVisible, isRefreshing]);
+	const { ref, setSize, data, isEmpty, isLoadingMore, isReachingEnd } = useListData({
+		url: '/api/admin/buy-item',
+	});
 
 	const onRemove = (id: string) => {
 		axios.post('/api/admin/buy-item/remove', { id }).then((response) => {
@@ -157,13 +124,11 @@ const Home = () => {
 					})}
 				</div>
 
-				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-					{isLoadingMore ? (
-						<Loading />
-					) : isReachingEnd ? (
-						<p className="text-gray-400">No more data</p>
-					) : null}
-				</div>
+				<InfiniteScrollTrigger
+					triggerRef={ref}
+					isLoadingMore={isLoadingMore}
+					isReachingEnd={isReachingEnd}
+				/>
 			</Container>
 		</Navigation>
 	);

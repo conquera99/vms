@@ -1,30 +1,21 @@
-import { LegacyRef, useEffect, useRef } from 'react';
-import { AddOutline } from 'antd-mobile-icons';
-import useSWRInfinite from 'swr/infinite';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { AddOutline } from 'antd-mobile-icons';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
-import { LinkButton } from 'components/general/button';
-import { Loading } from 'components/general/icon';
 import List from 'components/display/list';
 import Container from 'components/general/container';
+import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
+import { LinkButton } from 'components/general/button';
 
-import useOnScreen from 'hooks/useOnScreen';
+import useListData from 'hooks/useListData';
 
-import fetcher from 'utils/fetcher';
-import { datetimeFormat, DEFAULT_LIMIT, successMessage } from 'utils/constant';
-
-const getKey = (page: number, previousPageData: Record<string, any>, pageSize: number) => {
-	if (previousPageData?.data && !previousPageData.data.length) return null;
-
-	return `/api/admin/permission?s=${pageSize}&p=${page + 1}`;
-};
+import { datetimeFormat, successMessage } from 'utils/constant';
 
 const breadcrumb = [
 	{
@@ -38,32 +29,9 @@ const breadcrumb = [
 ];
 
 const Page = () => {
-	const ref = useRef() as LegacyRef<HTMLDivElement>;
-
-	const isVisible = useOnScreen(ref);
-
-	const {
-		data: response,
-		error,
-		size,
-		setSize,
-		isValidating,
-	} = useSWRInfinite((...args) => getKey(...args, DEFAULT_LIMIT), fetcher);
-
-	const data = response ? [].concat(...response) : [];
-	const isLoadingInitialData = !response && !error;
-	const isLoadingMore =
-		isLoadingInitialData || (size > 0 && response && typeof response[size - 1] === 'undefined');
-	const isEmpty = response?.[0]?.length === 0;
-	const isReachingEnd = size === DEFAULT_LIMIT;
-	const isRefreshing = isValidating && response && response.length === size;
-
-	useEffect(() => {
-		if (isVisible && !isReachingEnd && !isRefreshing) {
-			setSize(size + 1);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isVisible, isRefreshing]);
+	const { ref, setSize, data, isEmpty, isLoadingMore, isReachingEnd } = useListData({
+		url: '/api/admin/permission',
+	});
 
 	const onRemove = (id: string) => {
 		axios.post('/api/admin/permission/remove', { id }).then((response) => {
@@ -99,7 +67,7 @@ const Page = () => {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{data?.map((item: Record<string, any>) => {
 						return (
-							<List key={item.id}>
+							<List key={item.name}>
 								<div className="flex justify-between">
 									<div>
 										<p className="font-bold text-lg">{item.name}</p>
@@ -124,13 +92,11 @@ const Page = () => {
 					})}
 				</div>
 
-				<div ref={ref} className="text-center flex items-center mt-4 justify-center">
-					{isLoadingMore ? (
-						<Loading />
-					) : isReachingEnd ? (
-						<p className="text-gray-400">No more data</p>
-					) : null}
-				</div>
+				<InfiniteScrollTrigger
+					triggerRef={ref}
+					isLoadingMore={isLoadingMore}
+					isReachingEnd={isReachingEnd}
+				/>
 			</Container>
 		</Navigation>
 	);
