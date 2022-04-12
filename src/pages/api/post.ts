@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from 'db';
-import { DEFAULT_LIMIT, forbiddenResponse, successResponse } from 'utils/constant';
+import { DEFAULT_LIMIT, successResponse } from 'utils/constant';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
     const { p, s } = req.query;

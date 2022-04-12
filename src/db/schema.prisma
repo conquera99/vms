@@ -177,3 +177,38 @@ model Member {
 
     @@map("member")
 }
+
+model Campaign {
+    id        String    @id @default(cuid()) @map("campaign_id")
+    title     String    @map("campaign_title") @db.VarChar(255)
+    slug      String    @map("campaign_slug") @db.VarChar(255)
+    desc      String    @map("campaign_desc") @db.Text
+    notes     String?   @map("campaign_notes") @db.Text
+    imageId   String?   @map("campaign_image_id") @db.VarChar(255)
+    image     String?   @map("campaign_image") @db.Text()
+    startDate DateTime? @map("campaign_start_date") @db.Date
+    endDate   DateTime? @map("campaign_end_date") @db.Date
+    status    String    @map("campaign_status") @db.VarChar(1) // A: Active, C: Completed, N: NonActive
+    createdAt DateTime  @default(now()) @map("campaign_created_at")
+    createdBy String    @map("campaign_created_by")
+    updatedAt DateTime  @updatedAt @map("campaign_updated_at")
+    updatedBy String?   @map("campaign_updated_by")
+
+    @@map("campaign")
+}
+
+model CampaignDetail {
+    campaignId String   @map("cd_campaign_id")
+    seq        Int      @map("cd_seq") @db.Int
+    name       String   @map("cd_name") @db.VarChar(255)
+    desc       String?  @map("cd_desc") @db.Text
+    value      Decimal  @map("cd_value") @db.Decimal(20, 3)
+    status     String   @map("cd_status") @db.VarChar(1) // A: active, C: cancelled
+    createdAt  DateTime @default(now()) @map("cd_created_at")
+    createdBy  String   @map("cd_created_by")
+    updatedAt  DateTime @updatedAt @map("cd_updated_at")
+    updatedBy  String?  @map("cd_updated_by")
+
+    @@unique([campaignId, seq])
+    @@map("campaign_detail")
+}

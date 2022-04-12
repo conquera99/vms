@@ -18,6 +18,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	const postCount = await prisma.posts.count();
 	const albumCount = await prisma.albums.count();
 	const imagesCount = await prisma.images.count();
+	const campaignCount = await prisma.campaign.count();
 
 	res.json({
 		...successResponse,
@@ -28,6 +29,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			member: memberCount,
 			user: userCount,
 			permission: permissionCount,
+			campaign: campaignCount,
 			post: postCount,
 			album: albumCount,
 			image: imagesCount,

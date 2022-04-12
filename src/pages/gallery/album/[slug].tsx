@@ -10,6 +10,7 @@ import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
 import Container from 'components/general/container';
 import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
+import BlurImage from 'components/display/BlurImage';
 
 import useListData from 'hooks/useListData';
 
@@ -83,13 +84,10 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 								className="rounded-lg shadow-md cursor-pointer"
 								onClick={() => openImage(item)}
 							>
-								<Image
-									className="rounded-lg object-cover"
+								<BlurImage
+									className="aspect-w-1 aspect-h-1"
 									alt={item.altText}
 									src={item.image}
-									layout="responsive"
-									width={300}
-									height={300}
 								/>
 							</div>
 						);

@@ -1,11 +1,21 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
+import { Navigation as SwiperNavigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Empty from 'components/display/empty';
 import Post from 'components/display/post';
 import Container from 'components/general/container';
+import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
+import BlurImage from 'components/display/BlurImage';
 
 import useListData from 'hooks/useListData';
-import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
 
 const PostSkeleton = () => (
 	<div className="block bg-gray-200 animate-pulse rounded-lg my-5 border border-transparent relative">
@@ -26,10 +36,34 @@ const Home = () => {
 		url: '/api/post',
 	});
 
+	const [campaign, setCampaign] = useState<Record<string, any>[]>([]);
+
+	useEffect(() => {
+		axios.get('/api/campaign').then((response) => {
+			if (response.data.code === 0) {
+				setCampaign(response.data.data);
+			}
+		});
+	}, []);
+
 	return (
 		<Navigation active="home">
 			<Container>
-				<Title>Beranda</Title>
+				<Title>Aktivitas</Title>
+				<Swiper modules={[SwiperNavigation]} spaceBetween={50} slidesPerView={1}>
+					{campaign.map((item) => (
+						<SwiperSlide key={item.id}>
+							<Link href={`/campaign/${item.slug}`}>
+								<a>
+									<BlurImage src={item.image} alt={item.title} />
+								</a>
+							</Link>
+						</SwiperSlide>
+					))}
+				</Swiper>
+
+				<br />
+				<Title>Post</Title>
 
 				{isEmpty && <Empty />}
 

@@ -12,6 +12,7 @@ import {
 	FolderOutline,
 	GiftOutline,
 	GlobalOutline,
+	HandPayCircleOutline,
 	HistogramOutline,
 	LocationOutline,
 	PayCircleOutline,
@@ -69,6 +70,7 @@ const AdminHome = () => {
 		member: 0,
 		user: 0,
 		permission: 0,
+		campaign: 0,
 		post: 0,
 		album: 0,
 		image: 0,
@@ -173,6 +175,15 @@ const AdminHome = () => {
 							title="Post"
 							desc="atur dan buat post"
 							extra={<CountInfo value={count.post} desc="Post" />}
+						/>
+					)}
+					{session?.user?.permissions?.post === true && (
+						<Card
+							href="/admin/campaign"
+							icon={<HandPayCircleOutline className="text-4xl" />}
+							title="Campaign"
+							desc="atur dan buat campaign/donasi"
+							extra={<CountInfo value={count.campaign} desc="Campaign" />}
 						/>
 					)}
 					{session?.user?.permissions?.album === true && (

@@ -20,7 +20,7 @@
 	position: absolute;
 	@apply shadow-lg;
 	@apply bg-white;
-	@apply w-64;
+	/* @apply w-64; */
 	@apply rounded;
 	@apply border;
 	z-index: 10000;

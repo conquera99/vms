@@ -12,8 +12,9 @@ import Container from 'components/general/container';
 
 import { prisma } from 'db';
 import { datetimeFormat } from 'utils/constant';
+import BlurImage from 'components/display/BlurImage';
 
-const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
+const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 	const breadcrumb = [
 		{
 			title: 'Home',
@@ -32,14 +33,7 @@ const Home: FC<{ data: Record<string, any> }> = ({ data }) => {
 					<Breadcrumb data={breadcrumb} />
 				</Title>
 				<div>
-					<Image
-						src={data.image}
-						className="rounded-md object-cover"
-						alt={data.title}
-						height={230}
-						width={400}
-						layout="responsive"
-					/>
+					<BlurImage src={data.image} alt={data.title} />
 					<div className="my-5">
 						<h1 className="text-3xl text-indigo-500 font-bold">{data.title}</h1>
 						<div className="flex">
@@ -149,4 +143,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 	};
 };
 
-export default Home;
+export default Page;

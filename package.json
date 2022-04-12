@@ -21,6 +21,7 @@
         "autoprefixer": "^10.4.2",
         "axios": "^0.26.0",
         "bcryptjs": "^2.4.3",
+        "clipboard-copy": "^4.0.1",
         "cloudinary": "^1.28.1",
         "dayjs": "^1.10.8",
         "escape-html": "^1.0.3",
@@ -45,12 +46,14 @@
         "slate-hyperscript": "^0.67.0",
         "slate-react": "^0.74.0",
         "slugify": "^1.6.5",
+        "swiper": "^8.1.0",
         "swr": "^1.2.2",
         "tailwindcss": "^3.0.23",
         "workbox-window": "^6.5.1"
     },
     "devDependencies": {
         "@fullhuman/postcss-purgecss": "^4.1.3",
+        "@tailwindcss/aspect-ratio": "^0.4.0",
         "@types/bcryptjs": "^2.4.2",
         "@types/escape-html": "^1.0.1",
         "@types/formidable": "^2.0.4",
