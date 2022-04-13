@@ -188,7 +188,8 @@ model Campaign {
     image     String?   @map("campaign_image") @db.Text()
     startDate DateTime? @map("campaign_start_date") @db.Date
     endDate   DateTime? @map("campaign_end_date") @db.Date
-    status    String    @map("campaign_status") @db.VarChar(1) // A: Active, C: Completed, N: NonActive
+    status    String    @default("A") @map("campaign_status") @db.VarChar(1) // A: Active, C: Completed, N: NonActive
+    visible   String    @default("Y") @map("campaign_visbile") @db.VarChar(1) // Y: yes, N: no
     createdAt DateTime  @default(now()) @map("campaign_created_at")
     createdBy String    @map("campaign_created_by")
     updatedAt DateTime  @updatedAt @map("campaign_updated_at")

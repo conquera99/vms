@@ -43,6 +43,7 @@ const Page = () => {
 
 	const [isEdit, setIsEdit] = useState<null | number>(null);
 	const [campaign, setCampaign] = useState<Record<string, any>>({});
+	const [total, setTotal] = useState(0);
 	const [participant, setParticipant] = useState<Record<string, any>[]>([]);
 
 	const onFinish = (values: any) => {
@@ -111,6 +112,7 @@ const Page = () => {
 		axios.get(`/api/admin/campaign/participant?id=${router.query.id}`).then((response) => {
 			if (response.data.code === 0) {
 				setParticipant(response.data.data);
+				setTotal(response.data.total);
 			}
 		});
 	}, [router.query.id]);
@@ -169,6 +171,10 @@ const Page = () => {
 					<div className="mb-2">
 						<small className="text-gray-500">Deskripsi</small>
 						<p className="whitespace-pre-line">{campaign.desc}</p>
+					</div>
+					<div className="mb-2">
+						<small className="text-gray-500">Total</small>
+						<p className="whitespace-pre-line">{formatNumber(total)}</p>
 					</div>
 					<div>
 						<small className="text-gray-500">Opsi</small>
@@ -241,12 +247,12 @@ const Page = () => {
 								key={`${item.campaignId}-${item.seq}`}
 								className="flex items-center justify-between border-b mb-2 py-2 last:border-none"
 							>
-								<div className="w-6/12">
+								<div className="w-5/12 md:w-7/12">
 									{item.name}
 									<p className="text-sm">{formatNumber(item.value)}</p>
 									<div className="text-sm text-gray-400">{item.desc || '-'}</div>
 								</div>
-								<div className="text-center w-10/12 px-2">
+								<div className="text-center w-4/12 md:w-3/12 px-2">
 									<p
 										className={`text-xs font-bold py-1 px-2 rounded-md ${
 											item.status === 'P'
@@ -263,7 +269,7 @@ const Page = () => {
 											: 'FULL'}
 									</p>
 								</div>
-								<div className="w-2/12 text-right">
+								<div className="w-3/12 md:w-2/12 text-right">
 									<button
 										className="text-blue-500 mr-3"
 										onClick={() => onEdit(item)}

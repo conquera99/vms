@@ -5,7 +5,7 @@ import { successResponse } from 'utils/constant';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
 	const data = await prisma.campaign.findMany({
-		where: { status: 'A' },
+		where: { status: 'A', visible: 'Y' },
 		orderBy: { createdAt: 'desc' },
 	});
 

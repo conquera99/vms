@@ -70,25 +70,51 @@ const Page = () => {
 							<List key={item.id}>
 								<div className="flex justify-between">
 									<div>
-										<small className="text-xs">ID:&nbsp;{item.id}</small>
+										<small className="text-xs text-gray-500">
+											ID:&nbsp;{item.id}
+										</small>
 										<p className="font-bold text-lg">{item.title}</p>
+										<div className="flex">
+											<div className="mr-5">
+												<small className="text-gray-500">Status</small>
+												<p className="font-semibold">
+													{item.status === 'A'
+														? 'Aktif'
+														: item.status === 'C'
+														? 'Selesai'
+														: 'Nonaktif'}
+												</p>
+											</div>
+											<div>
+												<small className="text-gray-500">Visibilitas</small>
+												<p className="font-semibold">
+													{item.visible === 'Y'
+														? 'Terpublikasi'
+														: 'Internal'}
+												</p>
+											</div>
+										</div>
 										<small className="text-xs text-gray-600">
 											{dayjs(item.createdAt).format(datetimeFormat)}
 										</small>
 									</div>
-									<div>
-										<Link href={`/admin/campaign/detail?id=${item.id}`}>
-											<a className="text-blue-500 mr-2">edit</a>
-										</Link>
+									<div className="flex flex-col justify-between items-end">
+										<div>
+											<Link href={`/admin/campaign/detail?id=${item.id}`}>
+												<a className="text-blue-500 mr-2">edit</a>
+											</Link>
+											<button
+												className="text-red-500"
+												onClick={() => onRemove(item.id)}
+											>
+												hapus
+											</button>
+										</div>
 										<Link href={`/admin/campaign/participant?id=${item.id}`}>
-											<a className="text-gray-500 mr-2">atur</a>
+											<a className="text-gray-700 mr-2 px-2 py-1 bg-blue-100 rounded-md text-sm">
+												Atur Peserta
+											</a>
 										</Link>
-										<button
-											className="text-red-500"
-											onClick={() => onRemove(item.id)}
-										>
-											hapus
-										</button>
 									</div>
 								</div>
 							</List>

@@ -66,7 +66,7 @@ const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 					{participant.length > 0 &&
 						participant.map((item) => (
 							<div
-								key={`${item.campaignId}-${item.seq}`}
+								key={`${item.name}-${item.status}`}
 								className="flex items-center justify-between border-b mb-2 py-2 last:border-none"
 							>
 								<div className="w-6/12">{item.name}</div>

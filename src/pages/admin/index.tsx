@@ -177,7 +177,7 @@ const AdminHome = () => {
 							extra={<CountInfo value={count.post} desc="Post" />}
 						/>
 					)}
-					{session?.user?.permissions?.post === true && (
+					{session?.user?.permissions?.campaign === true && (
 						<Card
 							href="/admin/campaign"
 							icon={<HandPayCircleOutline className="text-4xl" />}

@@ -5,6 +5,7 @@ const BlurImage: FC<{ src: string; alt: string; className?: string }> = ({
 	src,
 	alt,
 	className,
+	children,
 }) => {
 	const [isLoading, setLoading] = useState(true);
 
@@ -24,6 +25,7 @@ const BlurImage: FC<{ src: string; alt: string; className?: string }> = ({
 					${isLoading ? 'grayscale blur-2xl scale-110' : 'grayscale-0 blur-0 scale-100'}`}
 				onLoadingComplete={() => setLoading(false)}
 			/>
+			{children}
 		</div>
 	);
 };

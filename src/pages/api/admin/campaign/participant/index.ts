@@ -16,5 +16,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		orderBy: { createdAt: 'asc' },
 	});
 
-	res.json({ ...successResponse, data });
+	const total = await prisma.campaignDetail.aggregate({
+		_sum: {
+			value: true,
+		},
+		where: {
+			campaignId: id as string,
+		},
+	});
+
+	res.json({ ...successResponse, data, total: total._sum.value || 0 });
 }

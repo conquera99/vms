@@ -16,6 +16,8 @@ import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
 import BlurImage from 'components/display/BlurImage';
 
 import useListData from 'hooks/useListData';
+import dayjs from 'dayjs';
+import { dateFormat } from 'utils/constant';
 
 const PostSkeleton = () => (
 	<div className="block bg-gray-200 animate-pulse rounded-lg my-5 border border-transparent relative">
@@ -36,34 +38,72 @@ const Home = () => {
 		url: '/api/post',
 	});
 
+	const [loading, setLoading] = useState(true);
 	const [campaign, setCampaign] = useState<Record<string, any>[]>([]);
 
 	useEffect(() => {
-		axios.get('/api/campaign').then((response) => {
-			if (response.data.code === 0) {
-				setCampaign(response.data.data);
-			}
-		});
+		axios
+			.get('/api/campaign')
+			.then((response) => {
+				if (response.data.code === 0) {
+					setCampaign(response.data.data);
+				}
+			})
+			.finally(() => setLoading(false));
 	}, []);
 
 	return (
 		<Navigation active="home">
 			<Container>
-				<Title>Aktivitas</Title>
-				<Swiper modules={[SwiperNavigation]} spaceBetween={50} slidesPerView={1}>
-					{campaign.map((item) => (
-						<SwiperSlide key={item.id}>
-							<Link href={`/campaign/${item.slug}`}>
-								<a>
-									<BlurImage src={item.image} alt={item.title} />
-								</a>
-							</Link>
-						</SwiperSlide>
-					))}
-				</Swiper>
+				<Title>Home</Title>
+
+				{!loading && campaign.length === 0 ? (
+					<Empty desc="belum ada banner yang dipublikasi" />
+				) : (
+					<Swiper modules={[SwiperNavigation]} spaceBetween={50} slidesPerView={1}>
+						{loading && (
+							<SwiperSlide>
+								<PostSkeleton />
+							</SwiperSlide>
+						)}
+						{!loading &&
+							campaign.map((item) => (
+								<SwiperSlide key={item.id}>
+									<Link href={`/campaign/${item.slug}`}>
+										<a>
+											<BlurImage
+												src={item.image}
+												alt={item.title}
+												className="aspect-w-2 aspect-h-1 md:aspect-w-3 md:aspect-h-1"
+											>
+												<div className="flex items-end p-1">
+													<div className="bg-slate-900/50 backdrop-blur-sm p-4 rounded-lg w-full">
+														<h2 className="text-white text-ellipsis overflow-hidden whitespace-nowrap text-xl font-bold leading-tight pr-5">
+															{item.title}
+														</h2>
+														<div className="text-base text-gray-200 font-medium">
+															<small className="text-sm text-gray-300">
+																{dayjs(item.startDate).format(
+																	dateFormat,
+																)}
+																&nbsp;-&nbsp;
+																{dayjs(item.endDate).format(
+																	dateFormat,
+																)}
+															</small>
+														</div>
+													</div>
+												</div>
+											</BlurImage>
+										</a>
+									</Link>
+								</SwiperSlide>
+							))}
+					</Swiper>
+				)}
 
 				<br />
-				<Title>Post</Title>
+				<h2 className="text-indigo-500 font-bold text-2xl">Post</h2>
 
 				{isEmpty && <Empty />}
 

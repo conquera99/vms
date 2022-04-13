@@ -63,6 +63,7 @@ const Page = () => {
 		formData.append('endDate', values.endDate);
 		formData.append('notes', values.notes);
 		formData.append('status', values.status);
+		formData.append('visible', values.visible);
 
 		if (file) {
 			formData.append('img', file);
@@ -73,7 +74,11 @@ const Page = () => {
 			.then((response) => {
 				if (response.data.code === 0) {
 					toast.success(successMessage);
-					if (!router.query.id) form.resetFields();
+					if (!router.query.id) {
+						form.resetFields();
+						setFile(null);
+						setImage(undefined);
+					}
 				} else {
 					toast.error(response.data.message);
 				}
@@ -89,6 +94,10 @@ const Page = () => {
 						response.data.data.startDate = dayjs(response.data.data.startDate);
 					if (response.data.data.endDate)
 						response.data.data.endDate = dayjs(response.data.data.endDate);
+
+					if (response.data.data.image) {
+						setImage(response.data.data.image);
+					}
 
 					form.setFieldsValue(response.data.data);
 				}
@@ -148,6 +157,14 @@ const Page = () => {
 							{ label: 'Aktif', value: 'A' },
 							{ label: 'Selesai', value: 'C' },
 							{ label: 'Nonaktif', value: 'N' },
+						]}
+					/>
+					<Select
+						name="visible"
+						label="Visibilitas"
+						options={[
+							{ label: 'Terpublish', value: 'Y' },
+							{ label: 'Internal', value: 'N' },
 						]}
 					/>
 					<Upload
