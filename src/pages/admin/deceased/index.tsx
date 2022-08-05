@@ -68,7 +68,7 @@ const Page = () => {
 							<List key={item.id}>
 								<div className="grid grid-cols-12 gap-2">
 									<div className="col-span-4 lg:col-span-3 overflow-hidden">
-										<div className="bg-slate-100 w-28 h-28 rounded-full flex items-center justify-center">
+										<div className="bg-slate-100 w-28 h-40 rounded-full flex items-center justify-center">
 											{item.image ? (
 												<img
 													src={item.image}
