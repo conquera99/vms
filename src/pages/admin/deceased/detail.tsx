@@ -49,7 +49,7 @@ const Page = () => {
 		setLoading(true);
 
 		if (values.dateOfBirth) values.date = dayjs(values.dateOfBirth).toDate();
-		if (values.placeOfDeath) values.date = dayjs(values.placeOfDeath).toDate();
+		if (values.dateOfDeath) values.date = dayjs(values.dateOfDeath).toDate();
 
 		const formData = new FormData();
 
@@ -59,7 +59,7 @@ const Page = () => {
 		formData.append('placeOfBirth', values.placeOfBirth);
 		formData.append('placeOfDeath', values.placeOfDeath);
 		formData.append('dateOfBirth', values.dateOfBirth);
-		formData.append('placeOfDeath', values.placeOfDeath);
+		formData.append('dateOfDeath', values.dateOfDeath);
 		formData.append('notes', values.notes);
 
 		if (file) {
