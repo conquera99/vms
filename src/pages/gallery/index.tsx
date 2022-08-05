@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FolderOutline } from 'antd-mobile-icons';
+import dayjs from 'dayjs';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
@@ -44,9 +45,14 @@ const Gallery = () => {
 								<a className="block rounded-lg bg-yellow-50 my-5 border border-transparent shadow-md relative transform transition-all duration-300 scale-100 hover:shadow-lg">
 									<div className="p-6 flex items-center">
 										<FolderOutline className="text-3xl mr-2" />
-										<h2 className="text-ellipsis overflow-hidden whitespace-nowrap text-xl font-bold leading-tight pr-5">
-											{item.title}
-										</h2>
+										<div>
+											<h2 className="text-ellipsis overflow-hidden whitespace-nowrap text-xl font-bold leading-tight pr-5">
+												{item.title}
+											</h2>
+											<small>
+												{dayjs(item.createdAt).format('DD MMM YYYY HH:mm')}
+											</small>
+										</div>
 									</div>
 								</a>
 							</Link>

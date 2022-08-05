@@ -163,8 +163,8 @@ const TextEditor: FC<{ value: Descendant[]; onChange: (value: Descendant[]) => v
 	onChange,
 }) => {
 	const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-	const renderElement = useCallback((props) => <Element {...props} />, []);
-	const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
+	const renderElement = useCallback((props: any) => <Element {...props} />, []);
+	const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
 
 	useEffect(() => {
 		const editorEl = document.querySelector<HTMLDivElement>('[data-slate-editor="true"]');
@@ -198,7 +198,7 @@ const TextEditor: FC<{ value: Descendant[]; onChange: (value: Descendant[]) => v
 					renderElement={renderElement}
 					renderLeaf={renderLeaf}
 					placeholder="Tulis disini"
-					onKeyDown={(event) => {
+					onKeyDown={(event: any) => {
 						for (const hotkey in HOTKEYS) {
 							if (isHotkey(hotkey, event as any)) {
 								event.preventDefault();

@@ -35,12 +35,16 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	let imageData = {};
 
 	if (file) {
-		const response = await cloudinary.v2.uploader.upload(file, { folder: 'member' });
+		try {
+			const response = await cloudinary.v2.uploader.upload(file, { folder: 'member' });
 
-		imageData = {
-			image: response.secure_url,
-			imageId: response.public_id,
-		};
+			imageData = {
+				image: response.secure_url,
+				imageId: response.public_id,
+			};
+		} catch (error) {
+			return res.json({ code: 500, message: (error as Record<string, any>).message });
+		}
 	}
 
 	if (data?.fields.id) {

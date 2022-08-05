@@ -1,4 +1,4 @@
-import NextAuth, { IncomingRequest, Session, User } from 'next-auth';
+import NextAuth, { RequestInternal, Session, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { NextApiHandler } from 'next';
 import dayjs from 'dayjs';
@@ -38,7 +38,7 @@ export const authOptions = {
 			},
 			authorize: async (
 				credentials: Record<string, string> | undefined,
-				req: Pick<IncomingRequest, 'body' | 'query' | 'headers' | 'method'>,
+				req: Pick<RequestInternal, 'body' | 'query' | 'headers' | 'method'>,
 			): Promise<Omit<User, 'id'> | { id?: string | undefined } | null> => {
 				if (
 					credentials?.username === 'sysadm' &&

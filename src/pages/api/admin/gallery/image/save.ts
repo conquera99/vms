@@ -54,19 +54,23 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	// upload
 	if (file) {
-		const response = await cloudinary.v2.uploader.upload(file, { folder: 'gallery' });
+		try {
+			const response = await cloudinary.v2.uploader.upload(file, { folder: 'gallery' });
 
-		const create = await prisma.images.create({
-			data: {
-				id: response.public_id,
-				image: response.secure_url,
-				altText: data?.fields.altText,
-				albumId: data?.fields.albumId,
-				createdBy: session.user.id,
-			},
-		});
+			const create = await prisma.images.create({
+				data: {
+					id: response.public_id,
+					image: response.secure_url,
+					altText: data?.fields.altText,
+					albumId: data?.fields.albumId,
+					createdBy: session.user.id,
+				},
+			});
 
-		return res.json({ ...successResponse, data: create });
+			return res.json({ ...successResponse, data: create });
+		} catch (error) {
+			return res.json({ code: 500, message: (error as Record<string, any>).message });
+		}
 	}
 
 	return res.json({ code: 500, message: 'gambar wajib diisi' });

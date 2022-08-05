@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 
-const BlurImage: FC<{ src: string; alt: string; className?: string }> = ({
+const BlurImage: FC<{ src: string; alt: string; className?: string; children?: ReactNode }> = ({
 	src,
 	alt,
 	className,

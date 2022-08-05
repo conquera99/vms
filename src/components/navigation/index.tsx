@@ -19,6 +19,7 @@ const MenuItem: FC<{
 	icon?: ReactNode;
 	href: string | UrlObject;
 	active?: boolean;
+	children?: ReactNode;
 	title: string;
 	className?: string;
 }> = ({ icon, className, title, href, active = false, children }) => {
@@ -86,7 +87,6 @@ const Navigation: FC<BaseNavInterface> = ({
 	// It has same effect as the old componentDidMount lifecycle callback.
 	useEffect(() => {
 		if (
-			false &&
 			typeof window !== 'undefined' &&
 			'serviceWorker' in navigator
 			// window.workbox !== undefined
@@ -172,9 +172,9 @@ const Navigation: FC<BaseNavInterface> = ({
 
 			{/* <div className="hidden md:block md:h-16">&nbsp;</div> */}
 
-			<div className="px-4 pt-16 pb-20 min-h-screen">{children}</div>
+			<div className="px-4 pt-16 pb-20 min-h-screen app-content">{children}</div>
 
-			<div className="md:top-0 md:bottom-auto md:border-b md:px-4 z-10 h-16 bottom-0 border-t bg-white/70 backdrop-filter backdrop-blur-md right-0 left-0 py-1 fixed">
+			<div className="app-nav md:top-0 md:bottom-auto md:border-b md:px-4 z-10 h-16 bottom-0 border-t bg-white/70 backdrop-filter backdrop-blur-md right-0 left-0 py-1 fixed">
 				<div className="flex h-full md:justify-between md:mx-auto md:max-w-5xl xl:max-w-7xl">
 					<div className="hidden md:flex items-center">
 						<Image src="/logo.png" width={45} height={45} alt="logo" />

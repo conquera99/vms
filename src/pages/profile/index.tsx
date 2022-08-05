@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { LeftOutline } from 'antd-mobile-icons';
 
@@ -7,7 +7,11 @@ import Title from 'components/display/title';
 import Button from 'components/general/button';
 import Container from 'components/general/container';
 
-const Desc: FC<{ label: string; value?: string }> = ({ label, children, value }) => {
+const Desc: FC<{ label: string; value?: string; children?: ReactNode }> = ({
+	label,
+	children,
+	value,
+}) => {
 	return (
 		<div className="mb-4">
 			<span className="text-gray-500">{label}</span>

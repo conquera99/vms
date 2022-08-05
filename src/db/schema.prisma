@@ -61,7 +61,6 @@ model Posts {
     updatedAt DateTime @default(now()) @map("post_updated_at")
     updatedBy String?  @map("post_updated_by")
 
-
     @@unique([slug])
     @@map("posts")
 }
@@ -212,4 +211,30 @@ model CampaignDetail {
 
     @@unique([campaignId, seq])
     @@map("campaign_detail")
+}
+
+model Deceased {
+    id           String    @id @default(cuid()) @map("deceased_id")
+    name         String    @map("deceased_name")
+    placeOfBirth String?   @map("deceased_place_of_birth") @db.VarChar(255)
+    dateOfBirth  DateTime? @map("deceased_date_of_birth")
+    placeOfDeath String?   @map("deceased_place_of_death") @db.VarChar(255)
+    dateOfDeath  DateTime? @map("deceased_date_of_death")
+    imageId      String?   @map("deceased_image_id") @db.VarChar(255)
+    image        String?   @map("deceased_image") @db.Text()
+    notes        String?   @map("deceased_notes")
+    createdAt    DateTime  @default(now()) @map("deceased_created_at")
+    createdBy    String    @map("deceased_created_by")
+    updatedAt    DateTime  @updatedAt @map("deceased_updated_at")
+    updatedBy    String?   @map("deceased_updated_by")
+
+    @@map("deceased")
+}
+
+model DeceasedFamily {
+    deceasedId String @map("df_deceased_id")
+    memberId   String @map("df_member_id")
+
+    @@unique([deceasedId, memberId])
+    @@map("deceased_family")
 }

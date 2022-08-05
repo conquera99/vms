@@ -75,4 +75,36 @@ iframe {
 	margin-top: 1em;
 }
 
+.print {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+@media print {
+	@page {
+		margin: 0.5mm;
+		size: A4;
+	}
+
+	body {
+		margin: 0;
+	}
+
+	.page-title,
+	.app-nav {
+		display: none;
+	}
+	.app-content {
+		padding: 1cm 0;
+	}
+
+	.print-container {
+		border: 15px solid transparent;
+		border-image: url(/images/border.png) 35% round;
+	}
+}
 /* purgecss end ignore */

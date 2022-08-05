@@ -1,7 +1,7 @@
 import { getSession } from 'next-auth/react';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { IncomingForm } from 'formidable';
-import slugify from 'slugify';
+import dayjs from 'dayjs';
 
 import { prisma } from 'db';
 import { forbiddenResponse, successResponse } from 'utils/constant';
@@ -35,18 +35,20 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	let imageData = {};
 
 	if (file) {
-		const response = await cloudinary.v2.uploader.upload(file, { folder: 'posts' });
+		try {
+			const response = await cloudinary.v2.uploader.upload(file, { folder: 'deceased' });
 
-		imageData = {
-			image: response.secure_url,
-			imageId: response.public_id,
-		};
+			imageData = {
+				image: response.secure_url,
+				imageId: response.public_id,
+			};
+		} catch (error) {
+			return res.json({ code: 500, message: (error as Record<string, any>).message });
+		}
 	}
 
-	const slug = slugify(data?.fields.title);
-
 	if (data?.fields.id) {
-		const detail = await prisma.posts.findFirst({
+		const detail = await prisma.deceased.findFirst({
 			where: { id: data?.fields.id },
 		});
 
@@ -54,15 +56,15 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			return res.json({ code: 404, message: 'data not found' });
 		}
 
-		const update = await prisma.posts.update({
+		const update = await prisma.deceased.update({
 			where: { id: data?.fields.id },
 			data: {
-				slug,
-				title: data?.fields.title,
-				summary: data?.fields.summary,
-				keywords: data?.fields.keywords,
-				content: data?.fields.content,
-				status: data?.fields.status,
+				name: data?.fields.name,
+				placeOfBirth: data?.fields.placeOfBirth,
+				placeOfDeath: data?.fields.placeOfDeath,
+				notes: data?.fields.notes,
+				dateOfBirth: dayjs(data?.fields.dateOfBirth).toDate(),
+				dateOfDeath: dayjs(data?.fields.dateOfDeath).toDate(),
 				updatedBy: session.user.id,
 				...imageData,
 			},
@@ -74,25 +76,21 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			deleteImage = await cloudinary.v2.api.delete_resources([detail.imageId]);
 		}
 
-		await res.revalidate(`/post/${slug}`);
-
 		return res.json({ ...successResponse, data: { update, deleteImage } });
 	}
 
-	const create = await prisma.posts.create({
+	const create = await prisma.deceased.create({
 		data: {
-			slug,
-			title: data?.fields.title,
-			summary: data?.fields.summary,
-			keywords: data?.fields.keywords,
-			content: data?.fields.content,
-			status: data?.fields.status,
+			name: data?.fields.name,
+			placeOfBirth: data?.fields.placeOfBirth,
+			placeOfDeath: data?.fields.placeOfDeath,
+			notes: data?.fields.notes,
+			dateOfBirth: dayjs(data?.fields.dateOfBirth).toDate(),
+			dateOfDeath: dayjs(data?.fields.dateOfDeath).toDate(),
 			createdBy: session.user.id,
 			...imageData,
 		},
 	});
-
-	await res.revalidate(`/post/${slug}`);
 
 	return res.json({ ...successResponse, data: create });
 }

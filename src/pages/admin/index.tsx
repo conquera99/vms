@@ -15,6 +15,7 @@ import {
 	HandPayCircleOutline,
 	HistogramOutline,
 	LocationOutline,
+	LoopOutline,
 	PayCircleOutline,
 	PicturesOutline,
 	ShopbagOutline,
@@ -74,6 +75,7 @@ const AdminHome = () => {
 		post: 0,
 		album: 0,
 		image: 0,
+		deceased: 0,
 	});
 
 	useEffect(() => {
@@ -135,6 +137,15 @@ const AdminHome = () => {
 							title="Anggota"
 							desc="data-data umat vihara"
 							extra={<CountInfo value={count.member} desc="Orang" />}
+						/>
+					)}
+					{session?.user?.permissions?.deceased === true && (
+						<Card
+							href="/admin/deceased"
+							icon={<LoopOutline className="text-4xl" />}
+							title="Mendiang"
+							desc="data-data mendiang"
+							extra={<CountInfo value={count.deceased} desc="Orang" />}
 						/>
 					)}
 				</div>
