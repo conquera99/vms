@@ -97,7 +97,7 @@ const Page = () => {
 							/>
 							<div className="flex items-end">
 								<div className="w-full text-center">
-									<h2 className="text-7xl font-bold">{data?.name}</h2>
+									<h2 className="text-7xl font-bold">ALM. {data?.name}</h2>
 									<div className="grid grid-cols-1">
 										<div className="text-xl col-6">
 											<p className="font-semibold">

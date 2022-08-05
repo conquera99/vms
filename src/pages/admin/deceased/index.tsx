@@ -84,7 +84,7 @@ const Page = () => {
 									<div className="col-span-8 lg:col-span-9 flex flex-col justify-between">
 										<div>
 											<small className="text-xs">ID:&nbsp;{item.id}</small>
-											<p className="font-bold text-lg">{item.name}</p>
+											<p className="font-bold text-lg">ALM. {item.name}</p>
 											<div className="grid grid-cols-2">
 												<div className="col-6">
 													<small>Lahir</small>
