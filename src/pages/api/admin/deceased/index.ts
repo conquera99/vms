@@ -1,5 +1,7 @@
 import { getSession } from 'next-auth/react';
 import { NextApiRequest, NextApiResponse } from 'next';
+import crypto from 'crypto';
+import { encode } from 'url-safe-base64';
 
 import { prisma } from 'db';
 import { DEFAULT_LIMIT, forbiddenResponse, successResponse } from 'utils/constant';
@@ -27,6 +29,22 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		take: Number(limit),
 		orderBy: { createdAt: 'desc' },
 	});
+
+	const newData = [];
+
+	for (let i = 0; i < data.length; i++) {
+		const payload = `${data[i].imageId}/${data[i].image?.split('/').pop()}`;
+
+		const key = crypto
+			.createHash('sha1')
+			.update(`/${payload}${process.env.CLOUDINARY_API_SECRET}`)
+			.digest('base64');
+
+		newData.push({
+			...data[i],
+			url: `https://res.cloudinary.com/vihara-sasana-graha/image/upload/${key}/${payload}`,
+		});
+	}
 
 	res.json({ ...successResponse, data });
 }

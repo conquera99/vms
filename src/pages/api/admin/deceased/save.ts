@@ -36,7 +36,10 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	if (file) {
 		try {
-			const response = await cloudinary.v2.uploader.upload(file, { folder: 'deceased' });
+			const response = await cloudinary.v2.uploader.upload(file, {
+				folder: 'deceased',
+				type: 'authenticated',
+			});
 
 			imageData = {
 				image: response.secure_url,
