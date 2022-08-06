@@ -106,6 +106,7 @@ const Page = () => {
 																	dateFormat,
 															  )
 															: '-'}
+														{item?.notes ? ` (${item.notes})` : ''}
 													</p>
 												</div>
 											</div>

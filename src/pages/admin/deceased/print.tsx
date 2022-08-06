@@ -104,7 +104,9 @@ const Page = () => {
 												<span className="font-normal">LAHIR:&nbsp;</span>
 												{data?.placeOfBirth || '-'},
 												{data?.dateOfBirth
-													? dayjs(data?.dateOfBirth).format(dateFormat)
+													? dayjs(data?.dateOfBirth)
+															.format(dateFormat)
+															.toUpperCase()
 													: '-'}
 											</p>
 										</div>
@@ -113,8 +115,11 @@ const Page = () => {
 												<span className="font-normal">WAFAT:&nbsp;</span>
 												{data?.placeOfDeath || '-'},
 												{data?.dateOfDeath
-													? dayjs(data?.dateOfDeath).format(dateFormat)
+													? dayjs(data?.dateOfDeath)
+															.format(dateFormat)
+															.toUpperCase()
 													: '-'}
+												{data?.notes ? ` (${data.notes})` : ''}
 											</p>
 										</div>
 									</div>
