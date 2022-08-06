@@ -90,11 +90,13 @@ const Page = () => {
 						<Skeleton />
 					) : (
 						<div className="print-container p-4">
-							<BlurImage
-								src={data?.image}
-								alt={data?.name}
-								className="aspect-w-3 aspect-h-4"
-							/>
+							<div className="p-8">
+								<BlurImage
+									src={data?.image || '/images/buddha-placeholder.png'}
+									alt={data?.name}
+									className="aspect-w-3 aspect-h-4"
+								/>
+							</div>
 							<div className="flex items-end">
 								<div className="w-full text-center">
 									<h2 className="text-7xl font-bold">ALM. {data?.name}</h2>

@@ -69,15 +69,11 @@ const Page = () => {
 								<div className="grid grid-cols-12 gap-2">
 									<div className="col-span-4 lg:col-span-3 overflow-hidden">
 										<div className="bg-slate-100 w-28 h-40 rounded-md flex items-center justify-center">
-											{item.image ? (
-												<img
-													src={item.image}
-													alt="member-image"
-													className="object-cover w-28 h-40 rounded-md"
-												/>
-											) : (
-												<div className="text-gray-500">No Image</div>
-											)}
+											<img
+												src={item.image || '/images/buddha-placeholder.png'}
+												alt="member-image"
+												className="object-cover w-28 h-40 rounded-md"
+											/>
 										</div>
 									</div>
 
