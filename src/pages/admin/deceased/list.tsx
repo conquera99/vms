@@ -26,6 +26,7 @@ const breadcrumb = [
 const Page = () => {
 	const { ref, data, isEmpty, isLoadingMore, isReachingEnd } = useListData({
 		url: '/api/admin/deceased',
+		show: 100,
 	});
 
 	return (

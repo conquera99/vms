@@ -29,6 +29,7 @@ const breadcrumb = [
 const Page = () => {
 	const { ref, setSize, data, isEmpty, isLoadingMore, isReachingEnd } = useListData({
 		url: '/api/admin/deceased',
+		show: 20,
 	});
 
 	const onRemove = (id: string) => {
@@ -71,88 +72,97 @@ const Page = () => {
 					</div>
 				</Title>
 
-				{isEmpty && <Empty />}
+				{isEmpty ? (
+					<Empty />
+				) : (
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						{data?.map((item: Record<string, any>) => {
+							return (
+								<List key={item.id}>
+									<div className="grid grid-cols-12 gap-2">
+										<div className="col-span-4 lg:col-span-3 overflow-hidden">
+											<div className="bg-slate-100 w-28 h-40 rounded-md flex items-center justify-center">
+												<img
+													src={
+														item.image ||
+														'/images/buddha-placeholder.png'
+													}
+													alt="member-image"
+													className="object-cover w-28 h-40 rounded-md"
+												/>
+											</div>
+										</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-					{data?.map((item: Record<string, any>) => {
-						return (
-							<List key={item.id}>
-								<div className="grid grid-cols-12 gap-2">
-									<div className="col-span-4 lg:col-span-3 overflow-hidden">
-										<div className="bg-slate-100 w-28 h-40 rounded-md flex items-center justify-center">
-											<img
-												src={item.image || '/images/buddha-placeholder.png'}
-												alt="member-image"
-												className="object-cover w-28 h-40 rounded-md"
-											/>
+										<div className="col-span-8 lg:col-span-9 flex flex-col justify-between">
+											<div>
+												<small className="text-xs">
+													ID:&nbsp;{item.id}
+												</small>
+												<p className="font-bold text-lg">
+													ALM. {item.name}
+												</p>
+												<div className="grid grid-cols-2">
+													<div className="col-6">
+														<small>Lahir</small>
+														<p>
+															{item.placeOfBirth || '-'},
+															{item.dateOfBirth
+																? dayjs(item.dateOfBirth).format(
+																		dateFormat,
+																  )
+																: '-'}
+														</p>
+													</div>
+													<div className="col-6">
+														<small>Wafat</small>
+														<p>
+															{item.placeOfDeath || '-'},
+															{item.dateOfDeath
+																? dayjs(item.dateOfDeath).format(
+																		dateFormat,
+																  )
+																: '-'}
+															{item?.notes ? ` (${item.notes})` : ''}
+														</p>
+													</div>
+												</div>
+												<small className="text-xs text-gray-600">
+													{dayjs(item.createdAt).format(datetimeFormat)}
+												</small>
+											</div>
+											<div className="mt-2 flex justify-between items-center">
+												<div className="flex">
+													<LinkButton
+														size="small"
+														buttonType="info"
+														className="mr-2"
+														href={`/admin/deceased/detail?id=${item.id}`}
+													>
+														Lihat
+													</LinkButton>
+													<LinkButton
+														size="small"
+														buttonType="info"
+														href={`/admin/deceased/print?id=${item.id}`}
+													>
+														Cetak
+													</LinkButton>
+												</div>
+												<Button
+													buttonType="danger"
+													size="small"
+													onClick={() => onRemove(item.id)}
+												>
+													hapus
+												</Button>
+											</div>
 										</div>
 									</div>
-
-									<div className="col-span-8 lg:col-span-9 flex flex-col justify-between">
-										<div>
-											<small className="text-xs">ID:&nbsp;{item.id}</small>
-											<p className="font-bold text-lg">ALM. {item.name}</p>
-											<div className="grid grid-cols-2">
-												<div className="col-6">
-													<small>Lahir</small>
-													<p>
-														{item.placeOfBirth || '-'},
-														{item.dateOfBirth
-															? dayjs(item.dateOfBirth).format(
-																	dateFormat,
-															  )
-															: '-'}
-													</p>
-												</div>
-												<div className="col-6">
-													<small>Wafat</small>
-													<p>
-														{item.placeOfDeath || '-'},
-														{item.dateOfDeath
-															? dayjs(item.dateOfDeath).format(
-																	dateFormat,
-															  )
-															: '-'}
-														{item?.notes ? ` (${item.notes})` : ''}
-													</p>
-												</div>
-											</div>
-											<small className="text-xs text-gray-600">
-												{dayjs(item.createdAt).format(datetimeFormat)}
-											</small>
-										</div>
-										<div className="mt-2 flex justify-between items-center">
-											<div className="flex">
-												<LinkButton
-													size="small"
-													buttonType="info"
-													className="mr-2"
-													href={`/admin/deceased/detail?id=${item.id}`}
-												>
-													Lihat
-												</LinkButton>
-												<LinkButton
-													size="small"
-													buttonType="info"
-													href={`/admin/deceased/print?id=${item.id}`}
-												>
-													Cetak
-												</LinkButton>
-											</div>
-											<Button
-												buttonType="danger"
-												size="small"
-												onClick={() => onRemove(item.id)}
-											>
-												hapus
-											</Button>
-										</div>
-									</div>
-								</div>
-							</List>
-						);
-					})}
-				</div>
+								</List>
+							);
+						})}
+					</div>
+				)}
 
 				<InfiniteScrollTrigger
 					triggerRef={ref}

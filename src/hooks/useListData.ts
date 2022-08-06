@@ -18,10 +18,12 @@ const getKey = (
 	return `${url}?s=${pageSize}&p=${page + 1}${param ? `&${param}` : ''}`;
 };
 
-const useListData = ({ url, param }: { url: string; param?: string }) => {
+const useListData = ({ url, param, show }: { url: string; param?: string; show?: number }) => {
 	const ref = useRef() as LegacyRef<HTMLDivElement>;
 
 	const isVisible = useOnScreen(ref);
+
+	const LIMIT = show ? show : DEFAULT_LIMIT;
 
 	const {
 		data: response,
@@ -29,14 +31,14 @@ const useListData = ({ url, param }: { url: string; param?: string }) => {
 		size,
 		setSize,
 		isValidating,
-	} = useSWRInfinite((...args) => getKey(...args, DEFAULT_LIMIT, url, param), fetcher);
+	} = useSWRInfinite((...args) => getKey(...args, LIMIT, url, param), fetcher);
 
 	const data = response ? [].concat(...response) : [];
 	const isLoadingInitialData = !response && !error;
 	const isLoadingMore =
 		isLoadingInitialData || (size > 0 && response && typeof response[size - 1] === 'undefined');
 	const isEmpty = response?.[0]?.length === 0;
-	const isReachingEnd = isEmpty || response?.[response?.length - 1]?.length < DEFAULT_LIMIT;
+	const isReachingEnd = isEmpty || response?.[response?.length - 1]?.length < LIMIT;
 	const isRefreshing = isValidating && response && response.length === size;
 
 	useEffect(() => {
