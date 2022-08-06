@@ -1,7 +1,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
-import { AddOutline } from 'antd-mobile-icons';
+import { AddOutline, UnorderedListOutline } from 'antd-mobile-icons';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
@@ -48,15 +48,26 @@ const Page = () => {
 				<Title>
 					<div className="flex justify-between items-center">
 						<Breadcrumb data={breadcrumb} />
-						<LinkButton
-							href="/admin/deceased/detail"
-							size="small"
-							buttonType="success"
-							icon={<AddOutline />}
-							className="text-base"
-						>
-							Tambah
-						</LinkButton>
+						<div className="flex">
+							<LinkButton
+								href="/admin/deceased/list"
+								size="small"
+								buttonType="info"
+								icon={<UnorderedListOutline />}
+								className="text-base mr-2"
+							>
+								Tabel
+							</LinkButton>
+							<LinkButton
+								href="/admin/deceased/detail"
+								size="small"
+								buttonType="success"
+								icon={<AddOutline />}
+								className="text-base"
+							>
+								Tambah
+							</LinkButton>
+						</div>
 					</div>
 				</Title>
 

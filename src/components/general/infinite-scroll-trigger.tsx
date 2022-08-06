@@ -13,13 +13,12 @@ const InfiniteScrollTrigger: FC<InfiniteScrollTriggerProps> = ({
 	isLoadingMore,
 	isReachingEnd,
 }) => {
-	console.log(isLoadingMore, isReachingEnd);
 	return (
 		<div ref={triggerRef} className="text-center flex items-center mt-4 justify-center">
-			{isLoadingMore ? (
-				<Loading />
-			) : isReachingEnd ? (
+			{isReachingEnd ? (
 				<p className="text-gray-400">No more data</p>
+			) : isLoadingMore ? (
+				<Loading />
 			) : null}
 		</div>
 	);

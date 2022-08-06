@@ -61,6 +61,7 @@ const Page = () => {
 		formData.append('dateOfBirth', values.dateOfBirth);
 		formData.append('dateOfDeath', values.dateOfDeath);
 		formData.append('notes', values.notes);
+		formData.append('family', values.family);
 
 		if (file) {
 			formData.append('img', file);
@@ -131,6 +132,7 @@ const Page = () => {
 						placeOfBirth: '',
 						placeOfDeath: '',
 						notes: '',
+						family: '',
 					}}
 				>
 					<Input
@@ -144,6 +146,7 @@ const Page = () => {
 					<Input name="placeOfDeath" label="Tempat Wafat" />
 					<DatePicker name="dateOfDeath" label="Tanggal Wafat" />
 					<Input name="notes" label="Catatan" />
+					<Input name="family" label="Keluarga" />
 					<Upload
 						file={file}
 						image={image}

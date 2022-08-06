@@ -223,6 +223,7 @@ model Deceased {
     imageId      String?   @map("deceased_image_id") @db.VarChar(255)
     image        String?   @map("deceased_image") @db.Text()
     notes        String?   @map("deceased_notes")
+    family       String?   @map("deceased_family")
     createdAt    DateTime  @default(now()) @map("deceased_created_at")
     createdBy    String    @map("deceased_created_by")
     updatedAt    DateTime  @updatedAt @map("deceased_updated_at")

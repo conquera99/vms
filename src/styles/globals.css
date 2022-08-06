@@ -98,13 +98,17 @@ iframe {
 	body {
 		margin: 0;
 	}
-
+	.print-hide,
 	.page-title,
 	.app-nav {
 		display: none;
 	}
 	.app-content {
 		padding: 1cm 0;
+	}
+
+	table {
+		box-shadow: none !important;
 	}
 }
 /* purgecss end ignore */
