@@ -84,6 +84,11 @@ iframe {
 	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
+.print-container {
+	border: 15px solid transparent;
+	border-image: url(/images/border.png) 35% round;
+}
+
 @media print {
 	@page {
 		margin: 0.5mm;
@@ -100,11 +105,6 @@ iframe {
 	}
 	.app-content {
 		padding: 1cm 0;
-	}
-
-	.print-container {
-		border: 15px solid transparent;
-		border-image: url(/images/border.png) 35% round;
 	}
 }
 /* purgecss end ignore */
