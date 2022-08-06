@@ -90,7 +90,7 @@ const Page = () => {
 						<Skeleton />
 					) : (
 						<div className="print-container p-4">
-							<div className="p-8">
+							<div className="px-20 py-16">
 								<BlurImage
 									src={data?.image || '/images/buddha-placeholder.png'}
 									alt={data?.name}
