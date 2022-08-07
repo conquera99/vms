@@ -90,7 +90,7 @@ const Page = () => {
 						<Skeleton />
 					) : (
 						<div className="print-container p-4">
-							<div className="px-20 py-16">
+							<div className="px-20 pt-16 pb-8">
 								<BlurImage
 									src={data?.image || '/images/buddha-placeholder.png'}
 									alt={data?.name}
@@ -98,13 +98,13 @@ const Page = () => {
 								/>
 							</div>
 							<div className="flex items-end">
-								<div className="w-full text-center">
-									<h2 className="text-7xl font-bold">ALM. {data?.name}</h2>
+								<div className="w-full text-center mb-8">
+									<h2 className="text-3xl font-bold mb-4">ALM. {data?.name}</h2>
 									<div className="grid grid-cols-1">
 										<div className="text-xl col-6">
 											<p className="font-semibold">
 												<span className="font-normal">LAHIR:&nbsp;</span>
-												{data?.placeOfBirth || '-'},
+												{data?.placeOfBirth ? `${data.placeOfBirth}, ` : ''}
 												{data?.dateOfBirth
 													? dayjs(data?.dateOfBirth)
 															.format(dateFormat)
@@ -115,7 +115,7 @@ const Page = () => {
 										<div className="text-xl col-6">
 											<p className="font-semibold">
 												<span className="font-normal">WAFAT:&nbsp;</span>
-												{data?.placeOfDeath || '-'},
+												{data?.placeOfDeath ? `${data.placeOfDeath}, ` : ''}
 												{data?.dateOfDeath
 													? dayjs(data?.dateOfDeath)
 															.format(dateFormat)
