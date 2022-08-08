@@ -29,10 +29,14 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		},
 	);
 
-	const file = data?.files?.img.filepath;
+	const file = data?.files?.img?.filepath;
 
 	// upload
-	const response = await cloudinary.v2.uploader.upload(file, { folder: 'item' });
+	let upload;
+	
+	if(file) {
+		upload = await cloudinary.v2.uploader.upload(file, { folder: 'item' });
+	}
 
 	const [create, updateItem] = await prisma.$transaction([
 		prisma.itemHistory.create({
@@ -41,8 +45,8 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 				date: dayjs(data?.fields.date).toDate(),
 				qty: data?.fields.qty,
 				price: data?.fields.price,
-				image: response.secure_url,
-				imageId: response.public_id,
+				image: upload?.secure_url,
+				imageId: upload?.public_id,
 				createdBy: session.user.id,
 			},
 		}),
@@ -52,5 +56,5 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		}),
 	]);
 
-	return res.json({ ...successResponse, data: { create, updateItem, response } });
+	return res.json({ ...successResponse, data: { create, updateItem, upload } });
 }

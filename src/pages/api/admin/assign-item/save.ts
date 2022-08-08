@@ -17,13 +17,25 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		return res.json({ code: 404, message: 'item not found' });
 	}
 
+	const detailLoc = await prisma.location.findUnique({ where: { id: locId } });
+
+	if (!detailLoc) {
+		return res.json({ code: 404, message: 'location not found' });
+	}
+
 	if (Number(detailItem.assignQty) + qty > Number(detailItem.totalQty)) {
 		return res.json({ code: 500, message: 'tidak ada qty yang tersisa' });
 	}
 
 	const [create, updateItem] = await prisma.$transaction([
 		prisma.itemLocation.create({
-			data: { itemId, locId, qty, createdBy: session.user.id },
+			data: {
+				code: `${detailLoc.code}.${detailItem.code}`,
+				itemId,
+				locId,
+				qty,
+				createdBy: session.user.id,
+			},
 		}),
 		prisma.item.updateMany({ where: { id: itemId }, data: { assignQty: { increment: qty } } }),
 	]);

@@ -67,10 +67,10 @@ const Page = () => {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{data?.map((item: Record<string, any>) => {
 						return (
-							<List key={item.il_id}>
+							<List key={item.il_code}>
 								<div className="flex justify-between">
 									<div>
-										<small className="text-xs">ID:&nbsp;{item.il_id}</small>
+										<small className="text-xs">ID:&nbsp;{item.il_code}</small>
 										<p className="font-bold text-lg">{item.item_name}</p>
 										<div className="text-sm mt-1 mb-3 grid grid-cols-3 gap-2">
 											<div>

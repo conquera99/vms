@@ -70,7 +70,7 @@ const Page = () => {
 							<List key={item.id}>
 								<div className="flex justify-between">
 									<div>
-										<small className="text-xs">ID:&nbsp;{item.id}</small>
+										<small className="text-xs">ID:&nbsp;{item.code}</small>
 										<p className="font-bold text-lg">{item.name}</p>
 										<small className="text-xs text-gray-600">
 											{dayjs(item.createdAt).format(datetimeFormat)}

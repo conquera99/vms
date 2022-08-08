@@ -20,8 +20,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		return res.json({ ...successResponse, data: update });
 	}
 
+	const code: Record<string, string>[] | undefined =
+		await prisma.$queryRaw`SELECT LPAD(IFNULL(MAX(loc_code), 0)+1, 3, '0') as 'seq' from locations`;
+
 	const create = await prisma.location.create({
-		data: { name, createdBy: session.user.id },
+		data: { code: code?.[0]?.seq as string, name, createdBy: session.user.id },
 	});
 
 	return res.json({ ...successResponse, data: create });

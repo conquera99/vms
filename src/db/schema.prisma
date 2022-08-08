@@ -93,6 +93,7 @@ model Images {
 
 model Location {
     id        String   @id @default(cuid()) @map("loc_id")
+    code      String   @default("") @map("loc_code") @db.VarChar(3)
     name      String   @map("loc_name")
     createdAt DateTime @default(now()) @map("loc_created_at")
     createdBy String   @map("loc_created_by")
@@ -150,6 +151,7 @@ model ItemHistory {
 model ItemLocation {
     locId     String   @map("il_loc_id")
     itemId    String   @map("il_item_id")
+    code      String   @default("") @map("il_code") @db.VarChar(21)
     qty       Decimal  @map("il_qty") @db.Decimal(13, 2)
     createdAt DateTime @default(now()) @map("il_created_at")
     createdBy String   @map("il_created_by")
@@ -218,11 +220,12 @@ model Deceased {
     name         String    @map("deceased_name")
     placeOfBirth String?   @map("deceased_place_of_birth") @db.VarChar(255)
     dateOfBirth  DateTime? @map("deceased_date_of_birth")
+    birthNotes   String?   @map("deceased_birth_notes")
     placeOfDeath String?   @map("deceased_place_of_death") @db.VarChar(255)
     dateOfDeath  DateTime? @map("deceased_date_of_death")
+    deathNotes   String?   @map("deceased_death_notes")
     imageId      String?   @map("deceased_image_id") @db.VarChar(255)
     image        String?   @map("deceased_image") @db.Text()
-    notes        String?   @map("deceased_notes")
     family       String?   @map("deceased_family")
     createdAt    DateTime  @default(now()) @map("deceased_created_at")
     createdBy    String    @map("deceased_created_by")

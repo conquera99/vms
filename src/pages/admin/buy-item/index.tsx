@@ -70,12 +70,16 @@ const Home = () => {
 							<List key={item.ih_id}>
 								<div className="grid grid-cols-12 gap-2">
 									<div className="col-span-4 lg:col-span-3 overflow-hidden">
-										<div className="bg-slate-100 w-full h-full rounded-lg">
-											<img
-												src={item.ih_image}
-												alt="item-image"
-												className="object-cover h-40 rounded-lg"
-											/>
+										<div className="bg-slate-100 w-full h-full rounded-lg flex items-center justify-center">
+											{item.ih_image ? (
+												<img
+													src={item.ih_image}
+													alt="item-image"
+													className="object-cover h-40 rounded-lg"
+												/>
+											) : (
+												<div className="text-gray-500">No Image</div>
+											)}
 										</div>
 									</div>
 

@@ -87,7 +87,7 @@ const Page = () => {
 														item.image ||
 														'/images/buddha-placeholder.png'
 													}
-													alt="member-image"
+													alt="deceased-image"
 													className="object-cover w-28 h-40 rounded-md"
 												/>
 											</div>
@@ -111,6 +111,9 @@ const Page = () => {
 																		dateFormat,
 																  )
 																: '-'}
+															{item?.birthNotes
+																? ` (${item.birthNotes})`
+																: ''}
 														</p>
 													</div>
 													<div className="col-6">
@@ -122,7 +125,9 @@ const Page = () => {
 																		dateFormat,
 																  )
 																: '-'}
-															{item?.notes ? ` (${item.notes})` : ''}
+															{item?.deathNotes
+																? ` (${item.deathNotes})`
+																: ''}
 														</p>
 													</div>
 												</div>

@@ -9,32 +9,67 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	if (!session) return res.status(403).json(forbiddenResponse);
 
-	const locationCount = await prisma.location.count();
-	const itemCategoryCount = await prisma.itemCategory.count();
-	const itemCount = await prisma.item.count();
-	const memberCount = await prisma.member.count();
-	const userCount = await prisma.user.count();
-	const permissionCount = await prisma.permissions.count();
-	const postCount = await prisma.posts.count();
-	const albumCount = await prisma.albums.count();
-	const imagesCount = await prisma.images.count();
-	const campaignCount = await prisma.campaign.count();
-	const deceasedCount = await prisma.deceased.count();
+	const locationQuery = prisma.location.count();
+	const itemCategoryQuery = prisma.itemCategory.count();
+	const itemQuery = prisma.item.count();
+	const memberQuery = prisma.member.count();
+	const userQuery = prisma.user.count();
+	const permissionQuery = prisma.permissions.count();
+	const postQuery = prisma.posts.count();
+	const albumQuery = prisma.albums.count();
+	const imagesQuery = prisma.images.count();
+	const campaignQuery = prisma.campaign.count();
+	const deceasedQuery = prisma.deceased.count();
 
-	res.json({
-		...successResponse,
-		data: {
-			location: locationCount,
-			itemCategory: itemCategoryCount,
-			item: itemCount,
-			member: memberCount,
-			user: userCount,
-			permission: permissionCount,
-			campaign: campaignCount,
-			post: postCount,
-			album: albumCount,
-			image: imagesCount,
-			deceased: deceasedCount,
-		},
-	});
+	return Promise.all([
+		locationQuery,
+		itemCategoryQuery,
+		itemQuery,
+		memberQuery,
+		userQuery,
+		permissionQuery,
+		postQuery,
+		albumQuery,
+		imagesQuery,
+		campaignQuery,
+		deceasedQuery,
+	])
+		.then(
+			([
+				locationCount,
+				itemCategoryCount,
+				itemCount,
+				memberCount,
+				userCount,
+				permissionCount,
+				postCount,
+				albumCount,
+				imagesCount,
+				campaignCount,
+				deceasedCount,
+			]) => {
+				res.json({
+					...successResponse,
+					data: {
+						location: locationCount,
+						itemCategory: itemCategoryCount,
+						item: itemCount,
+						member: memberCount,
+						user: userCount,
+						permission: permissionCount,
+						campaign: campaignCount,
+						post: postCount,
+						album: albumCount,
+						image: imagesCount,
+						deceased: deceasedCount,
+					},
+				});
+			},
+		)
+		.catch((error) => {
+			res.status(500).json({
+				code: 500,
+				message: error.message,
+			});
+		});
 }

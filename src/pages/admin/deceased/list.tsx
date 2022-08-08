@@ -67,7 +67,6 @@ const Page = () => {
 								<th className="px-4 py-2 border-r-2">NAMA MENDIANG</th>
 								<th className="px-4 py-2 border-r-2">LAHIR</th>
 								<th className="px-4 py-2 border-r-2">WAFAT</th>
-								<th className="px-4 py-2 border-r-2">CATATAN</th>
 								<th className="px-4 py-2 border-r-2">KELUARGA</th>
 							</tr>
 						</thead>
@@ -89,6 +88,7 @@ const Page = () => {
 											{item.dateOfBirth
 												? dayjs(item.dateOfBirth).format(dateFormat)
 												: '-'}
+											{item?.birthNotes ? ` (${item.birthNotes})` : ''}
 										</td>
 
 										<td>
@@ -97,8 +97,8 @@ const Page = () => {
 											{item.dateOfDeath
 												? dayjs(item.dateOfDeath).format(dateFormat)
 												: '-'}
+											{item?.deathNotes ? ` (${item.deathNotes})` : ''}
 										</td>
-										<td>{item.notes}</td>
 										<td>{item.family}</td>
 									</tr>
 								);

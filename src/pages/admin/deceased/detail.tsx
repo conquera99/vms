@@ -60,7 +60,8 @@ const Page = () => {
 		formData.append('placeOfDeath', values.placeOfDeath);
 		formData.append('dateOfBirth', values.dateOfBirth);
 		formData.append('dateOfDeath', values.dateOfDeath);
-		formData.append('notes', values.notes);
+		formData.append('deathNotes', values.deathNotes);
+		formData.append('birthNotes', values.birthNotes);
 		formData.append('family', values.family);
 
 		if (file) {
@@ -131,7 +132,8 @@ const Page = () => {
 						dateOfDeath: null,
 						placeOfBirth: '',
 						placeOfDeath: '',
-						notes: '',
+						birthNotes: '',
+						deathNotes: '',
 						family: '',
 					}}
 				>
@@ -143,9 +145,10 @@ const Page = () => {
 					/>
 					<Input name="placeOfBirth" label="Tempat Lahir" />
 					<DatePicker name="dateOfBirth" label="Tanggal Lahir" />
+					<Input name="birthNotes" label="Catatan Lahir" />
 					<Input name="placeOfDeath" label="Tempat Wafat" />
 					<DatePicker name="dateOfDeath" label="Tanggal Wafat" />
-					<Input name="notes" label="Catatan" />
+					<Input name="deathNotes" label="Catatan Wafat" />
 					<Input name="family" label="Keluarga" />
 					<Upload
 						file={file}
