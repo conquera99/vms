@@ -26,7 +26,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 	const data = await prisma.deceased.findMany({
 		skip: (Number(page) - 1) * Number(limit),
 		take: Number(limit),
-		orderBy: { createdAt: 'desc' },
+		orderBy: { family: 'asc' },
 	});
 
 	const newData = [];
