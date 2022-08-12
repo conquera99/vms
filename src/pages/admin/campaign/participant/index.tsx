@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { CloseOutline, RightOutline, SendOutline } from 'antd-mobile-icons';
 import Form from 'rc-field-form';
 import axios from 'axios';
@@ -18,6 +18,7 @@ import { dateFormat, successMessage } from 'utils/constant';
 import Empty from 'components/display/empty';
 import Select from 'components/entry/select';
 import { formatNumber } from 'utils/helper';
+import BlurImage from 'components/display/BlurImage';
 
 const breadcrumb = [
 	{
@@ -37,6 +38,9 @@ const breadcrumb = [
 const Page = () => {
 	const router = useRouter();
 	const [form] = Form.useForm();
+
+	const scrollRef = useRef(null);
+	const inputRef = useRef(null);
 
 	const [loading, setLoading] = useState(false);
 	const [copyLoading, setCopyLoading] = useState(false);
@@ -93,6 +97,8 @@ const Page = () => {
 	const onEdit = (item: Record<string, any>) => {
 		setIsEdit(item.seq);
 		form.setFieldsValue(item);
+		(scrollRef?.current as unknown as HTMLDivElement)?.scrollIntoView?.();
+		(inputRef?.current as unknown as HTMLDivElement)?.focus?.();
 	};
 
 	const onRemove = (seq: number) => {
@@ -157,7 +163,13 @@ const Page = () => {
 				</Title>
 
 				<div className="p-4 rounded-md shadow-md mb-4 border border-gray-200">
-					<img alt="banner" src={campaign.image} className="mb-2 rounded-md" />
+					{campaign.image ? (
+						<BlurImage
+							src={campaign.image}
+							alt={'banner'}
+							className="aspect-w-2 aspect-h-1 md:aspect-w-3 md:aspect-h-1"
+						/>
+					) : null}
 					<div className="mb-2">
 						<small className="text-gray-500">Judul</small>
 						<p>{campaign.title}</p>
@@ -176,6 +188,8 @@ const Page = () => {
 						<small className="text-gray-500">Total</small>
 						<p className="whitespace-pre-line">{formatNumber(total)}</p>
 					</div>
+
+					<div ref={scrollRef} />
 					<div>
 						<small className="text-gray-500">Opsi</small>
 						<div className="mt-1 flex items-center">
@@ -210,6 +224,7 @@ const Page = () => {
 					}}
 				>
 					<Input
+						input={{ ref: inputRef }}
 						name="name"
 						label="Nama"
 						required
