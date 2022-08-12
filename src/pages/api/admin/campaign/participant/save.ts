@@ -5,7 +5,7 @@ import { prisma } from 'db';
 import { forbiddenResponse, successResponse } from 'utils/constant';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const { id, name, value, status, seq, desc } = req.body;
+	const { id, name, value, status, group, seq, desc } = req.body;
 
 	const session = await getSession({ req });
 
@@ -17,6 +17,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 				name,
 				value,
 				desc,
+				group,
 				status,
 				updatedBy: session.user.id,
 			},
@@ -48,6 +49,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 			seq: sequence + 1,
 			name,
 			value,
+			group,
 			desc,
 			status,
 			createdBy: session.user.id,

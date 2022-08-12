@@ -13,7 +13,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
 	const data = await prisma.campaignDetail.findMany({
 		where: { campaignId: id as string },
-		orderBy: { createdAt: 'asc' },
+		orderBy: [{ group: 'asc' }, { createdAt: 'asc' }],
 	});
 
 	const total = await prisma.campaignDetail.aggregate({

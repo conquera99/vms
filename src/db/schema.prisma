@@ -204,6 +204,7 @@ model CampaignDetail {
     seq        Int      @map("cd_seq") @db.Int
     name       String   @map("cd_name") @db.VarChar(255)
     desc       String?  @map("cd_desc") @db.Text
+    group      String?  @map("cd_group") @db.VarChar(50)
     value      Decimal  @map("cd_value") @db.Decimal(20, 3)
     status     String   @map("cd_status") @db.VarChar(1) // A: active, C: cancelled
     createdAt  DateTime @default(now()) @map("cd_created_at")

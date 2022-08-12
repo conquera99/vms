@@ -231,6 +231,7 @@ const Page = () => {
 						rules={[{ required: true, message: 'nama wajib diisi' }]}
 					/>
 					<InputNumber name="value" label="Nilai" />
+					<Input name="group" label="Group/Paket" />
 					<TextArea name="desc" label="Deskripsi" />
 					<Select
 						name="status"
@@ -265,7 +266,12 @@ const Page = () => {
 								<div className="w-5/12 md:w-7/12">
 									{item.name}
 									<p className="text-sm">{formatNumber(item.value)}</p>
-									<div className="text-sm text-gray-400">{item.desc || '-'}</div>
+									<div className="text-sm text-gray-400">
+										Group/Paket: <b>{item.group || '-'}</b>
+									</div>
+									<div className="text-sm text-gray-400">
+										Catatan: <b>{item.desc || '-'}</b>
+									</div>
 								</div>
 								<div className="text-center w-4/12 md:w-3/12 px-2">
 									<p
