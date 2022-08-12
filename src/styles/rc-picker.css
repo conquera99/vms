@@ -20,10 +20,10 @@
 	position: absolute;
 	@apply shadow-lg;
 	@apply bg-white;
-	/* @apply w-64; */
 	@apply rounded;
 	@apply border;
 	z-index: 10000;
+	width: 340px;
 }
 .rc-picker-dropdown-hidden {
 	display: none;
@@ -48,11 +48,12 @@
 	@apply text-center;
 	@apply w-full;
 	@apply rounded;
-	@apply cursor-pointer;
+	@apply p-2;
 }
 .rc-picker-cell {
 	@apply text-gray-300;
-	@apply py-2;
+	@apply p-0;
+	@apply cursor-pointer;
 }
 .rc-picker-cell-in-view {
 	@apply text-gray-700;
@@ -65,6 +66,29 @@
 	@apply text-white;
 }
 
+.rc-picker-input {
+	position: relative;
+	display: inline-flex;
+	width: 100%;
+}
+.rc-picker-clear {
+	position: absolute;
+	top: 0;
+	right: 4px;
+	cursor: pointer;
+}
+.rc-picker-rtl .rc-picker-clear {
+	right: auto;
+	left: 4px;
+}
+.rc-picker-clear-btn {
+	font-size: 26pt;
+	@apply mr-2;
+}
+.rc-picker-clear-btn::after {
+	content: '×';
+}
+
 .rc-picker-cell-disabled {
 	background-color: #efefef;
 }
@@ -73,5 +97,26 @@
 	@apply border;
 	@apply rounded-md;
 	@apply border-gray-700;
+}
+
+.rc-picker-year-btn,
+.rc-picker-month-btn,
+.rc-picker-header-super-prev-btn,
+.rc-picker-header-prev-btn,
+.rc-picker-header-super-next-btn,
+.rc-picker-header-next-btn {
+	@apply px-2;
+	@apply cursor-pointer;
+	@apply rounded-md;
+}
+
+.rc-picker-year-btn:hover,
+.rc-picker-month-btn:hover,
+.rc-picker-header-super-prev-btn:hover,
+.rc-picker-header-prev-btn:hover,
+.rc-picker-header-super-next-btn:hover,
+.rc-picker-header-next-btn:hover {
+	@apply bg-blue-400;
+	@apply text-white;
 }
 /* purgecss end ignore */
