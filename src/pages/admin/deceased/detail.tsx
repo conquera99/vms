@@ -144,10 +144,10 @@ const Page = () => {
 						rules={[{ required: true, message: 'nama lengkap wajib diisi' }]}
 					/>
 					<Input name="placeOfBirth" label="Tempat Lahir" />
-					<DatePicker name="dateOfBirth" label="Tanggal Lahir" />
+					<DatePicker name="dateOfBirth" allowClear label="Tanggal Lahir" />
 					<Input name="birthNotes" label="Catatan Lahir" />
 					<Input name="placeOfDeath" label="Tempat Wafat" />
-					<DatePicker name="dateOfDeath" label="Tanggal Wafat" />
+					<DatePicker name="dateOfDeath" allowClear label="Tanggal Wafat" />
 					<Input name="deathNotes" label="Catatan Wafat" />
 					<Input name="family" label="Keluarga" />
 					<Upload
