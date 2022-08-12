@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
@@ -10,7 +11,7 @@ import Empty from 'components/display/empty';
 import List from 'components/display/list';
 import Container from 'components/general/container';
 import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
-import Button, { LinkButton } from 'components/general/button';
+import { ConfirmButton, LinkButton } from 'components/general/button';
 
 import { dateFormat, datetimeFormat, successMessage } from 'utils/constant';
 import useListData from 'hooks/useListData';
@@ -32,15 +33,22 @@ const Page = () => {
 		show: 20,
 	});
 
+	const [removeLoading, setRemoveLoading] = useState(false);
+
 	const onRemove = (id: string) => {
-		axios.post('/api/admin/deceased/remove', { id }).then((response) => {
-			if (response.data.code === 0) {
-				toast.success(successMessage);
-				setSize(1);
-			} else {
-				toast.error(response.data.message);
-			}
-		});
+		setRemoveLoading(true);
+
+		axios
+			.post('/api/admin/deceased/remove', { id })
+			.then((response) => {
+				if (response.data.code === 0) {
+					toast.success(successMessage);
+					setSize(1);
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.finally(() => setRemoveLoading(false));
 	};
 
 	return (
@@ -153,13 +161,14 @@ const Page = () => {
 														Cetak
 													</LinkButton>
 												</div>
-												<Button
-													buttonType="danger"
-													size="small"
+												<ConfirmButton
+													className="text-red-500"
+													confirmText="Yakin untuk menghapus data ini?"
 													onClick={() => onRemove(item.id)}
+													loading={removeLoading}
 												>
 													hapus
-												</Button>
+												</ConfirmButton>
 											</div>
 										</div>
 									</div>

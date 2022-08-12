@@ -1,7 +1,9 @@
-import { AnchorHTMLAttributes, ButtonHTMLAttributes, FC, ReactNode } from 'react';
-import { Loading } from 'components/general/icon';
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, FC, ReactNode, useState } from 'react';
 import Link from 'next/link';
 import { UrlObject } from 'url';
+import Tooltip from 'rc-tooltip';
+
+import { Loading } from 'components/general/icon';
 
 interface BaseButtonProps {
 	icon?: ReactNode;
@@ -17,6 +19,12 @@ interface LinkButtonProps
 	extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>,
 		BaseButtonProps {
 	href: string | UrlObject;
+}
+
+interface ConfirmButtonProps extends ButtonProps {
+	confirmTitle?: string;
+	confirmText?: string;
+	loading?: boolean;
 }
 
 const buttonTypeClass = {
@@ -87,5 +95,55 @@ export const LinkButton: FC<LinkButtonProps> = ({
 				{iconLocation === 'right' && (loading ? <Loading /> : icon)}
 			</a>
 		</Link>
+	);
+};
+
+export const ConfirmButton: FC<ConfirmButtonProps> = ({
+	className,
+	confirmTitle,
+	confirmText,
+	loading,
+	children,
+	onClick,
+}) => {
+	const [visible, setVisible] = useState(false);
+
+	const onCancel = () => {
+		setVisible(false);
+	};
+
+	return (
+		<Tooltip
+			visible={visible}
+			animation="zoom"
+			placement="left"
+			trigger="click"
+			destroyTooltipOnHide={true}
+			onVisibleChange={setVisible}
+			overlay={
+				<div className="bg-white shadow-md rounded-md p-4">
+					<div>
+						<p className="font-bold text-base">{confirmTitle || 'Warning!'}</p>
+						<span className="text-sm">{confirmText}</span>
+					</div>
+					<div className="flex justify-end mt-2">
+						<button onClick={onCancel} disabled={loading} className="px-4 py-1">
+							Tidak
+						</button>
+						<button
+							onClick={onClick}
+							className={`${defaultButtonClass} ${buttonTypeClass.primary} ${sizeClass.small}`}
+							disabled={loading}
+						>
+							{loading ? <Loading /> : null}&nbsp;Ya
+						</button>
+					</div>
+				</div>
+			}
+		>
+			<button className={className} type="button">
+				{children}
+			</button>
+		</Tooltip>
 	);
 };

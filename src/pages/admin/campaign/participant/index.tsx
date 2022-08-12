@@ -11,7 +11,7 @@ import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Input, { InputNumber, TextArea } from 'components/entry/input';
-import Button, { LinkButton } from 'components/general/button';
+import Button, { ConfirmButton, LinkButton } from 'components/general/button';
 import { ContainerAdmin } from 'components/general/container';
 
 import { dateFormat, successMessage } from 'utils/constant';
@@ -44,6 +44,7 @@ const Page = () => {
 
 	const [loading, setLoading] = useState(false);
 	const [copyLoading, setCopyLoading] = useState(false);
+	const [removeLoading, setRemoveLoading] = useState(false);
 
 	const [isEdit, setIsEdit] = useState<null | number>(null);
 	const [campaign, setCampaign] = useState<Record<string, any>>({});
@@ -102,6 +103,8 @@ const Page = () => {
 	};
 
 	const onRemove = (seq: number) => {
+		setRemoveLoading(true);
+
 		axios
 			.post('/api/admin/campaign/participant/remove', { id: router.query.id as string, seq })
 			.then((response) => {
@@ -111,7 +114,8 @@ const Page = () => {
 				} else {
 					toast.error(response.data.message);
 				}
-			});
+			})
+			.finally(() => setRemoveLoading(false));
 	};
 
 	const loadParticipant = useCallback(() => {
@@ -297,12 +301,15 @@ const Page = () => {
 									>
 										edit
 									</button>
-									<button
+
+									<ConfirmButton
 										className="text-red-500"
+										confirmText="Yakin untuk menghapus data ini?"
 										onClick={() => onRemove(item.seq)}
+										loading={removeLoading}
 									>
 										hapus
-									</button>
+									</ConfirmButton>
 								</div>
 							</div>
 						))}

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import Link from 'next/link';
@@ -11,7 +12,7 @@ import Empty from 'components/display/empty';
 import List from 'components/display/list';
 import Container from 'components/general/container';
 import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
-import { LinkButton } from 'components/general/button';
+import { ConfirmButton, LinkButton } from 'components/general/button';
 
 import useListData from 'hooks/useListData';
 
@@ -33,15 +34,22 @@ const Page = () => {
 		url: '/api/admin/campaign',
 	});
 
+	const [removeLoading, setRemoveLoading] = useState(false);
+
 	const onRemove = (id: string) => {
-		axios.post('/api/admin/campaign/remove', { id }).then((response) => {
-			if (response.data.code === 0) {
-				toast.success(successMessage);
-				setSize(1);
-			} else {
-				toast.error(response.data.message);
-			}
-		});
+		setRemoveLoading(true);
+
+		axios
+			.post('/api/admin/campaign/remove', { id })
+			.then((response) => {
+				if (response.data.code === 0) {
+					toast.success(successMessage);
+					setSize(1);
+				} else {
+					toast.error(response.data.message);
+				}
+			})
+			.finally(() => setRemoveLoading(false));
 	};
 
 	return (
@@ -103,12 +111,14 @@ const Page = () => {
 											<Link href={`/admin/campaign/detail?id=${item.id}`}>
 												<a className="text-blue-500 mr-2">edit</a>
 											</Link>
-											<button
+											<ConfirmButton
 												className="text-red-500"
+												confirmText="Yakin untuk menghapus data ini?"
 												onClick={() => onRemove(item.id)}
+												loading={removeLoading}
 											>
 												hapus
-											</button>
+											</ConfirmButton>
 										</div>
 										<Link href={`/admin/campaign/participant?id=${item.id}`}>
 											<a className="text-gray-700 mr-2 px-2 py-1 bg-blue-100 rounded-md text-sm">

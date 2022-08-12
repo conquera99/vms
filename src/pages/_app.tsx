@@ -10,6 +10,7 @@ import 'styles/rc-select.css';
 import 'styles/rc-picker.css';
 import 'styles/rc-dialog.css';
 import 'styles/rc-input-number.css';
+import 'styles/rc-tooltip.css';
 import 'styles/toastify.css';
 
 import type { AppProps } from 'next/app';
