@@ -102,7 +102,9 @@ const Page = () => {
 									{/* <h3 className="text-lg font-medium italic uppercase">
 										Mendiang
 									</h3> */}
-									<h2 className="text-3xl font-bold mb-4">MENDIANG {data?.name}</h2>
+									<h2 className="text-3xl font-bold mb-4">
+										MENDIANG {data?.name}
+									</h2>
 									<div className="grid grid-cols-1">
 										<div className="text-xl col-6">
 											<p className="font-semibold">
@@ -113,6 +115,7 @@ const Page = () => {
 															.format(dateFormat)
 															.toUpperCase()
 													: '-'}
+												{data?.birthNotes ? ` (${data.birthNotes})` : ''}
 											</p>
 										</div>
 										<div className="text-xl col-6">
@@ -124,7 +127,7 @@ const Page = () => {
 															.format(dateFormat)
 															.toUpperCase()
 													: '-'}
-												{data?.notes ? ` (${data.notes})` : ''}
+												{data?.deathNotes ? ` (${data.deathNotes})` : ''}
 											</p>
 										</div>
 									</div>
