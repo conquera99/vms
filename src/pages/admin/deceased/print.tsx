@@ -99,7 +99,10 @@ const Page = () => {
 							</div>
 							<div className="flex items-end">
 								<div className="w-full text-center mb-8">
-									<h2 className="text-3xl font-bold mb-4">ALM. {data?.name}</h2>
+									{/* <h3 className="text-lg font-medium italic uppercase">
+										Mendiang
+									</h3> */}
+									<h2 className="text-3xl font-bold mb-4">MENDIANG {data?.name}</h2>
 									<div className="grid grid-cols-1">
 										<div className="text-xl col-6">
 											<p className="font-semibold">

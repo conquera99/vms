@@ -85,8 +85,8 @@ iframe {
 }
 
 .print-container {
-	border: 15px solid transparent;
-	border-image: url(/images/border.png) 35% round;
+	border: 50px solid transparent;
+	border-image: url(/images/border1.png) 33% round;
 }
 
 @media print {
