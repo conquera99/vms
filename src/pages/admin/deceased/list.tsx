@@ -68,6 +68,7 @@ const Page = () => {
 								<th className="px-4 py-2 border-r-2">LAHIR</th>
 								<th className="px-4 py-2 border-r-2">WAFAT</th>
 								<th className="px-4 py-2 border-r-2">KELUARGA</th>
+								<th className="px-4 py-2 border-r-2">OPSI</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -100,6 +101,15 @@ const Page = () => {
 											{item?.deathNotes ? ` (${item.deathNotes})` : ''}
 										</td>
 										<td>{item.family}</td>
+										<td>
+											<LinkButton
+												size="small"
+												buttonType="info"
+												href={`/admin/deceased/print?id=${item.id}`}
+											>
+												Cetak
+											</LinkButton>
+										</td>
 									</tr>
 								);
 							})}
