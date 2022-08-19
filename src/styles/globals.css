@@ -36,9 +36,8 @@ pre {
 	@apply rounded-md;
 }
 
-img {
-	max-width: 100%;
-	max-height: 20em;
+.img-modal {
+	max-height: 34rem;
 }
 
 blockquote {

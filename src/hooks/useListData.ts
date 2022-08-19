@@ -49,7 +49,7 @@ const useListData = ({ url, param, show }: { url: string; param?: string; show?:
 	}, [isVisible, isRefreshing]);
 
 	return {
-		data,
+		data: data as Record<string, any>[],
 		isLoadingInitialData,
 		isLoadingMore,
 		isEmpty,

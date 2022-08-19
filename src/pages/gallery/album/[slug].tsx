@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import dayjs from 'dayjs';
-import Image from 'next/image';
 import Dialog from 'rc-dialog';
 
 import Title from 'components/display/title';
@@ -16,6 +15,7 @@ import useListData from 'hooks/useListData';
 
 import { prisma } from 'db';
 import { datetimeFormat } from 'utils/constant';
+import { LeftOutline, RightOutline } from 'antd-mobile-icons';
 
 const ImageSkeleton = () => (
 	<div className="block bg-gray-200 h-full animate-pulse rounded-lg border border-transparent relative">
@@ -31,16 +31,50 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 	});
 
 	const [visible, setVisible] = useState(false);
-	const [image, setImage] = useState<Record<string, any> | null>(null);
+	const [selectedIndex, setSelectedIndex] = useState(0);
 
-	const openImage = (item: Record<string, any>) => {
+	const openImage = (index: number) => {
 		setVisible(true);
-		setImage(item);
+		setSelectedIndex(index);
 	};
 
 	const closePreview = () => {
 		setVisible(false);
-		setImage(null);
+	};
+
+	const prev = () => {
+		if (selectedIndex > 0) {
+			setSelectedIndex((prev) => prev - 1);
+		}
+	};
+
+	const next = () => {
+		if (selectedIndex < data.length - 1) {
+			setSelectedIndex((prev) => prev + 1);
+		}
+	};
+
+	const downloadImg = () => {
+		const ext = data[selectedIndex].image.split('.');
+		const timestamp = dayjs().unix();
+
+		fetch(data[selectedIndex].image, {
+			method: 'GET',
+			headers: {},
+		})
+			.then((response) => {
+				response.arrayBuffer().then(function (buffer) {
+					const url = window.URL.createObjectURL(new Blob([buffer]));
+					const link = document.createElement('a');
+					link.href = url;
+					link.setAttribute('download', `${timestamp}.${ext[ext.length - 1]}`);
+					document.body.appendChild(link);
+					link.click();
+				});
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	const breadcrumb = [
@@ -69,7 +103,7 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 
 				{isEmpty && <Empty />}
 
-				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
+				<div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 					{isLoadingInitialData && (
 						<>
 							<ImageSkeleton />
@@ -77,15 +111,15 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 						</>
 					)}
 
-					{data?.map((item: Record<string, any>) => {
+					{data?.map((item: Record<string, any>, index) => {
 						return (
 							<div
 								key={item.id}
 								className="rounded-lg shadow-md cursor-pointer"
-								onClick={() => openImage(item)}
+								onClick={() => openImage(index)}
 							>
 								<BlurImage
-									className="aspect-w-1 aspect-h-1"
+									className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8"
 									alt={item.altText}
 									src={item.image}
 								/>
@@ -106,13 +140,32 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 					style={{}}
 					bodyStyle={{ padding: 0 }}
 				>
-					<div className="flex justify-center">
+					<button
+						onClick={prev}
+						className="absolute top-1/2 text-2xl rounded-full bg-slate-100 p-2 transition-all ml-1 hover:opacity-50"
+					>
+						<LeftOutline />
+					</button>
+					<div className="w-full">
 						<img
-							className="object-contain rounded-md"
-							alt={image?.altText}
-							src={image?.image}
-							style={{ minHeight: 'calc(100vh - 50px)' }}
+							className="object-contain rounded-md img-modal"
+							alt={data[selectedIndex]?.altText}
+							src={data[selectedIndex]?.image}
 						/>
+					</div>
+					<button
+						onClick={next}
+						className="absolute top-1/2 right-0 text-2xl rounded-full bg-slate-100 p-2 transition-all ml-1  hover:opacity-50"
+					>
+						<RightOutline />
+					</button>
+					<div className="flex justify-center">
+						<button
+							onClick={downloadImg}
+							className="mt-2 px-4 py-1 bg-slate-100 rounded-md"
+						>
+							Download
+						</button>
 					</div>
 				</Dialog>
 			</Container>

@@ -2,8 +2,7 @@
 .rc-dialog {
 	position: relative;
 	width: fit-content;
-	/* margin: 10px; */
-	margin: 20px auto;
+	margin: 20px;
 	@apply transition-all;
 	@apply duration-200;
 }
@@ -17,12 +16,16 @@
 	z-index: 1050;
 	-webkit-overflow-scrolling: touch;
 	outline: 0;
+	@apply flex;
+	@apply items-center;
+	@apply justify-center;
 }
 .rc-dialog-content {
 	position: relative;
 	border-radius: 6px;
 	background-clip: padding-box;
 	outline: 0;
+	max-height: calc(100vh - 60px);
 }
 .rc-dialog-header {
 	padding: 15px;
@@ -62,7 +65,6 @@
 	position: relative;
 	padding: 15px;
 	@apply rounded-md;
-	@apply bg-white;
 }
 .rc-dialog-footer {
 	padding: 15px;
