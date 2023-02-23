@@ -56,6 +56,7 @@ const Home = () => {
 		<Navigation active="home">
 			<Container>
 				<Title>Home</Title>
+				<h1>Test ubah</h1>
 
 				{!loading && campaign.length === 0 ? (
 					<Empty desc="belum ada banner yang dipublikasi" />
