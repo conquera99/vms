@@ -39,6 +39,7 @@ const Home = () => {
 	});
 
 	const [loading, setLoading] = useState(true);
+	const [hover, isHover] = useState(false);
 	const [campaign, setCampaign] = useState<Record<string, any>[]>([]);
 
 	useEffect(() => {
@@ -54,67 +55,83 @@ const Home = () => {
 
 	return (
 		<Navigation active="home">
-			<Container>
-				<Title>Home</Title>
-
-				{!loading && campaign.length === 0 ? (
-					<Empty desc="belum ada banner yang dipublikasi" />
-				) : (
-					<Swiper
-						navigation={true}
-						modules={[SwiperNavigation]}
-						spaceBetween={50}
-						slidesPerView={1}
-					>
-						{loading && (
-							<SwiperSlide>
-								<PostSkeleton />
+			{!loading && campaign.length === 0 ? (
+				<Empty desc="belum ada banner yang dipublikasi" />
+			) : (
+				<Swiper
+					navigation={true}
+					modules={[SwiperNavigation]}
+					spaceBetween={50}
+					slidesPerView={1}
+				>
+					{loading && (
+						<SwiperSlide>
+							<PostSkeleton />
+						</SwiperSlide>
+					)}
+					{!loading &&
+						campaign.map((item) => (
+							<SwiperSlide
+								key={item.id}
+								onMouseEnter={() => isHover(true)}
+								onMouseLeave={() => isHover(false)}
+							>
+								<div
+									className="aspect-w-2 aspect-h-1 md:aspect-w-3 md:aspect-h-1 overflow-hidden bg-no-repeat bg-cover"
+									style={{
+										backgroundPosition: '50%',
+										backgroundImage: `url(${item.image})`,
+									}}
+								/>
+								<div className="container mx-auto px-10 md:px-12 xl:px-16">
+									<div className="text-center text-gray-800">
+										<div
+											className="block rounded-lg  py-8 md:py-12 px-4 md:px-12 lg:px-12 border-2 border-amber-500  shadow-lg shadow-neutral-400 hover:shadow-neutral-500 my-6 mt-[-50px] md:mt-[-100px] lg:mt-[-130px]"
+											style={{
+												background: 'hsla(0, 0%, 100%, 0.7)',
+												backdropFilter: 'blur(30px)',
+											}}
+										>
+											<h2 className="text-2xl md:text-3xl xl:text-5xl font-bold tracking-tight text-black text-ellipsis overflow-hidden whitespace-nowrap leading-tight pr-5 mb-8">
+												{item.title}
+											</h2>
+											<div className="text-base text-slate-800 font-medium">
+												<small className="text-sm text-slate-700">
+													{dayjs(item.startDate).format(dateFormat)}
+													&nbsp;-&nbsp;
+													{dayjs(item.endDate).format(dateFormat)}
+												</small>
+											</div>
+											<Link key={item.slug} href={`/campaign/${item.slug}`}>
+												<a
+													className="inline-block px-7 py-3 text-white font-medium text-sm leading-snug bg-transparent text-amber-500 font-medium text-xs leading-tight uppercase rounded hover:text-amber-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-500 ease-in-out"
+													data-mdb-ripple="true"
+													data-mdb-ripple-color="light"
+													href="#!"
+													role="button"
+												>
+													Lihat Selengkapnya
+												</a>
+											</Link>
+										</div>
+									</div>
+								</div>
 							</SwiperSlide>
-						)}
-						{!loading &&
-							campaign.map((item) => (
-								<SwiperSlide key={item.id}>
-									<Link href={`/campaign/${item.slug}`}>
-										<a>
-											<BlurImage
-												src={item.image}
-												alt={item.title}
-												className="aspect-w-2 aspect-h-1 md:aspect-w-3 md:aspect-h-1"
-											>
-												<div className="flex items-end p-1">
-													<div className="bg-slate-900/50 backdrop-blur-sm p-4 rounded-lg w-full">
-														<h2 className="text-white text-ellipsis overflow-hidden whitespace-nowrap text-xl font-bold leading-tight pr-5">
-															{item.title}
-														</h2>
-														<div className="text-base text-gray-200 font-medium">
-															<small className="text-sm text-gray-300">
-																{dayjs(item.startDate).format(
-																	dateFormat,
-																)}
-																&nbsp;-&nbsp;
-																{dayjs(item.endDate).format(
-																	dateFormat,
-																)}
-															</small>
-														</div>
-													</div>
-												</div>
-											</BlurImage>
-										</a>
-									</Link>
-								</SwiperSlide>
-							))}
-					</Swiper>
-				)}
+						))}
+				</Swiper>
+			)}
+			<Container>
+				{/* <Title>Home</Title> */}
 
 				<br />
-				<h2 className="text-indigo-500 font-bold text-2xl">Post</h2>
+				<h2 className="text-amber-500 font-bold text-2xl">Post</h2>
 
 				{isEmpty && <Empty />}
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8">
 					{isLoadingInitialData && (
 						<>
+							<PostSkeleton />
 							<PostSkeleton />
 							<PostSkeleton />
 						</>
