@@ -58,12 +58,7 @@ const Home = () => {
 			{!loading && campaign.length === 0 ? (
 				<Empty desc="belum ada banner yang dipublikasi" />
 			) : (
-				<Swiper
-					navigation={true}
-					modules={[SwiperNavigation]}
-					spaceBetween={50}
-					slidesPerView={1}
-				>
+				<Swiper>
 					{loading && (
 						<SwiperSlide>
 							<PostSkeleton />
@@ -82,36 +77,19 @@ const Home = () => {
 										backgroundPosition: '50%',
 										backgroundImage: `url(${item.image})`,
 									}}
-								/>
-								<div className="container mx-auto px-10 md:px-12 xl:px-16">
-									<div className="text-center text-gray-800">
-										<div
-											className="block rounded-lg  py-8 md:py-12 px-4 md:px-12 lg:px-12 border-2 border-amber-500  shadow-lg shadow-neutral-400 hover:shadow-neutral-500 my-6 mt-[-50px] md:mt-[-100px] lg:mt-[-130px]"
-											style={{
-												background: 'hsla(0, 0%, 100%, 0.7)',
-												backdropFilter: 'blur(30px)',
-											}}
-										>
-											<h2 className="text-2xl md:text-3xl xl:text-5xl font-bold tracking-tight text-black text-ellipsis overflow-hidden whitespace-nowrap leading-tight pr-5 mb-8">
+								>
+									<div className="flex flex-col justify-end">
+										<div className="flex flex-col justify-end z-10 px-4 py-2 sm:px-16 sm:py-6 bg-black/40 border-y-4 border-amber-500 backdrop-blur-sm">
+											<h2 className="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-2 text-ellipsis overflow-hidden whitespace-nowrap">
 												{item.title}
 											</h2>
-											<div className="text-base text-slate-800 font-medium">
-												<small className="text-sm text-slate-700">
-													{dayjs(item.startDate).format(dateFormat)}
-													&nbsp;-&nbsp;
-													{dayjs(item.endDate).format(dateFormat)}
-												</small>
-											</div>
+											<p className="hidden sm:block leading-relaxed text-white text-medium  text-ellipsis overflow-hidden whitespace-nowrap">
+												{item.desc}
+											</p>
 											<Link key={item.slug} href={`/campaign/${item.slug}`}>
-												<a
-													className="inline-block px-7 py-3 text-white font-medium text-sm leading-snug bg-transparent text-amber-500 font-medium text-xs leading-tight uppercase rounded hover:text-amber-600 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-500 ease-in-out"
-													data-mdb-ripple="true"
-													data-mdb-ripple-color="light"
-													href="#!"
-													role="button"
-												>
+												<button className="mt-2 sm:mt-4 px-4 sm:px-8 py-2 border-2 w-full sm:w-[250px] text-white transform transition-all duration-700 hover:bg-amber-500">
 													Lihat Selengkapnya
-												</a>
+												</button>
 											</Link>
 										</div>
 									</div>

@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
+import { FaFacebook, FaYoutube, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 import { Workbox } from 'workbox-window';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,6 +15,7 @@ import PageHead from 'components/general/page-head';
 import Forbidden from 'components/display/forbidden';
 
 const ACTIVE_TEXT_COLOR = 'text-slate-100';
+const ACTIVE_TEXT_COLOR_FOOTER = 'text-amber-500';
 
 const MenuItem: FC<{
 	icon?: ReactNode;
@@ -46,6 +48,30 @@ const MenuItem: FC<{
 						)}
 					</span>
 				</a>
+			</Link>
+		</div>
+	);
+};
+
+const MenuItemFooter: FC<{
+	href: string | UrlObject;
+	active?: boolean;
+	children?: ReactNode;
+	title: string;
+	className?: string;
+}> = ({ className, title, href, active = false, children }) => {
+	return (
+		<div>
+			<Link href={href}>
+				{children || (
+					<a
+						className={`${
+							active ? ACTIVE_TEXT_COLOR_FOOTER : 'text-gray-600'
+						} hover:text-amber-500`}
+					>
+						{title}
+					</a>
+				)}
 			</Link>
 		</div>
 	);
@@ -175,13 +201,108 @@ const Navigation: FC<BaseNavInterface> = ({
 			<div className="w-full md:pt-16 lg:pt-16 pb-20 min-h-screen app-content">
 				{children}
 			</div>
+			<footer className="text-gray-600 body-font pb-16 md:pb-0">
+				<div className="container px-12 py-12 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col border-t-2 border-amber-500">
+					<div className="flex-shrink-0 md:mx-0 mx-auto text-center md:text-left lg:w-1/3 md:w-1/2 w-full px-4">
+						<a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+							<Link href="/">
+								<div className="hidden md:flex items-center hover:cursor-pointer">
+									<Image src="/logo.png" width={60} height={60} alt="logo" />
+									<h1 className="ml-2 font-bold text-2xl">VSG</h1>
+								</div>
+							</Link>
+						</a>
+					</div>
+					<div className="lg:w-1/3 md:w-full w-full px-4">
+						<h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
+							MENU
+						</h2>
+						<nav className="list-none mb-10">
+							<MenuItemFooter active={active === 'home'} href="/" title="Beranda" />
+							<MenuItemFooter
+								active={active === 'gallery'}
+								href="/gallery"
+								title="Galeri"
+							/>
+						</nav>
+					</div>
+					<div className="lg:w-1/3 md:w-full w-full px-4">
+						<h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
+							Kontak Kami
+						</h2>
+						<div className="list-none mb-10">
+							<p className="text-gray-600 hover:text-gray-800">Alamat</p>
+							<p className="text-gray-600 hover:text-gray-800">
+								Jl. Cut Nyak Dien RT. 15, Kel. Nunukan Tengah
+								<br />
+								Kab. Nunukan, Kalimantan Utara
+							</p>
+							<br />
+							<p className="text-gray-600 hover:text-gray-800">Email</p>
+							<p className="text-gray-600 hover:text-gray-800">vsg@gmail.com</p>
+						</div>
+					</div>
+				</div>
+				<div className="bg-amber-500">
+					<div className="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+						<p className="text-zinc-100 text-sm text-center sm:text-left">
+							© 2022 Benny —
+							<a
+								href="https://twitter.com"
+								rel="noopener noreferrer"
+								className="text-zinc-100 ml-1"
+								target="_blank"
+							>
+								@conquera99
+							</a>
+						</p>
+						<span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+							<a
+								href="https://www.facebook.com/vsg.nunukan"
+								rel="noopener noreferrer"
+								className="text-zinc-100 ml-3"
+								target="_blank"
+							>
+								<FaFacebook />
+							</a>
+							<a
+								href="https://www.youtube.com/@vsg.nunukan"
+								rel="noopener noreferrer"
+								className="text-zinc-100 ml-3"
+								target="_blank"
+							>
+								<FaYoutube />
+							</a>
+							<a
+								href="https://www.instagram.com/vsg.nunukan/"
+								rel="noopener noreferrer"
+								className="text-zinc-100 ml-3"
+								target="_blank"
+							>
+								<FaInstagram />
+							</a>
+							<a
+								href="#"
+								rel="noopener noreferrer"
+								className="text-zinc-100 ml-3"
+								target="_blank"
+							>
+								<FaWhatsapp />
+							</a>
+						</span>
+					</div>
+				</div>
+			</footer>
 
 			<div className="app-nav md:top-0 md:bottom-auto md:border-b md:px-4 z-10 h-16 bottom-0 border-t bg-amber-500/80 backdrop-filter backdrop-blur-md right-0 left-0 py-1 fixed">
 				<div className="flex h-full md:justify-between md:mx-auto md:max-w-5xl xl:max-w-7xl">
-					<div className="hidden md:flex items-center">
-						<Image src="/logo.png" width={45} height={45} alt="logo" />
-						<h1 className="ml-2 font-bold text-xl">VSG</h1>
-					</div>
+					<Link href="/">
+						<div className="hidden md:flex items-center hover:cursor-pointer">
+							<Image src="/logo.png" width={45} height={45} alt="logo" />
+							<h1 className="ml-2 font-bold text-xl">VSG</h1>
+						</div>
+					</Link>
+
 					<div className="flex w-full md:w-auto">
 						<MenuItem
 							active={active === 'home'}
@@ -217,90 +338,6 @@ const Navigation: FC<BaseNavInterface> = ({
 					</div>
 				</div>
 			</div>
-			<footer className="text-gray-600 body-font">
-				<div className="container px-12 py-12 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col border-t-2 border-amber-500">
-					<div className="flex-shrink-0 md:mx-0 mx-auto text-center md:text-left lg:w-1/3 md:w-1/2 w-full px-4">
-						<a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-							<div className="hidden md:flex items-center">
-								<Image src="/logo.png" width={60} height={60} alt="logo" />
-								<h1 className="ml-2 font-bold text-2xl">VSG</h1>
-							</div>
-						</a>
-					</div>
-					<div className="lg:w-1/3 md:w-1/2 w-full px-4">
-						<h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-							MENU
-						</h2>
-						<nav className="list-none mb-10">
-							<li>
-								<a className="text-gray-600 hover:text-gray-800">Beranda</a>
-							</li>
-							<li>
-								<a className="text-gray-600 hover:text-gray-800">Galeri</a>
-							</li>
-						</nav>
-					</div>
-					<div className="lg:w-1/3 md:w-1/2 w-full px-4">
-						<h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-							Kontak Kami
-						</h2>
-						<div className="list-none mb-10">
-							<p className="text-gray-600 hover:text-gray-800">Alamat</p>
-							<p className="text-gray-600 hover:text-gray-800">
-								Jl. Cut Nyak Dien RT. 15, Kel. Nunukan Tengah
-								<br />
-								Kab. Nunukan, Kalimantan Utara
-							</p>
-							<br />
-							<p className="text-gray-600 hover:text-gray-800">Email</p>
-							<p className="text-gray-600 hover:text-gray-800">vsg@gmail.com</p>
-						</div>
-					</div>
-				</div>
-				<div className="bg-amber-500">
-					<div className="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
-						<p className="text-zinc-100 text-sm text-center sm:text-left">
-							© 2022 Benny —
-							<a
-								href="https://twitter.com"
-								rel="noopener noreferrer"
-								className="text-zinc-100 ml-1"
-								target="_blank"
-							>
-								@conquera99
-							</a>
-						</p>
-						<span className="inline-flex sm:ml-auto sm:mt-0 mt-2 justify-center sm:justify-start">
-							<a className="text-zinc-100">
-								<svg
-									fill="currentColor"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									className="w-5 h-5"
-									viewBox="0 0 24 24"
-								>
-									<path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-								</svg>
-							</a>
-							<a className="ml-3 text-zinc-100">
-								<svg
-									fill="none"
-									stroke="currentColor"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									className="w-5 h-5"
-									viewBox="0 0 24 24"
-								>
-									<rect width={20} height={20} x={2} y={2} rx={5} ry={5} />
-									<path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01" />
-								</svg>
-							</a>
-						</span>
-					</div>
-				</div>
-			</footer>
 		</div>
 	);
 };

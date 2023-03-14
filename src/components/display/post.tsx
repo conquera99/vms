@@ -14,18 +14,12 @@ const Post: FC<PostProps> = ({ data }) => {
 
 	return (
 		<article
-			className=" flex flex-col bg-slate-100 rounded-xl shadow-lg overflow-hidden w-full my-5 border-transparent shadow-md shadow-neutral-400 hover:shadow-neutral-500 relative cursor-pointer transform transition-all duration-700 hover:shadow-lg hover:scale-105"
+			className=" flex flex-col bg-white rounded-xl shadow-lg overflow-hidden w-full my-5 border-transparent shadow-md shadow-neutral-400 hover:shadow-neutral-500 relative cursor-pointer transform transition-all duration-700 hover:shadow-lg hover:scale-105"
 			onMouseEnter={() => isHover(true)}
 			onMouseLeave={() => isHover(false)}
 		>
 			<figure className="relative w-full h-[268px]">
-				<div
-					className={
-						hover
-							? 'absolute top-0 left-0 right-0 bottom-0 bg-slate-500/50 z-[2]'
-							: 'absolute top-0 left-0 right-0 bottom-0'
-					}
-				/>
+				<div className="absolute top-0 left-0 right-0 bottom-0 z-[2]" />
 				<Image
 					src={`${data.image}`}
 					alt={`${data.image}`}
