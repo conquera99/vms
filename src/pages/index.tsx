@@ -58,7 +58,12 @@ const Home = () => {
 			{!loading && campaign.length === 0 ? (
 				<Empty desc="belum ada banner yang dipublikasi" />
 			) : (
-				<Swiper>
+				<Swiper
+					modules={[SwiperNavigation]}
+					spaceBetween={50}
+					slidesPerView={1}
+					navigation={true}
+				>
 					{loading && (
 						<SwiperSlide>
 							<PostSkeleton />
@@ -79,7 +84,7 @@ const Home = () => {
 									}}
 								>
 									<div className="flex flex-col justify-end">
-										<div className="flex flex-col justify-end z-10 px-4 py-2 sm:px-16 sm:py-6 bg-black/40 border-y-4 border-amber-500 backdrop-blur-sm">
+										<div className="flex flex-col justify-end z-10 px-4 py-2 sm:px-16 sm:py-6 bg-black/40 backdrop-blur-sm">
 											<h2 className="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-2 text-ellipsis overflow-hidden whitespace-nowrap">
 												{item.title}
 											</h2>
@@ -87,7 +92,7 @@ const Home = () => {
 												{item.desc}
 											</p>
 											<Link key={item.slug} href={`/campaign/${item.slug}`}>
-												<button className="mt-2 sm:mt-4 px-4 sm:px-8 py-2 border-2 w-full sm:w-[250px] text-white transform transition-all duration-700 hover:bg-amber-500">
+												<button className="mt-2 sm:mt-4 px-4 sm:px-8 py-2 rounded-xl border-2 w-full sm:w-[250px] text-white transform transition-all duration-700 hover:bg-amber-500">
 													Lihat Selengkapnya
 												</button>
 											</Link>
