@@ -294,7 +294,7 @@ const Navigation: FC<BaseNavInterface> = ({
 				</div>
 			</footer>
 
-			<div className="app-nav md:top-0 md:bottom-auto md:border-b md:px-4 z-10 h-16 bottom-0 border-t bg-amber-500/80 backdrop-filter backdrop-blur-md right-0 left-0 py-1 fixed">
+			<div className="app-nav md:top-0 md:bottom-auto md:border-b md:px-4 z-10 h-16 bottom-0 border-t bg-amber-500 md:bg-amber-500/80  backdrop-filter backdrop-blur-md right-0 left-0 py-1 fixed">
 				<div className="flex h-full md:justify-between md:mx-auto md:max-w-5xl xl:max-w-7xl">
 					<Link href="/">
 						<div className="hidden md:flex items-center hover:cursor-pointer">

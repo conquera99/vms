@@ -99,7 +99,7 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 					<Breadcrumb data={breadcrumb} />
 				</Title>
 
-				<h1 className="text-3xl text-indigo-500 font-bold mb-4">{detail.title}</h1>
+				<h1 className="text-3xl text-amber-500 font-bold mb-4">{detail.title}</h1>
 
 				{isEmpty && <Empty />}
 

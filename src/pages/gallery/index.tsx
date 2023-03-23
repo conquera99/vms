@@ -27,9 +27,7 @@ const Gallery = () => {
 	return (
 		<Navigation title="VMS: Galeri" active="gallery">
 			<Container>
-				<Title>
-					<h2 className="text-amber-500 font-bold text-2xl">Galeri</h2>
-				</Title>
+				<Title>Galeri</Title>
 
 				{isEmpty && <Empty />}
 
