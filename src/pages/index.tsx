@@ -39,6 +39,7 @@ const Home = () => {
 	});
 
 	const [loading, setLoading] = useState(true);
+	const [hover, isHover] = useState(false);
 	const [campaign, setCampaign] = useState<Record<string, any>[]>([]);
 
 	useEffect(() => {
@@ -54,62 +55,66 @@ const Home = () => {
 
 	return (
 		<Navigation active="home">
-			<Container>
-				<Title>Home</Title>
-
-				{!loading && campaign.length === 0 ? (
-					<Empty desc="belum ada banner yang dipublikasi" />
-				) : (
-					<Swiper modules={[SwiperNavigation]} spaceBetween={50} slidesPerView={1}>
-						{loading && (
-							<SwiperSlide>
-								<PostSkeleton />
+			{!loading && campaign.length === 0 ? (
+				<Empty desc="belum ada banner yang dipublikasi" />
+			) : (
+				<Swiper
+					modules={[SwiperNavigation]}
+					spaceBetween={50}
+					slidesPerView={1}
+					navigation={true}
+				>
+					{loading && (
+						<SwiperSlide>
+							<PostSkeleton />
+						</SwiperSlide>
+					)}
+					{!loading &&
+						campaign.map((item) => (
+							<SwiperSlide
+								key={item.id}
+								onMouseEnter={() => isHover(true)}
+								onMouseLeave={() => isHover(false)}
+							>
+								<div
+									className="aspect-w-2 aspect-h-1 md:aspect-w-3 md:aspect-h-1 overflow-hidden bg-no-repeat bg-cover"
+									style={{
+										backgroundPosition: '50%',
+										backgroundImage: `url(${item.image})`,
+									}}
+								>
+									<div className="flex flex-col justify-end">
+										<div className="flex flex-col justify-end z-10 px-4 py-2 sm:px-16 sm:py-6 bg-black/40 backdrop-blur-sm">
+											<h2 className="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-2 text-ellipsis overflow-hidden whitespace-nowrap">
+												{item.title}
+											</h2>
+											<p className="hidden sm:block leading-relaxed text-white text-medium  text-ellipsis overflow-hidden whitespace-nowrap">
+												{item.desc}
+											</p>
+											<Link key={item.slug} href={`/campaign/${item.slug}`}>
+												<button className="mt-2 sm:mt-4 px-4 sm:px-8 py-2 rounded-xl border-2 w-full sm:w-[250px] text-white transform transition-all duration-700 hover:bg-amber-500">
+													Lihat Selengkapnya
+												</button>
+											</Link>
+										</div>
+									</div>
+								</div>
 							</SwiperSlide>
-						)}
-						{!loading &&
-							campaign.map((item) => (
-								<SwiperSlide key={item.id}>
-									<Link href={`/campaign/${item.slug}`}>
-										<a>
-											<BlurImage
-												src={item.image}
-												alt={item.title}
-												className="aspect-w-2 aspect-h-1 md:aspect-w-3 md:aspect-h-1"
-											>
-												<div className="flex items-end p-1">
-													<div className="bg-slate-900/50 backdrop-blur-sm p-4 rounded-lg w-full">
-														<h2 className="text-white text-ellipsis overflow-hidden whitespace-nowrap text-xl font-bold leading-tight pr-5">
-															{item.title}
-														</h2>
-														<div className="text-base text-gray-200 font-medium">
-															<small className="text-sm text-gray-300">
-																{dayjs(item.startDate).format(
-																	dateFormat,
-																)}
-																&nbsp;-&nbsp;
-																{dayjs(item.endDate).format(
-																	dateFormat,
-																)}
-															</small>
-														</div>
-													</div>
-												</div>
-											</BlurImage>
-										</a>
-									</Link>
-								</SwiperSlide>
-							))}
-					</Swiper>
-				)}
+						))}
+				</Swiper>
+			)}
+			<Container>
+				{/* <Title>Home</Title> */}
 
 				<br />
-				<h2 className="text-indigo-500 font-bold text-2xl">Post</h2>
+				<h2 className="text-amber-500 font-bold text-2xl">Post</h2>
 
 				{isEmpty && <Empty />}
 
-				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-2">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8">
 					{isLoadingInitialData && (
 						<>
+							<PostSkeleton />
 							<PostSkeleton />
 							<PostSkeleton />
 						</>

@@ -38,12 +38,12 @@ const Card: FC<{
 }> = ({ href, title, icon, extra, desc }) => {
 	return (
 		<Link href={href} scroll={false}>
-			<a className="flex justify-between items-center group py-4 px-6 rounded-lg border border-white hover:border-indigo-500 shadow-lg bg-white">
-				<div className="group-hover:text-indigo-500 flex">
+			<a className="flex justify-between items-center group py-4 px-6 rounded-lg border border-white hover:border-amber-500 shadow-lg bg-white">
+				<div className="group-hover:text-amber-500 flex">
 					{icon}
-					<div className="ml-4 text-gray-600 group-hover:text-indigo-400">
+					<div className="ml-4 text-gray-600 group-hover:text-amber-500">
 						<h2>{title}</h2>
-						<small className="text-gray-400 group-hover:text-indigo-300">{desc}</small>
+						<small className="text-gray-400 group-hover:text-amber-500">{desc}</small>
 					</div>
 				</div>
 				<div>{extra}</div>
@@ -54,9 +54,9 @@ const Card: FC<{
 
 const CountInfo: FC<{ value?: number; desc?: string }> = ({ value, desc }) => {
 	return (
-		<div className="w-20 text-center group-hover:text-indigo-500">
+		<div className="w-20 text-center group-hover:text-amber-500">
 			<p className="text-lg">{value}</p>
-			<small className="text-gray-400 group-hover:text-indigo-400">{desc}</small>
+			<small className="text-gray-400 group-hover:text-amber-500">{desc}</small>
 		</div>
 	);
 };
@@ -91,7 +91,9 @@ const AdminHome = () => {
 	return (
 		<Navigation title="VMS: Menu Admin" active="admin" isAdmin>
 			<Container>
-				<Title>Administrator Menu</Title>
+				<Title>
+					<h2 className="text-amber-500 font-bold text-2xl">Administrator Menu</h2>
+				</Title>
 				<div className="p-4 mb-4 text-center">
 					<Image src="/images/welcome.svg" width="200" height="100" alt="welcome-image" />
 				</div>

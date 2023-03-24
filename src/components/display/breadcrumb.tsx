@@ -10,7 +10,7 @@ const Item: FC<{ title: string; href?: string | UrlObject; isCurrent?: boolean }
 	if (isCurrent === true) {
 		return (
 			<li
-				className="breadcrumb-item active text-indigo-500 hover:text-indigo-500 mx-2"
+				className="breadcrumb-item active text-amber-500 hover:text-amber-500 mx-2"
 				aria-current="page"
 			>
 				{title}
@@ -21,7 +21,7 @@ const Item: FC<{ title: string; href?: string | UrlObject; isCurrent?: boolean }
 	return (
 		<li className="breadcrumb-item text-gray-600">
 			<Link href={href as string | UrlObject}>
-				<a className="text-gray-600 hover:text-indigo-500 mx-2">{title}</a>
+				<a className="text-gray-600 hover:text-amber-500 mx-2">{title}</a>
 			</Link>
 		</li>
 	);
