@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { CloseOutline } from 'antd-mobile-icons';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';
@@ -9,7 +10,7 @@ import Breadcrumb from 'components/display/breadcrumb';
 import Button, { LinkButton } from 'components/general/button';
 import { ContainerAdmin } from 'components/general/container';
 import BlurImage from 'components/display/BlurImage';
-import dayjs from 'dayjs';
+
 import { dateFormat } from 'utils/constant';
 
 const breadcrumb = [
@@ -58,7 +59,13 @@ const Page = () => {
 	}, [router.query.id]);
 
 	return (
-		<Navigation title="VMS: Mendiang Detail" active="admin" access="deceased" isAdmin>
+		<Navigation
+			title="VMS: Mendiang Detail"
+			active="admin"
+			access="deceased"
+			isAdmin
+			hideFooter
+		>
 			<ContainerAdmin>
 				<Title>
 					<div className="flex justify-between items-center">
