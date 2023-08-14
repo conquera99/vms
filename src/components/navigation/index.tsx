@@ -61,7 +61,7 @@ const Navigation: FC<BaseNavInterface> = ({
 	children,
 	isSuperAdminOnly,
 	isAdmin,
-	hideFooter = false,
+	hideFooter = true,
 }) => {
 	const router = useRouter();
 	const { data: session, status } = useSession();
