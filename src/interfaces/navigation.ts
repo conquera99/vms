@@ -7,4 +7,5 @@ export default interface BaseNavInterface extends PageHeadInterface {
 	isSuperAdminOnly?: boolean;
 	access?: string;
 	children?: ReactNode;
+	hideFooter?: boolean;
 }

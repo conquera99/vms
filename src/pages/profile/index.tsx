@@ -26,7 +26,7 @@ const Profile = () => {
 	const onSignOut = () => signOut({ redirect: true, callbackUrl: '/' });
 
 	return (
-		<Navigation title="VMS: Profile" active="account">
+		<Navigation title="VMS: Profile" active="account" hideFooter={false}>
 			<Container>
 				<Title>Profile</Title>
 

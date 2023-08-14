@@ -27,7 +27,7 @@ const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 	];
 
 	return (
-		<Navigation title={data.title} desc={data.summary} image={data.image} active="home">
+		<Navigation title={data.title} desc={data.summary} image={data.image} active="home" hideFooter={false}>
 			<Container>
 				<Title>
 					<Breadcrumb data={breadcrumb} />

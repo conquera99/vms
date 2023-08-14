@@ -93,7 +93,7 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 	];
 
 	return (
-		<Navigation title={detail.title} desc={detail.title} active="gallery">
+		<Navigation title={detail.title} desc={detail.title} active="gallery" hideFooter={false}>
 			<Container>
 				<Title>
 					<Breadcrumb data={breadcrumb} />

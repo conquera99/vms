@@ -7,17 +7,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Empty from 'components/display/empty';
 import Post from 'components/display/post';
 import Container from 'components/general/container';
 import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
-import BlurImage from 'components/display/BlurImage';
 
 import useListData from 'hooks/useListData';
-import dayjs from 'dayjs';
-import { dateFormat } from 'utils/constant';
 
 const PostSkeleton = () => (
 	<div className="block bg-gray-200 animate-pulse rounded-lg my-5 border border-transparent relative">
@@ -54,7 +50,7 @@ const Home = () => {
 	}, []);
 
 	return (
-		<Navigation active="home">
+		<Navigation active="home" hideFooter={false}>
 			{!loading && campaign.length === 0 ? (
 				<Empty desc="belum ada banner yang dipublikasi" />
 			) : (

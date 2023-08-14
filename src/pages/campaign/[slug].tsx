@@ -37,7 +37,7 @@ const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 	}, [data.id]);
 
 	return (
-		<Navigation title={data.title} desc={data.desc} image={data.image} active="home">
+		<Navigation title={data.title} desc={data.desc} image={data.image} active="home" hideFooter={false}>
 			<Container>
 				<Title>
 					<Breadcrumb data={breadcrumb} />
