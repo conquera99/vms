@@ -25,7 +25,7 @@ const Gallery = () => {
 	});
 
 	return (
-		<Navigation title="VMS: Galeri" active="gallery">
+		<Navigation title="VMS: Galeri" active="gallery" hideFooter={false}>
 			<Container>
 				<Title>Galeri</Title>
 
