@@ -2,7 +2,6 @@ import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
-import { Workbox } from 'workbox-window';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -88,79 +87,10 @@ const Navigation: FC<BaseNavInterface> = ({
 	// This hook only run once in browser after the component is rendered for the first time.
 	// It has same effect as the old componentDidMount lifecycle callback.
 	useEffect(() => {
-		if (
-			typeof window !== 'undefined' &&
-			'serviceWorker' in navigator
-			// window.workbox !== undefined
-		) {
-			// const wb = window.workbox;
-			const wb = new Workbox('/vsg-worker.js');
-
-			// add event listeners to handle any of PWA lifecycle event
-			// https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-window.Workbox#events
-			wb.addEventListener('installed', (_event: any) => {
-				// console.log(`Event ${event.type} is triggered.`);
-				// console.log(event);
+		if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+			navigator.serviceWorker.register('/vsg-worker.js', { scope: '/' }).catch((error) => {
+				console.error('Service worker registration failed', error);
 			});
-
-			wb.addEventListener('controlling', (_event: any) => {
-				// console.log(`Event ${event.type} is triggered.`);
-				// console.log(event);
-			});
-
-			wb.addEventListener('activated', (_event: any) => {
-				// console.log(`Event ${event.type} is triggered.`);
-				// console.log(event);
-			});
-
-			// A common UX pattern for progressive web apps is to show a banner when a service worker has updated and waiting to install.
-			// NOTE: MUST set skipWaiting to false in next.config.js pwa object
-			// https://developers.google.com/web/tools/workbox/guides/advanced-recipes#offer_a_page_reload_for_users
-			const promptNewVersionAvailable = (_event: any) => {
-				// `event.wasWaitingBeforeRegister` will be false if this is the first time the updated service worker is waiting.
-				// When `event.wasWaitingBeforeRegister` is true, a previously updated service worker is still waiting.
-				// You may want to customize the UI prompt accordingly.
-				if (confirm('A newer version of this web app is available, reload to update?')) {
-					wb.addEventListener('controlling', (_event: any) => {
-						window.location.reload();
-					});
-
-					// Send a message to the waiting service worker, instructing it to activate.
-					wb.messageSW({ type: 'SKIP_WAITING' });
-				} else {
-					// console.log(
-					//     'User rejected to reload the web app, keep using old version. New version will be automatically load when user open the app next time.',
-					// );
-				}
-			};
-
-			wb.addEventListener('waiting', promptNewVersionAvailable);
-			// wb.addEventListener('externalwaiting', promptNewVersionAvailable);
-
-			// ISSUE - this is not working as expected, why?
-			// I could only make message event listenser work when I manually add this listenser into sw.js file
-			wb.addEventListener('message', (_event: any) => {
-				// console.log(`Event ${event.type} is triggered.`);
-				// console.log(event);
-			});
-
-			/*
-                wb.addEventListener('redundant', event => {
-                    console.log(`Event ${event.type} is triggered.`)
-                    console.log(event)
-                })
-                wb.addEventListener('externalinstalled', event => {
-                    console.log(`Event ${event.type} is triggered.`)
-                    console.log(event)
-                })
-                wb.addEventListener('externalactivated', event => {
-                    console.log(`Event ${event.type} is triggered.`)
-                    console.log(event)
-                })
-            */
-
-			// never forget to call register as auto register is turned off in next.config.js
-			wb.register();
 		}
 	}, []);
 

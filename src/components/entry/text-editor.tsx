@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createEditor, Descendant, Transforms, Editor, Element as SlateElement } from 'slate';
 import {
 	Slate,
@@ -163,6 +163,9 @@ const TextEditor: FC<{ value: Descendant[]; onChange: (value: Descendant[]) => v
 	onChange,
 }) => {
 	const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+	const lastEmittedValueRef = useRef(value);
+	const [editorKey, setEditorKey] = useState(0);
+	const [initialValue, setInitialValue] = useState(value);
 	const renderElement = useCallback((props: any) => <Element {...props} />, []);
 	const renderLeaf = useCallback((props: any) => <Leaf {...props} />, []);
 
@@ -175,13 +178,23 @@ const TextEditor: FC<{ value: Descendant[]; onChange: (value: Descendant[]) => v
 	}, []);
 
 	useEffect(() => {
-		// console.log('change', value);
-		editor.children = value;
-	}, [editor, value]);
+		if (value !== lastEmittedValueRef.current) {
+			setInitialValue(value);
+			setEditorKey((currentKey) => currentKey + 1);
+		}
+	}, [value]);
 
 	return (
 		<div className="px-4 border border-gray-600 rounded-md">
-			<Slate editor={editor} value={value} onChange={onChange}>
+			<Slate
+				key={editorKey}
+				editor={editor}
+				initialValue={initialValue}
+				onChange={(newValue) => {
+					lastEmittedValueRef.current = newValue;
+					onChange(newValue);
+				}}
+			>
 				<div className="relative pt-3 py-2 border-b">
 					<MarkButton format="bold" icon="format_bold" />
 					<MarkButton format="italic" icon="format_italic" />

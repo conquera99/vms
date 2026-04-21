@@ -17,5 +17,5 @@ const purgecss = [
 ];
 
 module.exports = {
-	plugins: ['postcss-preset-env', 'tailwindcss', 'autoprefixer', purgecss],
+	plugins: ['postcss-preset-env', '@tailwindcss/postcss', 'autoprefixer', purgecss],
 };
