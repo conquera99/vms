@@ -1,5 +1,5 @@
 import type { GetServerSidePropsContext, NextPage } from 'next';
-import Image from "next/image";
+import Image from 'next/image';
 import Link from 'next/link';
 import { getSession, getCsrfToken, signIn } from 'next-auth/react';
 import Form from 'rc-field-form';
@@ -24,65 +24,92 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 		);
 	};
 
-	return (
-        <div>
-            <div className="min-h-screen  flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-				<PageHead title="Sign In" />
-				<div className="sm:mx-auto sm:w-full sm:max-w-md text-center py-4">
-					<Link href="/">
+	const errorMessage =
+		typeof router.query.error === 'string' ? router.query.error.replace(/_/g, ' ') : '';
 
-                        <Image
-                            className="h-16 mx-auto"
+	return (
+		<div className="relative min-h-screen overflow-hidden py-10 sm:px-6 lg:px-8">
+			<div className="pointer-events-none absolute -right-20 -top-8 h-52 w-52 rounded-full bg-[#f3deb1]/45 blur-3xl sm:h-72 sm:w-72" />
+			<div className="pointer-events-none absolute -left-20 bottom-6 h-48 w-48 rounded-full bg-[#c8dded]/55 blur-3xl sm:h-64 sm:w-64" />
+
+			<div className="relative mx-auto w-full max-w-md">
+				<PageHead title="Sign In" />
+
+				<div className="mb-5 text-center sm:mb-6">
+					<Link href="/">
+						<Image
+							className="mx-auto"
                             src="/logo.png"
                             alt="Vsg-Logo"
-                            width={100}
-                            height={100}
+							width={82}
+							height={82}
+							sizes="82px"
                             style={{
-                                maxWidth: "100%",
-                                height: "auto"
-                            }} />
-
-                    </Link>
+								maxWidth: '100%',
+								height: 'auto',
+							}}
+						/>
+					</Link>
 				</div>
-				<div className="flex flex-col justify-center sm:px-6 lg:px-8">
-					<div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-						<h1 className="text-xl font-bold leading-7 text-indigo-500 sm:leading-9 sm:truncate">
+
+				<div className="overflow-hidden rounded-3xl border border-white/80 bg-white/90 p-5 shadow-xl shadow-slate-200/35 backdrop-blur-sm sm:p-7">
+					<div className="mb-5 sm:mb-6">
+						<p className="mb-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+							Account
+						</p>
+						<h1 className="text-2xl font-semibold leading-tight text-slate-800 sm:text-3xl">
 							Sign In
 						</h1>
-						<h2>Sign in with an existing account, or create new account.</h2>
+						<p className="mt-2 text-sm leading-relaxed text-slate-600">
+							Masuk dengan akun yang sudah terdaftar untuk melanjutkan.
+						</p>
 					</div>
-					<div className="mt-1 sm:mx-auto sm:w-full sm:max-w-md">
-						<div className="py-8 px-4 mx-2 rounded-sm sm:px-10">
-							<Form
-								form={form}
-								onFinish={onFinish}
-								initialValues={{ username: '', password: '', csrfToken }}
-							>
-								<Input name="csrfToken" type="hidden" />
-								<Input name="username" label="Username" />
-								<Input name="password" type="password" label="Password" />
-								<span className="text-red-400">{router.query.error}</span>
-								<Button
-									icon={<RightOutline />}
-									iconLocation="right"
-									buttonType="primary"
-									className="w-full"
-									type="submit"
-									loading={loading}
-								>
-									Masuk
-								</Button>
-								<Link href="/" className="block mt-2 text-sm text-blue-400 text-center">
-									
-										Kembali
-									
-								</Link>
-							</Form>
-						</div>
-					</div>
+
+					<Form
+						form={form}
+						onFinish={onFinish}
+						initialValues={{ username: '', password: '', csrfToken }}
+					>
+						<Input name="csrfToken" type="hidden" />
+						<Input
+							name="username"
+							label="Username"
+							input={{ autoComplete: 'username' }}
+						/>
+						<Input
+							name="password"
+							type="password"
+							label="Password"
+							input={{ autoComplete: 'current-password' }}
+						/>
+
+						{errorMessage ? (
+							<p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-500">
+								{errorMessage}
+							</p>
+						) : null}
+
+						<Button
+							icon={<RightOutline />}
+							iconLocation="right"
+							buttonType="primary"
+							className="w-full"
+							type="submit"
+							loading={loading}
+						>
+							Masuk
+						</Button>
+
+						<Link
+							href="/"
+							className="mt-3 block text-center text-sm font-medium text-[#5d84a9] transition hover:text-[#486d92]"
+						>
+							Kembali
+						</Link>
+					</Form>
 				</div>
 			</div>
-        </div>
+		</div>
     );
 };
 

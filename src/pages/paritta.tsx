@@ -166,7 +166,7 @@ const ParittaPage = () => {
 			.catch(() => setIsPlaying(false));
 
 		setShouldAutoPlay(false);
-	}, [currentIndex, shouldAutoPlay]);
+	}, [currentIndex]);
 
 	return (
 		<Navigation title="Paritta" active="paritta" hideFooter={false}>
