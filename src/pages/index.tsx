@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { Navigation as SwiperNavigation } from 'swiper';
+import { Navigation as SwiperNavigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -16,15 +16,24 @@ import InfiniteScrollTrigger from 'components/general/infinite-scroll-trigger';
 import useListData from 'hooks/useListData';
 
 const PostSkeleton = () => (
-	<div className="block bg-gray-200 animate-pulse rounded-lg my-5 border border-transparent relative">
-		<div className="h-60" />
-		<div className="p-1">
-			<div className="animate-pulse p-4 rounded-lg">
-				<div className="w-3/6 bg-gray-400 h-8 mb-2 rounded-md" />
-				<div className="w-2/6 bg-gray-400 mb-3 h-3 rounded-md" />
-				<div className="w-full bg-gray-400 mb-2 h-4 rounded-md" />
-				<div className="w-full bg-gray-400 h-4 rounded-md" />
-			</div>
+	<div className="relative my-4 block animate-pulse overflow-hidden rounded-2xl border border-slate-200 bg-white">
+		<div className="h-44 bg-slate-200 sm:h-56" />
+		<div className="space-y-3 p-4 sm:p-5">
+			<div className="h-6 w-3/5 rounded-md bg-slate-200" />
+			<div className="h-3 w-1/3 rounded-md bg-slate-200" />
+			<div className="h-4 w-full rounded-md bg-slate-200" />
+			<div className="h-4 w-5/6 rounded-md bg-slate-200" />
+		</div>
+	</div>
+);
+
+const BannerSkeleton = () => (
+	<div className="animate-pulse overflow-hidden rounded-3xl border border-slate-200 bg-white">
+		<div className="h-56 bg-slate-200 sm:h-72 lg:h-96" />
+		<div className="space-y-3 p-4 sm:p-6">
+			<div className="h-7 w-2/3 rounded-md bg-slate-200" />
+			<div className="h-4 w-5/6 rounded-md bg-slate-200" />
+			<div className="h-10 w-40 rounded-xl bg-slate-200" />
 		</div>
 	</div>
 );
@@ -35,7 +44,6 @@ const Home = () => {
 	});
 
 	const [loading, setLoading] = useState(true);
-	const [hover, isHover] = useState(false);
 	const [campaign, setCampaign] = useState<Record<string, any>[]>([]);
 
 	useEffect(() => {
@@ -51,81 +59,85 @@ const Home = () => {
 
 	return (
 		<Navigation active="home" hideFooter={false}>
-			{!loading && campaign.length === 0 ? (
-				<Empty desc="belum ada banner yang dipublikasi" />
-			) : (
-				<Swiper
-					modules={[SwiperNavigation]}
-					spaceBetween={50}
-					slidesPerView={1}
-					navigation={true}
-				>
-					{loading && (
-						<SwiperSlide>
-							<PostSkeleton />
-						</SwiperSlide>
-					)}
-					{!loading &&
-						campaign.map((item) => (
-							<SwiperSlide
-								key={item.id}
-								onMouseEnter={() => isHover(true)}
-								onMouseLeave={() => isHover(false)}
-							>
-								<div
-									className="aspect-w-2 aspect-h-1 md:aspect-w-3 md:aspect-h-1 overflow-hidden bg-no-repeat bg-cover"
-									style={{
-										backgroundPosition: '50%',
-										backgroundImage: `url(${item.image})`,
-									}}
-								>
-									<div className="flex flex-col justify-end">
-										<div className="flex flex-col justify-end z-10 px-4 py-2 sm:px-16 sm:py-6 bg-black/40 backdrop-blur-sm">
-											<h2 className="text-xl sm:text-2xl lg:text-3xl text-white font-bold mb-2 text-ellipsis overflow-hidden whitespace-nowrap">
-												{item.title}
-											</h2>
-											<p className="hidden sm:block leading-relaxed text-white text-medium  text-ellipsis overflow-hidden whitespace-nowrap">
-												{item.desc}
-											</p>
-											<Link key={item.slug} href={`/campaign/${item.slug}`}>
-												<button className="mt-2 sm:mt-4 px-4 sm:px-8 py-2 rounded-xl border-2 w-full sm:w-[250px] text-white transform transition-all duration-700 hover:bg-amber-500">
+			<section className="px-4 pt-4 sm:px-6 sm:pt-6 lg:px-8">
+				{!loading && campaign.length === 0 ? (
+					<div className="overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 sm:p-8">
+						<Empty desc="belum ada banner yang dipublikasi" />
+					</div>
+				) : (
+					<div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+						<Swiper
+							modules={[SwiperNavigation]}
+							spaceBetween={16}
+							slidesPerView={1}
+							navigation={true}
+						>
+							{loading && (
+								<SwiperSlide>
+									<BannerSkeleton />
+								</SwiperSlide>
+							)}
+							{!loading &&
+								campaign.map((item) => (
+									<SwiperSlide key={item.id}>
+										<div
+											className="relative flex min-h-[260px] items-end bg-cover bg-center bg-no-repeat sm:min-h-[340px] lg:min-h-[420px]"
+											style={{
+												backgroundImage: `url(${item.image})`,
+											}}
+										>
+											<div className="absolute inset-0 bg-linear-to-t from-black/75 via-black/35 to-transparent" />
+											<div className="relative z-10 w-full px-4 py-5 sm:px-8 sm:py-8 lg:px-12 lg:py-10">
+												<p className="mb-2 text-xs font-medium uppercase tracking-[0.2em] text-white/80">Campaign</p>
+												<h2 className="mb-3 text-2xl font-semibold leading-tight text-white sm:text-3xl lg:text-4xl">
+													{item.title}
+												</h2>
+												<p className="max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base">{item.desc}</p>
+												<Link
+													href={`/campaign/${item.slug}`}
+													className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-white px-5 py-2 text-sm font-medium text-slate-900 transition hover:bg-amber-300 sm:mt-6"
+												>
 													Lihat Selengkapnya
-												</button>
-											</Link>
+												</Link>
+											</div>
 										</div>
-									</div>
-								</div>
-							</SwiperSlide>
-						))}
-				</Swiper>
-			)}
+									</SwiperSlide>
+								))}
+						</Swiper>
+					</div>
+				)}
+			</section>
 			<Container>
-				{/* <Title>Home</Title> */}
+				<section className="mt-8 pb-2 sm:mt-10">
+					<div className="mb-5 flex items-end justify-between gap-3 sm:mb-7">
+						<div>
+							<p className="mb-1 text-xs font-medium uppercase tracking-[0.2em] text-slate-400">Latest Updates</p>
+							<h2 className="text-2xl font-semibold text-slate-800 sm:text-3xl">Post</h2>
+						</div>
+					</div>
 
-				<br />
-				<h2 className="text-amber-500 font-bold text-2xl">Post</h2>
+					{isEmpty && <Empty />}
 
-				{isEmpty && <Empty />}
+					<div className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2">
+						{isLoadingInitialData && (
+							<>
+								<PostSkeleton />
+								<PostSkeleton />
+								<PostSkeleton />
+							</>
+						)}
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8">
-					{isLoadingInitialData && (
-						<>
-							<PostSkeleton />
-							<PostSkeleton />
-							<PostSkeleton />
-						</>
-					)}
+						{data?.map((item: Record<string, any>) => {
+							return <Post key={item.id} data={item} />;
+						})}
+					</div>
 
-					{data?.map((item: Record<string, any>) => {
-						return <Post key={item.id} data={item} />;
-					})}
-				</div>
-
-				<InfiniteScrollTrigger
-					triggerRef={ref}
-					isLoadingMore={isLoadingMore}
-					isReachingEnd={isReachingEnd}
-				/>
+					<InfiniteScrollTrigger
+						triggerRef={ref}
+						isLoadingMore={isLoadingMore}
+						isReachingEnd={isReachingEnd}
+					/>
+				</section>
 			</Container>
 		</Navigation>
 	);
