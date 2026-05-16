@@ -121,6 +121,7 @@ const Navigation: FC<BaseNavInterface> = ({
                                 width={45}
                                 height={45}
                                 alt="logo"
+								sizes="45px"
                                 style={{
                                     maxWidth: "100%",
                                     height: "auto"

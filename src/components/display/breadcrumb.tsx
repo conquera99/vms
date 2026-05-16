@@ -18,41 +18,41 @@ const Item: FC<{
 	if (variant === 'post') {
 		if (isCurrent === true) {
 			return (
-				<li
+				<span
 					className="truncate text-sm font-semibold text-[#5d84a9]"
 					aria-current="page"
 				>
 					{title}
-				</li>
+				</span>
 			);
 		}
 
 		return (
-			<li className="text-sm text-slate-500 transition duration-300 hover:text-[#5d84a9]">
+			<span className="text-sm text-slate-500 transition duration-300 hover:text-[#5d84a9]">
 				<Link href={href as string | UrlObject}>{title}</Link>
-			</li>
+			</span>
 		);
 	}
 
 	if (isCurrent === true) {
 		return (
-			<li
+			<span
 				className="breadcrumb-item active text-amber-500 hover:text-amber-500 mx-2"
 				aria-current="page"
 			>
 				{title}
-			</li>
+			</span>
 		);
 	}
 
 	return (
-        <li className="breadcrumb-item text-gray-600">
+        <span className="breadcrumb-item text-gray-600">
             <Link
                 href={href as string | UrlObject}
                 className="text-gray-600 hover:text-amber-500 mx-2">
 				{title}
 			</Link>
-        </li>
+        </span>
     );
 };
 

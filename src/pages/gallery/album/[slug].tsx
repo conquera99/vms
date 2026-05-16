@@ -1,7 +1,6 @@
 import { FC, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import dayjs from 'dayjs';
-import Dialog from 'rc-dialog';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
@@ -33,6 +32,9 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 	const totalImages = data?.length || 0;
 
 	const openImage = (index: number) => {
+		if (!data?.[index]?.image) {
+			return;
+		}
 		setVisible(true);
 		setSelectedIndex(index);
 	};
@@ -109,7 +111,8 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 							{detail.title}
 						</h1>
 						<p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
-							Koleksi dokumentasi kegiatan dalam album ini. Klik gambar untuk melihat ukuran penuh.
+							Koleksi dokumentasi kegiatan dalam album ini. Klik gambar untuk melihat
+							ukuran penuh.
 						</p>
 					</div>
 
@@ -145,6 +148,7 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 											className="rounded-2xl"
 											alt={item.altText || `gallery-${index + 1}`}
 											src={item.image}
+											sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
 										/>
 									</button>
 								</div>
@@ -159,48 +163,54 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 					/>
 				</section>
 
-				<Dialog
-					visible={visible}
-					onClose={closePreview}
-					bodyStyle={{ padding: 0, background: 'transparent' }}
-				>
-					<button
-						onClick={prev}
-						type="button"
-						className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/80 bg-white/90 p-2 text-2xl text-slate-700 transition duration-300 hover:bg-[#edf4fa] disabled:cursor-not-allowed disabled:opacity-40"
-						disabled={selectedIndex <= 0}
+				{visible && totalImages > 0 && (
+					<div
+						className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 sm:p-6"
+						onClick={closePreview}
 					>
-						<LeftOutline />
-					</button>
-					<div className="w-full overflow-hidden rounded-2xl bg-black/85 p-1">
-						<img
-							className="max-h-[78vh] w-full rounded-xl object-contain"
-							alt={data[selectedIndex]?.altText}
-							src={data[selectedIndex]?.image}
-						/>
-					</div>
-					<button
-						onClick={next}
-						type="button"
-						className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/80 bg-white/90 p-2 text-2xl text-slate-700 transition duration-300 hover:bg-[#edf4fa] disabled:cursor-not-allowed disabled:opacity-40"
-						disabled={selectedIndex >= totalImages - 1}
-					>
-						<RightOutline />
-					</button>
-					<div className="mt-3 flex items-center justify-center gap-2">
-						<span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-600">
-							{totalImages > 0 ? `${selectedIndex + 1} / ${totalImages}` : '0 / 0'}
-						</span>
-						<button
-							onClick={downloadImg}
-							type="button"
-							className="rounded-full bg-white/90 px-4 py-1.5 text-sm font-medium text-slate-700 transition duration-300 hover:bg-[#edf4fa]"
-							disabled={!data?.[selectedIndex]?.image}
+						<div
+							className="relative w-full max-w-6xl"
+							onClick={(event) => event.stopPropagation()}
 						>
-							Download
-						</button>
+							<button
+								onClick={prev}
+								type="button"
+								className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/80 bg-white/90 p-2 text-2xl text-slate-700 transition duration-300 hover:bg-[#edf4fa] disabled:cursor-not-allowed disabled:opacity-40"
+								disabled={selectedIndex <= 0}
+							>
+								<LeftOutline />
+							</button>
+							<div className="w-full overflow-hidden rounded-2xl bg-black/85 p-1">
+								<img
+									className="max-h-[78vh] w-full rounded-xl object-contain"
+									alt={data?.[selectedIndex]?.altText}
+									src={data?.[selectedIndex]?.image}
+								/>
+							</div>
+							<button
+								onClick={next}
+								type="button"
+								className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/80 bg-white/90 p-2 text-2xl text-slate-700 transition duration-300 hover:bg-[#edf4fa] disabled:cursor-not-allowed disabled:opacity-40"
+								disabled={selectedIndex >= totalImages - 1}
+							>
+								<RightOutline />
+							</button>
+							<div className="mt-3 flex items-center justify-center gap-2">
+								<span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-600">
+									{totalImages > 0 ? `${selectedIndex + 1} / ${totalImages}` : '0 / 0'}
+								</span>
+								<button
+									onClick={downloadImg}
+									type="button"
+									className="rounded-full bg-white/90 px-4 py-1.5 text-sm font-medium text-slate-700 transition duration-300 hover:bg-[#edf4fa]"
+									disabled={!data?.[selectedIndex]?.image}
+								>
+									Download
+								</button>
+							</div>
+						</div>
 					</div>
-				</Dialog>
+				)}
 			</Container>
 		</Navigation>
 	);

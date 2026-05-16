@@ -71,6 +71,7 @@ const Footer: FC<{ active?: string }> = ({ active }) => {
                                 width={60}
                                 height={60}
                                 alt="logo"
+								sizes="60px"
                                 style={{
                                     maxWidth: "100%",
                                     height: "auto"

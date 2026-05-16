@@ -20,7 +20,7 @@ const Post: FC<PostProps> = ({ data }) => {
                     alt={data.title || 'post image'}
                     className="transition duration-500 group-hover:scale-105"
                     fill
-                    sizes="100vw"
+					sizes="(max-width: 768px) 100vw, 50vw"
                     style={{
                         objectFit: "cover"
                     }} />

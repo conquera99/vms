@@ -41,7 +41,13 @@ const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 					<Breadcrumb data={breadcrumb} variant="post" />
 
 					<div className="relative z-10">
-						<BlurImage src={data.image} alt={data.title} className="rounded-2xl" />
+						<BlurImage
+							src={data.image}
+							alt={data.title}
+							className="rounded-2xl"
+							sizes="(max-width: 640px) 100vw, (max-width: 1280px) 92vw, 1100px"
+							preview
+						/>
 
 						<div className="my-5 sm:my-6">
 							<h1 className="text-3xl font-semibold leading-tight text-slate-800 sm:text-4xl lg:text-5xl">
