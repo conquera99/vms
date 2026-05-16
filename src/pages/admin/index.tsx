@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { UrlObject } from 'url';

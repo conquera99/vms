@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { FC } from 'react';
 
 const Empty: FC<{ desc?: string; title?: string }> = ({ desc, title }) => {

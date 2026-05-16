@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 import { FC } from 'react';
 import { datetimeFormat } from 'utils/constant';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 interface PostProps {
 	data: Record<string, any>;

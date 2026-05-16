@@ -3,7 +3,7 @@ import { FC, ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 import type { UrlObject } from 'url';
 
