@@ -1,5 +1,6 @@
 /* rc-picker */
 /* purgecss start ignore */
+@reference "tailwindcss";
 .rc-picker-input > input {
 	@apply px-4;
 	@apply py-3;

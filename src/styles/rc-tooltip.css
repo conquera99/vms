@@ -1,4 +1,5 @@
 /* purgecss start ignore */
+@reference "tailwindcss";
 .rc-tooltip.rc-tooltip-zoom-appear,
 .rc-tooltip.rc-tooltip-zoom-enter {
 	opacity: 0;

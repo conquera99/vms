@@ -1,4 +1,5 @@
 /* purgecss start ignore */
+@reference "tailwindcss";
 .rc-input-number {
 	display: inline-block;
 	margin: 0;

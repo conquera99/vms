@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createEditor, Descendant, Transforms, Editor, Element as SlateElement } from 'slate';
 import {
 	Slate,

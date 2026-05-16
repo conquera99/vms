@@ -1,4 +1,5 @@
 /* purgecss start ignore */
+@reference "tailwindcss";
 * {
 	box-sizing: border-box;
 }

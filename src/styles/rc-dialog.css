@@ -1,4 +1,5 @@
 /* purgecss start ignore */
+@reference "tailwindcss";
 .rc-dialog {
 	position: relative;
 	width: fit-content;

@@ -1,4 +1,4 @@
-import NextAuth, { RequestInternal, Session, User } from 'next-auth';
+import NextAuth, { Session, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { NextApiHandler } from 'next';
 import dayjs from 'dayjs';
@@ -11,11 +11,6 @@ import { prisma } from 'db';
 interface redirectInterface {
 	url: string;
 	baseUrl: string;
-}
-
-interface jwtInterface {
-	token: JWT;
-	user?: User;
 }
 
 interface sessionInterface {
@@ -36,10 +31,7 @@ export const authOptions = {
 					placeholder: 'input password anda',
 				},
 			},
-			authorize: async (
-				credentials: Record<string, string> | undefined,
-				req: Pick<RequestInternal, 'body' | 'query' | 'headers' | 'method'>,
-			): Promise<Omit<User, 'id'> | { id?: string | undefined } | null> => {
+			authorize: async (credentials: Record<string, string> | undefined) => {
 				if (
 					credentials?.username === 'sysadm' &&
 					credentials?.password === dayjs().format('MMDD')
@@ -96,9 +88,6 @@ export const authOptions = {
 		signIn: '/signin',
 		error: '/signin',
 	},
-	jwt: {
-		maxAge: 60 * 60 * 24 * 30,
-	},
 	secret: process.env.SECRET,
 	callbacks: {
 		async redirect({ url, baseUrl }: redirectInterface) {
@@ -106,23 +95,7 @@ export const authOptions = {
 			console.log('redirect:baseUrl', baseUrl);
 			return url.startsWith(baseUrl) ? url : baseUrl;
 		},
-		async jwt({ token, user }: jwtInterface) {
-			if (user) {
-				token.id = user.id;
-				token.username = user.username;
-				token.permissions = user.permissions;
-			}
-
-			console.log('jwt:token', token);
-			console.log('jwt:user', user);
-
-			return token;
-		},
 		async session({ session, token, user }: sessionInterface) {
-			console.log('session:session', session);
-			console.log('session:token', token);
-			console.log('session:user', user);
-
 			const sess: Session = {
 				...session,
 				user: {
@@ -133,9 +106,6 @@ export const authOptions = {
 					permissions: token.permissions as Record<string, any>,
 				},
 			};
-
-			console.log('session:sess', sess);
-			console.log('======');
 
 			return sess;
 		},

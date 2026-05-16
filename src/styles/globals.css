@@ -2,6 +2,7 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/aspect-ratio';
 @custom-variant dark (&:where(.dark, .dark *));
+@reference "tailwindcss";
 
 html,
 body {
