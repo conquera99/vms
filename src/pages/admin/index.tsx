@@ -37,19 +37,22 @@ const Card: FC<{
 	extra?: ReactNode;
 }> = ({ href, title, icon, extra, desc }) => {
 	return (
-		<Link href={href} scroll={false}>
-			<a className="flex justify-between items-center group py-4 px-6 rounded-lg border border-white hover:border-amber-500 shadow-lg bg-white">
-				<div className="group-hover:text-amber-500 flex">
-					{icon}
-					<div className="ml-4 text-gray-600 group-hover:text-amber-500">
-						<h2>{title}</h2>
-						<small className="text-gray-400 group-hover:text-amber-500">{desc}</small>
-					</div>
-				</div>
-				<div>{extra}</div>
-			</a>
-		</Link>
-	);
+        <Link
+            href={href}
+            scroll={false}
+            className="flex justify-between items-center group py-4 px-6 rounded-lg border border-white hover:border-amber-500 shadow-lg bg-white">
+
+            <div className="group-hover:text-amber-500 flex">
+                {icon}
+                <div className="ml-4 text-gray-600 group-hover:text-amber-500">
+                    <h2>{title}</h2>
+                    <small className="text-gray-400 group-hover:text-amber-500">{desc}</small>
+                </div>
+            </div>
+            <div>{extra}</div>
+
+        </Link>
+    );
 };
 
 const CountInfo: FC<{ value?: number; desc?: string }> = ({ value, desc }) => {

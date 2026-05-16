@@ -45,8 +45,8 @@ const Page = () => {
 	};
 
 	return (
-		<Navigation title="VMS: Data Lokasi" active="admin" access="location" isAdmin>
-			<Container>
+        <Navigation title="VMS: Data Lokasi" active="admin" access="location" isAdmin>
+            <Container>
 				<Title>
 					<div className="flex justify-between items-center">
 						<Breadcrumb data={breadcrumb} />
@@ -67,8 +67,8 @@ const Page = () => {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{data?.map((item: Record<string, any>) => {
 						return (
-							<List key={item.id}>
-								<div className="flex justify-between">
+                            <List key={item.id}>
+                                <div className="flex justify-between">
 									<div>
 										<small className="text-xs">ID:&nbsp;{item.code}</small>
 										<p className="font-bold text-lg">{item.name}</p>
@@ -77,8 +77,10 @@ const Page = () => {
 										</small>
 									</div>
 									<div>
-										<Link href={`/admin/location/detail?id=${item.id}`}>
-											<a className="text-blue-500 mr-2">edit</a>
+										<Link
+                                            href={`/admin/location/detail?id=${item.id}`}
+                                            className="text-blue-500 mr-2">
+											edit
 										</Link>
 										<button
 											className="text-red-500"
@@ -88,8 +90,8 @@ const Page = () => {
 										</button>
 									</div>
 								</div>
-							</List>
-						);
+                            </List>
+                        );
 					})}
 				</div>
 
@@ -99,8 +101,8 @@ const Page = () => {
 					isReachingEnd={isReachingEnd}
 				/>
 			</Container>
-		</Navigation>
-	);
+        </Navigation>
+    );
 };
 
 export default Page;

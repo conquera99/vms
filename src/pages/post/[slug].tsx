@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import escapeHtml from 'escape-html';
 import dayjs from 'dayjs';
-import Image from 'next/image';
 import { CalendarOutline, UserOutline } from 'antd-mobile-icons';
 
 import Title from 'components/display/title';
@@ -27,28 +26,48 @@ const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 	];
 
 	return (
-		<Navigation title={data.title} desc={data.summary} image={data.image} active="home" hideFooter={false}>
+		<Navigation
+			title={data.title}
+			desc={data.summary}
+			image={data.image}
+			active="home"
+			hideFooter={false}
+		>
 			<Container>
-				<Title>
-					<Breadcrumb data={breadcrumb} />
-				</Title>
-				<div>
-					<BlurImage src={data.image} alt={data.title} />
-					<div className="my-5">
-						<h1 className="text-3xl text-indigo-500 font-bold">{data.title}</h1>
-						<div className="flex">
-							<div className="flex mb-2 mr-5">
-								<UserOutline className="mr-2" />
-								{data.createdBy}
-							</div>
-							<div className="flex">
-								<CalendarOutline className="mr-2" />
-								{data.createdAt}
+				<section className="relative mt-4 overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-4 shadow-xl shadow-slate-200/35 backdrop-blur-sm sm:mt-6 sm:p-6 lg:p-8">
+					<div className="pointer-events-none absolute -right-16 top-0 h-44 w-44 rounded-full bg-[#f3deb1]/45 blur-3xl" />
+					<div className="pointer-events-none absolute -left-16 bottom-2 h-40 w-40 rounded-full bg-[#c8dded]/50 blur-3xl" />
+
+					<Breadcrumb data={breadcrumb} variant="post" />
+
+					<div className="relative z-10">
+						<BlurImage src={data.image} alt={data.title} className="rounded-2xl" />
+
+						<div className="my-5 sm:my-6">
+							<h1 className="text-3xl font-semibold leading-tight text-slate-800 sm:text-4xl lg:text-5xl">
+								{data.title}
+							</h1>
+							<p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+								{data.summary}
+							</p>
+							<div className="mt-4 flex flex-wrap items-center gap-2 sm:gap-3">
+								<div className="inline-flex items-center rounded-full border border-slate-200 bg-white/85 px-3 py-1.5 text-xs font-medium text-slate-600 sm:text-sm">
+									<UserOutline className="mr-2" />
+									{data.createdBy}
+								</div>
+								<div className="inline-flex items-center rounded-full border border-slate-200 bg-white/85 px-3 py-1.5 text-xs font-medium text-slate-600 sm:text-sm">
+									<CalendarOutline className="mr-2" />
+									{data.createdAt}
+								</div>
 							</div>
 						</div>
+
+						<article
+							className="rounded-2xl border border-slate-100 bg-white p-4 text-slate-700 shadow-sm sm:p-6 lg:p-8"
+							dangerouslySetInnerHTML={{ __html: data.content }}
+						/>
 					</div>
-				</div>
-				<div dangerouslySetInnerHTML={{ __html: data.content }} />
+				</section>
 			</Container>
 		</Navigation>
 	);
@@ -83,21 +102,21 @@ const serialize = (node: any, first = false) => {
 
 	switch (node.type) {
 		case 'block-quote':
-			return `<blockquote class='my-4'><p>${children}</p></blockquote>`;
+			return `<blockquote class='my-4 border-l-2 border-[#c8dded] pl-3 italic text-slate-500'><p>${children}</p></blockquote>`;
 		case 'bulleted-list':
-			return `<ul class='list-disc list-inside'>${children}</ul>`;
+			return `<ul class='my-3 list-inside list-disc space-y-1'>${children}</ul>`;
 		case 'heading-one':
-			return `<h1 class='text-xl my-4'>${children}</h1>`;
+			return `<h1 class='my-4 text-2xl font-semibold text-slate-800'>${children}</h1>`;
 		case 'heading-two':
-			return `<h2 class='text-lg my-3'>${children}</h2>`;
+			return `<h2 class='my-3 text-xl font-semibold text-slate-800'>${children}</h2>`;
 		case 'list-item':
 			return `<li>${children}</li>`;
 		case 'numbered-list':
-			return `<ol class='list-decimal list-inside'><p>${children}</p></ol>`;
+			return `<ol class='my-3 list-inside list-decimal space-y-1'><p>${children}</p></ol>`;
 		case 'paragraph':
-			return `<p class='my-2'>${children}</p>`;
+			return `<p class='my-3 leading-relaxed'>${children}</p>`;
 		case 'link':
-			return `<a href="${escapeHtml(node.url)}">${children}</a>`;
+			return `<a href="${escapeHtml(node.url)}" class='font-medium text-[#5d84a9] underline decoration-[#c8dded] underline-offset-4 hover:text-[#486d92]'>${children}</a>`;
 		default:
 			return children;
 	}

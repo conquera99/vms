@@ -53,8 +53,8 @@ const Page = () => {
 	};
 
 	return (
-		<Navigation title="VMS: Campaign" active="admin" access="campaign" isAdmin>
-			<Container>
+        <Navigation title="VMS: Campaign" active="admin" access="campaign" isAdmin>
+            <Container>
 				<Title>
 					<div className="flex justify-between items-center">
 						<Breadcrumb data={breadcrumb} />
@@ -75,8 +75,8 @@ const Page = () => {
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{data?.map((item: Record<string, any>) => {
 						return (
-							<List key={item.id}>
-								<div className="flex justify-between">
+                            <List key={item.id}>
+                                <div className="flex justify-between">
 									<div>
 										<small className="text-xs text-gray-500">
 											ID:&nbsp;{item.id}
@@ -108,8 +108,10 @@ const Page = () => {
 									</div>
 									<div className="flex flex-col justify-between items-end">
 										<div>
-											<Link href={`/admin/campaign/detail?id=${item.id}`}>
-												<a className="text-blue-500 mr-2">edit</a>
+											<Link
+                                                href={`/admin/campaign/detail?id=${item.id}`}
+                                                className="text-blue-500 mr-2">
+												edit
 											</Link>
 											<ConfirmButton
 												className="text-red-500"
@@ -120,15 +122,17 @@ const Page = () => {
 												hapus
 											</ConfirmButton>
 										</div>
-										<Link href={`/admin/campaign/participant?id=${item.id}`}>
-											<a className="text-gray-700 mr-2 px-2 py-1 bg-blue-100 rounded-md text-sm">
+										<Link
+                                            href={`/admin/campaign/participant?id=${item.id}`}
+                                            className="text-gray-700 mr-2 px-2 py-1 bg-blue-100 rounded-md text-sm">
+											
 												Atur Peserta
-											</a>
+											
 										</Link>
 									</div>
 								</div>
-							</List>
-						);
+                            </List>
+                        );
 					})}
 				</div>
 
@@ -138,8 +142,8 @@ const Page = () => {
 					isReachingEnd={isReachingEnd}
 				/>
 			</Container>
-		</Navigation>
-	);
+        </Navigation>
+    );
 };
 
 export default Page;

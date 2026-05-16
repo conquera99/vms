@@ -3,7 +3,6 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import dayjs from 'dayjs';
 import Dialog from 'rc-dialog';
 
-import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Empty from 'components/display/empty';
@@ -18,9 +17,8 @@ import { datetimeFormat } from 'utils/constant';
 import { LeftOutline, RightOutline } from 'antd-mobile-icons';
 
 const ImageSkeleton = () => (
-	<div className="block bg-gray-200 h-full animate-pulse rounded-lg border border-transparent relative">
-		<div className="h-60" />
-		<div className="h-28" />
+	<div className="animate-pulse overflow-hidden rounded-2xl border border-slate-200 bg-white/90 shadow-sm">
+		<div className="h-52 bg-slate-200 sm:h-60" />
 	</div>
 );
 
@@ -32,6 +30,7 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 
 	const [visible, setVisible] = useState(false);
 	const [selectedIndex, setSelectedIndex] = useState(0);
+	const totalImages = data?.length || 0;
 
 	const openImage = (index: number) => {
 		setVisible(true);
@@ -49,12 +48,16 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 	};
 
 	const next = () => {
-		if (selectedIndex < data.length - 1) {
+		if (selectedIndex < totalImages - 1) {
 			setSelectedIndex((prev) => prev + 1);
 		}
 	};
 
 	const downloadImg = () => {
+		if (!data?.[selectedIndex]?.image) {
+			return;
+		}
+
 		const ext = data[selectedIndex].image.split('.');
 		const timestamp = dayjs().unix();
 
@@ -95,74 +98,104 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 	return (
 		<Navigation title={detail.title} desc={detail.title} active="gallery" hideFooter={false}>
 			<Container>
-				<Title>
-					<Breadcrumb data={breadcrumb} />
-				</Title>
+				<section className="relative mt-4 overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-4 shadow-xl shadow-slate-200/35 backdrop-blur-sm sm:mt-6 sm:p-6 lg:p-8">
+					<div className="pointer-events-none absolute -right-16 top-0 h-44 w-44 rounded-full bg-[#f3deb1]/45 blur-3xl" />
+					<div className="pointer-events-none absolute -left-16 bottom-2 h-40 w-40 rounded-full bg-[#c8dded]/50 blur-3xl" />
 
-				<h1 className="text-3xl text-amber-500 font-bold mb-4">{detail.title}</h1>
+					<Breadcrumb data={breadcrumb} variant="post" />
 
-				{isEmpty && <Empty />}
+					<div className="relative z-10 mb-5 sm:mb-7">
+						<h1 className="text-3xl font-semibold leading-tight text-slate-800 sm:text-4xl lg:text-5xl">
+							{detail.title}
+						</h1>
+						<p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
+							Koleksi dokumentasi kegiatan dalam album ini. Klik gambar untuk melihat ukuran penuh.
+						</p>
+					</div>
 
-				<div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-					{isLoadingInitialData && (
-						<>
-							<ImageSkeleton />
-							<ImageSkeleton />
-						</>
-					)}
+					{isEmpty && <Empty />}
 
-					{data?.map((item: Record<string, any>, index) => {
-						return (
-							<div
-								key={item.id}
-								className="rounded-lg shadow-md cursor-pointer"
-								onClick={() => openImage(index)}
-							>
-								<BlurImage
-									className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8"
-									alt={item.altText}
-									src={item.image}
-								/>
-							</div>
-						);
-					})}
-				</div>
+					<div className="relative z-10 columns-1 gap-4 sm:columns-2 sm:gap-5 lg:columns-3 xl:columns-4">
+						{isLoadingInitialData && (
+							<>
+								<div className="mb-4 break-inside-avoid sm:mb-5">
+									<ImageSkeleton />
+								</div>
+								<div className="mb-4 break-inside-avoid sm:mb-5">
+									<ImageSkeleton />
+								</div>
+								<div className="mb-4 break-inside-avoid sm:mb-5">
+									<ImageSkeleton />
+								</div>
+								<div className="mb-4 break-inside-avoid sm:mb-5">
+									<ImageSkeleton />
+								</div>
+							</>
+						)}
 
-				<InfiniteScrollTrigger
-					triggerRef={ref}
-					isLoadingMore={isLoadingMore}
-					isReachingEnd={isReachingEnd}
-				/>
+						{data?.map((item: Record<string, any>, index) => {
+							return (
+								<div key={item.id} className="mb-4 break-inside-avoid sm:mb-5">
+									<button
+										type="button"
+										className="group block w-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 shadow-lg shadow-slate-200/30 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-200/55"
+										onClick={() => openImage(index)}
+									>
+										<BlurImage
+											className="rounded-2xl"
+											alt={item.altText || `gallery-${index + 1}`}
+											src={item.image}
+										/>
+									</button>
+								</div>
+							);
+						})}
+					</div>
+
+					<InfiniteScrollTrigger
+						triggerRef={ref}
+						isLoadingMore={isLoadingMore}
+						isReachingEnd={isReachingEnd}
+					/>
+				</section>
 
 				<Dialog
 					visible={visible}
 					onClose={closePreview}
-					style={{}}
-					bodyStyle={{ padding: 0 }}
+					bodyStyle={{ padding: 0, background: 'transparent' }}
 				>
 					<button
 						onClick={prev}
-						className="absolute top-1/2 text-2xl rounded-full bg-slate-100 p-2 transition-all ml-1 hover:opacity-50"
+						type="button"
+						className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/80 bg-white/90 p-2 text-2xl text-slate-700 transition duration-300 hover:bg-[#edf4fa] disabled:cursor-not-allowed disabled:opacity-40"
+						disabled={selectedIndex <= 0}
 					>
 						<LeftOutline />
 					</button>
-					<div className="w-full">
+					<div className="w-full overflow-hidden rounded-2xl bg-black/85 p-1">
 						<img
-							className="object-contain rounded-md img-modal"
+							className="max-h-[78vh] w-full rounded-xl object-contain"
 							alt={data[selectedIndex]?.altText}
 							src={data[selectedIndex]?.image}
 						/>
 					</div>
 					<button
 						onClick={next}
-						className="absolute top-1/2 right-0 text-2xl rounded-full bg-slate-100 p-2 transition-all ml-1  hover:opacity-50"
+						type="button"
+						className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/80 bg-white/90 p-2 text-2xl text-slate-700 transition duration-300 hover:bg-[#edf4fa] disabled:cursor-not-allowed disabled:opacity-40"
+						disabled={selectedIndex >= totalImages - 1}
 					>
 						<RightOutline />
 					</button>
-					<div className="flex justify-center">
+					<div className="mt-3 flex items-center justify-center gap-2">
+						<span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-600">
+							{totalImages > 0 ? `${selectedIndex + 1} / ${totalImages}` : '0 / 0'}
+						</span>
 						<button
 							onClick={downloadImg}
-							className="mt-2 px-4 py-1 bg-slate-100 rounded-md"
+							type="button"
+							className="rounded-full bg-white/90 px-4 py-1.5 text-sm font-medium text-slate-700 transition duration-300 hover:bg-[#edf4fa]"
+							disabled={!data?.[selectedIndex]?.image}
 						>
 							Download
 						</button>

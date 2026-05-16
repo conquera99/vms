@@ -25,21 +25,21 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 	};
 
 	return (
-		<div>
-			<div className="min-h-screen  flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div>
+            <div className="min-h-screen  flex flex-col justify-center py-12 sm:px-6 lg:px-8">
 				<PageHead title="Sign In" />
 				<div className="sm:mx-auto sm:w-full sm:max-w-md text-center py-4">
 					<Link href="/">
-						<a>
-							<Image
-								className="h-16 mx-auto"
-								src="/logo.png"
-								alt="Vsg-Logo"
-								width={100}
-								height={100}
-							/>
-						</a>
-					</Link>
+
+                        <Image
+                            className="h-16 mx-auto"
+                            src="/logo.png"
+                            alt="Vsg-Logo"
+                            width={100}
+                            height={100}
+                        />
+
+                    </Link>
 				</div>
 				<div className="flex flex-col justify-center sm:px-6 lg:px-8">
 					<div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -69,18 +69,18 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 								>
 									Masuk
 								</Button>
-								<Link href="/">
-									<a className="block mt-2 text-sm text-blue-400 text-center">
+								<Link href="/" className="block mt-2 text-sm text-blue-400 text-center">
+									
 										Kembali
-									</a>
+									
 								</Link>
 							</Form>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	);
+        </div>
+    );
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {

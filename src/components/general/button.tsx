@@ -85,17 +85,17 @@ export const LinkButton: FC<LinkButtonProps> = ({
 	...rest
 }) => {
 	return (
-		<Link href={href}>
-			<a
-				className={`${defaultButtonClass} ${buttonTypeClass[buttonType]} ${sizeClass[size]} ${className}`}
-				{...rest}
-			>
-				{iconLocation === 'left' && (loading ? <Loading /> : icon)}
-				{children}
-				{iconLocation === 'right' && (loading ? <Loading /> : icon)}
-			</a>
-		</Link>
-	);
+        <Link
+            href={href}
+            className={`${defaultButtonClass} ${buttonTypeClass[buttonType]} ${sizeClass[size]} ${className}`}
+            {...rest}>
+
+            {iconLocation === 'left' && (loading ? <Loading /> : icon)}
+            {children}
+            {iconLocation === 'right' && (loading ? <Loading /> : icon)}
+
+        </Link>
+    );
 };
 
 export const ConfirmButton: FC<ConfirmButtonProps> = ({
