@@ -1,5 +1,5 @@
 import type { GetServerSidePropsContext, NextPage } from 'next';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from 'next/link';
 import { getSession, getCsrfToken, signIn } from 'next-auth/react';
 import Form from 'rc-field-form';
@@ -37,7 +37,10 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
                             alt="Vsg-Logo"
                             width={100}
                             height={100}
-                        />
+                            style={{
+                                maxWidth: "100%",
+                                height: "auto"
+                            }} />
 
                     </Link>
 				</div>

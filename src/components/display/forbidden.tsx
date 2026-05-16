@@ -1,4 +1,4 @@
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from 'next/link';
 
 const Forbidden = () => {
@@ -8,11 +8,14 @@ const Forbidden = () => {
 				<div className="py-8">
 					<div className="mb-4">
 						<Image
-							src="/images/forbidden.svg"
-							width="250"
-							height="150"
-							alt="forbidden-icon"
-						/>
+                            src="/images/forbidden.svg"
+                            width="250"
+                            height="150"
+                            alt="forbidden-icon"
+                            style={{
+                                maxWidth: "100%",
+                                height: "auto"
+                            }} />
 					</div>
 					<p className="text-2xl text-gray-800 font-medium mb-2">Tidak ada akses</p>
 					<p className="text-gray-500 max-w-xs mx-auto mb-6">

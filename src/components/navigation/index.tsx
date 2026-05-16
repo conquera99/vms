@@ -3,7 +3,7 @@ import { FC, ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
 import Link from 'next/link';
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 import type { UrlObject } from 'url';
 
@@ -99,18 +99,14 @@ const Navigation: FC<BaseNavInterface> = ({
 	}
 
 	return (
-		<div className="bg-slate-100">
-			<PageHead title={title} desc={desc} image={image} />
-
-			{/* <div className="hidden md:block md:h-16">&nbsp;</div> */}
-
-			<div className="w-full md:pt-16 lg:pt-16 pb-20 min-h-screen app-content">
+        <div className="bg-slate-100">
+            <PageHead title={title} desc={desc} image={image} />
+            {/* <div className="hidden md:block md:h-16">&nbsp;</div> */}
+            <div className="w-full md:pt-16 lg:pt-16 pb-20 min-h-screen app-content">
 				{children}
 			</div>
-
-			{hideFooter === false && <Footer active={active} />}
-
-			<div
+            {hideFooter === false && <Footer active={active} />}
+            <div
 				className="app-nav md:top-0 md:bottom-auto md:border-b md:px-4 z-10 h-16 bottom-0 border-t border-white/60 backdrop-filter backdrop-blur-md right-0 left-0 py-1 fixed"
 				style={{
 					backgroundImage:
@@ -120,7 +116,15 @@ const Navigation: FC<BaseNavInterface> = ({
 				<div className="flex h-full md:justify-between md:mx-auto md:max-w-5xl xl:max-w-7xl">
 					<Link href="/">
 						<div className="hidden md:flex items-center hover:cursor-pointer">
-							<Image src="/logo.png" width={45} height={45} alt="logo" />
+							<Image
+                                src="/logo.png"
+                                width={45}
+                                height={45}
+                                alt="logo"
+                                style={{
+                                    maxWidth: "100%",
+                                    height: "auto"
+                                }} />
 							<h1 className="ml-2 font-bold text-xl text-slate-800">VSG</h1>
 						</div>
 					</Link>
@@ -160,8 +164,8 @@ const Navigation: FC<BaseNavInterface> = ({
 					</div>
 				</div>
 			</div>
-		</div>
-	);
+        </div>
+    );
 };
 
 export default Navigation;

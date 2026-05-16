@@ -1,4 +1,4 @@
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { FC, ReactNode, useState } from 'react';
 
 const BlurImage: FC<{ src: string; alt: string; className?: string; children?: ReactNode }> = ({
@@ -11,30 +11,32 @@ const BlurImage: FC<{ src: string; alt: string; className?: string; children?: R
 	const [aspectRatio, setAspectRatio] = useState(16 / 9);
 
 	return (
-		<div
+        <div
 			className={`relative w-full overflow-hidden rounded-lg bg-gray-200 ${
 				className || ''
 			}`}
 			style={{ aspectRatio: `${aspectRatio}` }}
 		>
-			<Image
-				alt={alt}
-				src={src}
-				layout="fill"
-				objectFit="cover"
-				className={`
+            <Image
+                alt={alt}
+                src={src}
+                className={`
 					group-hover:opacity-75 duration-700 ease-in-out
 					${isLoading ? 'grayscale blur-2xl scale-110' : 'grayscale-0 blur-0 scale-100'}`}
-				onLoadingComplete={(img) => {
+                onLoadingComplete={(img) => {
 					setLoading(false);
 					if (img.naturalWidth && img.naturalHeight) {
 						setAspectRatio(img.naturalWidth / img.naturalHeight);
 					}
 				}}
-			/>
-			{children}
-		</div>
-	);
+                fill
+                sizes="100vw"
+                style={{
+                    objectFit: "cover"
+                }} />
+            {children}
+        </div>
+    );
 };
 
 export default BlurImage;

@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from "next/legacy/image";
+import Image from "next/image";
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { UrlObject } from 'url';
@@ -92,13 +92,21 @@ const AdminHome = () => {
 	console.log(session);
 
 	return (
-		<Navigation title="VMS: Menu Admin" active="admin" isAdmin>
-			<Container>
+        <Navigation title="VMS: Menu Admin" active="admin" isAdmin>
+            <Container>
 				<Title>
 					<h2 className="text-amber-500 font-bold text-2xl">Administrator Menu</h2>
 				</Title>
 				<div className="p-4 mb-4 text-center">
-					<Image src="/images/welcome.svg" width="200" height="100" alt="welcome-image" />
+					<Image
+                        src="/images/welcome.svg"
+                        width="200"
+                        height="100"
+                        alt="welcome-image"
+                        style={{
+                            maxWidth: "100%",
+                            height: "auto"
+                        }} />
 				</div>
 
 				{(session?.user?.permissions?.location === true ||
@@ -308,8 +316,8 @@ const AdminHome = () => {
 					)}
 				</div>
 			</Container>
-		</Navigation>
-	);
+        </Navigation>
+    );
 };
 
 export default AdminHome;

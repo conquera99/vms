@@ -1,13 +1,21 @@
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { FC } from 'react';
 
 const Empty: FC<{ desc?: string; title?: string }> = ({ desc, title }) => {
 	return (
-		<div className="rounded-lg bg-slate-100">
-			<div className="text-center px-6 py-4">
+        <div className="rounded-lg bg-slate-100">
+            <div className="text-center px-6 py-4">
 				<div className="py-8">
 					<div className="mb-4">
-						<Image src="/images/empty.svg" width="250" height="150" alt="empty-icon" />
+						<Image
+                            src="/images/empty.svg"
+                            width="250"
+                            height="150"
+                            alt="empty-icon"
+                            style={{
+                                maxWidth: "100%",
+                                height: "auto"
+                            }} />
 					</div>
 					<p className="text-2xl text-gray-800 font-medium mb-2">
 						{title || 'Tidak ada data'}
@@ -17,8 +25,8 @@ const Empty: FC<{ desc?: string; title?: string }> = ({ desc, title }) => {
 					</p>
 				</div>
 			</div>
-		</div>
-	);
+        </div>
+    );
 };
 
 export default Empty;

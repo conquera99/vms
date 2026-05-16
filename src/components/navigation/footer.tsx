@@ -1,4 +1,4 @@
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from 'next/link';
 import { FC, ReactNode } from 'react';
 import { UrlObject } from 'url';
@@ -55,8 +55,8 @@ const Footer: FC<{ active?: string }> = ({ active }) => {
 	];
 
 	return (
-		<footer className="pb-16 text-slate-600 md:pb-0">
-			<div className="mx-auto mt-12 max-w-5xl px-4 pb-8 pt-10 xl:max-w-7xl">
+        <footer className="pb-16 text-slate-600 md:pb-0">
+            <div className="mx-auto mt-12 max-w-5xl px-4 pb-8 pt-10 xl:max-w-7xl">
 				<div className="overflow-hidden rounded-3xl border border-slate-200 bg-white/85 shadow-xl shadow-slate-200/35 backdrop-blur-sm">
 					<div className="pointer-events-none h-1.5 w-full bg-linear-to-r from-[#c8dded]/90 via-[#f4e3bd]/85 to-[#d7e6f2]/90" />
 					<div className="grid gap-8 px-5 py-8 sm:px-8 sm:py-10 md:grid-cols-3 md:gap-6 lg:px-12">
@@ -66,7 +66,15 @@ const Footer: FC<{ active?: string }> = ({ active }) => {
 						className="inline-flex items-center justify-center font-semibold text-slate-900 md:justify-start"
 					>
 						<div className="flex items-center">
-							<Image src="/logo.png" width={60} height={60} alt="logo" />
+							<Image
+                                src="/logo.png"
+                                width={60}
+                                height={60}
+                                alt="logo"
+                                style={{
+                                    maxWidth: "100%",
+                                    height: "auto"
+                                }} />
 							<h1 className="ml-2 text-2xl font-bold">VSG</h1>
 						</div>
 					</Link>
@@ -122,8 +130,8 @@ const Footer: FC<{ active?: string }> = ({ active }) => {
 					</p>
 				</div>
 			</div>
-		</footer>
-	);
+        </footer>
+    );
 };
 
 export default Footer;
