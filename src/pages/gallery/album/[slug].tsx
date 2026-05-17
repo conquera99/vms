@@ -78,7 +78,7 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 				});
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 

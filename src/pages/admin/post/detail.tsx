@@ -55,7 +55,6 @@ const Page = () => {
 	};
 
 	const onTextEditorChange = (newValue: Descendant[]) => {
-		console.log(newValue);
 		setValue(newValue);
 	};
 
@@ -100,7 +99,6 @@ const Page = () => {
 					if (response.data.data.content) {
 						response.data.data.content = JSON.parse(response.data.data.content);
 						setValue(response.data.data.content);
-						console.log(response.data.data.content);
 					}
 
 					if (response.data.data.image) {

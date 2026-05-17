@@ -116,8 +116,6 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 	const session = await getSession(context);
 
-	console.log('client-session', session);
-
 	if (session) {
 		return { redirect: { permanent: false, destination: '/' } };
 	}

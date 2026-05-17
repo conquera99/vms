@@ -60,8 +60,6 @@ export const authOptions = {
 						permissions: permissionsData,
 					};
 
-					console.log('user', user);
-
 					// Any object returned will be saved in `user` property of the JWT
 					return user;
 				} else {
@@ -101,8 +99,6 @@ export const authOptions = {
 	secret: process.env.SECRET,
 	callbacks: {
 		async redirect({ url, baseUrl }: redirectInterface) {
-			console.log('redirect:url', url);
-			console.log('redirect:baseUrl', baseUrl);
 			return url.startsWith(baseUrl) ? url : baseUrl;
 		},
 		async jwt({ token, user }: jwtInterface) {
@@ -115,8 +111,6 @@ export const authOptions = {
 			return token;
 		},
 		async session({ session, token }: sessionInterface) {
-			console.log('session:session', session);
-			console.log('session:token', token);
 			const sess: Session = {
 				...session,
 				user: {

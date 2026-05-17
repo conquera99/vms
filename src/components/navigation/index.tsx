@@ -67,13 +67,6 @@ const Navigation: FC<BaseNavInterface> = ({
 
 	useEffect(() => {
 		if (status !== 'loading') {
-			console.log('-----');
-			console.log('isAdmin', isAdmin);
-			console.log('router:isReady', router.isReady);
-			console.log('access', access);
-			console.log('auth:status', status);
-			console.log('auth:session', session?.user?.permissions);
-
 			if (isAdmin === true && router.isReady && status === 'unauthenticated') {
 				router.push('/');
 			}
