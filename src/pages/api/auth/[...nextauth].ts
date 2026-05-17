@@ -16,7 +16,15 @@ interface redirectInterface {
 interface sessionInterface {
 	session: Session;
 	token: JWT;
-	user: User;
+}
+
+interface jwtInterface {
+	token: JWT;
+	user?: User & {
+		id?: string;
+		username?: string;
+		permissions?: Record<string, boolean>;
+	};
 }
 
 export const authOptions = {
@@ -51,6 +59,8 @@ export const authOptions = {
 						email: 'admin@vsg.com',
 						permissions: permissionsData,
 					};
+
+					console.log('user', user);
 
 					// Any object returned will be saved in `user` property of the JWT
 					return user;
@@ -95,12 +105,22 @@ export const authOptions = {
 			console.log('redirect:baseUrl', baseUrl);
 			return url.startsWith(baseUrl) ? url : baseUrl;
 		},
-		async session({ session, token, user }: sessionInterface) {
+		async jwt({ token, user }: jwtInterface) {
+			if (user) {
+				token.id = user.id;
+				token.username = user.username;
+				token.permissions = user.permissions;
+			}
+
+			return token;
+		},
+		async session({ session, token }: sessionInterface) {
+			console.log('session:session', session);
+			console.log('session:token', token);
 			const sess: Session = {
 				...session,
 				user: {
 					...session.user,
-					...user,
 					id: token.id as string,
 					username: token.username as string,
 					permissions: token.permissions as Record<string, any>,
