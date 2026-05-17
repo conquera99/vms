@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 import { AddOutline } from 'antd-mobile-icons';
 
 import Title from 'components/display/title';

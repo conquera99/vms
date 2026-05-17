@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { CloseOutline, RightOutline } from 'antd-mobile-icons';
-import Form from 'rc-field-form';
+import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
@@ -87,7 +87,7 @@ const Page = () => {
 				</div>
 
 				<div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-					<Form form={form} onFinish={onFinish} initialValues={{ name: '' }}>
+					<Form layout="vertical" form={form} onFinish={onFinish} initialValues={{ name: '' }}>
 						<div className="grid grid-cols-1 gap-3">
 							<Input
 								name="name"

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
 import Link from 'next/link';
 import Image from "next/image";
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 
 import type { UrlObject } from 'url';
 

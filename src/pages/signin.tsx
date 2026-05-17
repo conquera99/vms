@@ -2,7 +2,7 @@ import type { GetServerSidePropsContext, NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getSession, getCsrfToken, signIn } from 'next-auth/react';
-import Form from 'rc-field-form';
+import { Form } from 'antd';
 import { useRouter } from 'next/router';
 
 import PageHead from 'components/general/page-head';
@@ -39,12 +39,12 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 					<Link href="/">
 						<Image
 							className="mx-auto"
-                            src="/logo.png"
-                            alt="Vsg-Logo"
+							src="/logo.png"
+							alt="Vsg-Logo"
 							width={82}
 							height={82}
 							sizes="82px"
-                            style={{
+							style={{
 								maxWidth: '100%',
 								height: 'auto',
 							}}
@@ -66,6 +66,7 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 					</div>
 
 					<Form
+						layout="vertical"
 						form={form}
 						onFinish={onFinish}
 						initialValues={{ username: '', password: '', csrfToken }}
@@ -83,11 +84,13 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 							input={{ autoComplete: 'current-password' }}
 						/>
 
-						{errorMessage ? (
-							<p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-500">
-								{errorMessage}
-							</p>
-						) : null}
+						<div className="p-2">
+							{errorMessage ? (
+								<p className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-500">
+									{errorMessage}
+								</p>
+							) : null}
+						</div>
 
 						<Button
 							icon={<RightOutline />}
@@ -110,7 +113,7 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 				</div>
 			</div>
 		</div>
-    );
+	);
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {

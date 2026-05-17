@@ -1,7 +1,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 import { AddOutline, LeftOutline, TagOutline } from 'antd-mobile-icons';
 
 import Navigation from 'components/navigation';

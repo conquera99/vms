@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import Link from 'next/link';
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 import { AddOutline } from 'antd-mobile-icons';
 
 import Title from 'components/display/title';

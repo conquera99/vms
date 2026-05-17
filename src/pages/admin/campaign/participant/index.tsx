@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CloseOutline, RightOutline, SendOutline } from 'antd-mobile-icons';
-import Form from 'rc-field-form';
+import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 import dayjs from 'dayjs';
 import copy from 'clipboard-copy';
 
@@ -218,6 +218,7 @@ const Page = () => {
 				</div>
 
 				<Form
+					layout="vertical"
 					form={form}
 					onFinish={onFinish}
 					initialValues={{

@@ -1,6 +1,8 @@
-import { DefaultOptionType } from 'rc-select/lib/Select';
+type SelectOptionLike = {
+	label?: string;
+};
 
-export const selectFilter = (input: string, option: DefaultOptionType | undefined): boolean =>
+export const selectFilter = (input: string, option: SelectOptionLike | undefined): boolean =>
 	(option?.label as string).toLowerCase().indexOf(input.toLowerCase()) >= 0;
 
 export const formatNumber = (

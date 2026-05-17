@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 import { AddOutline, LeftOutline, LoopOutline, UnorderedListOutline } from 'antd-mobile-icons';
 
 import Navigation from 'components/navigation';

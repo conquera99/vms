@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800&display=swap');
+
 @import 'tailwindcss';
 @plugin '@tailwindcss/aspect-ratio';
-@custom-variant dark (&:where(.dark, .dark *));
+
 @reference "tailwindcss";
 
 :root {
@@ -31,9 +32,6 @@ body {
 }
 
 /* purgecss start ignore */
-p {
-	/* margin: 0; */
-}
 
 pre {
 	padding: 10px;

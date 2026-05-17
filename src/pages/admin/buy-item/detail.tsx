@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { CloseOutline, RightOutline } from 'antd-mobile-icons';
-import Form from 'rc-field-form';
+import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 import dayjs from 'dayjs';
 
-import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import { InputNumber } from 'components/entry/input';
@@ -37,6 +36,7 @@ const Page = () => {
 	const [loading, setLoading] = useState(false);
 	const [file, setFile] = useState<File | null>(null);
 	const [image, setImage] = useState<string | undefined>(undefined);
+	const isEditMode = Boolean(router.query.id);
 
 	const removeImage = () => setFile(null);
 
@@ -59,7 +59,6 @@ const Page = () => {
 		formData.append('itemId', values.itemId);
 		formData.append('date', values.date);
 		formData.append('price', values.price);
-		formData.append('qty', values.qty);
 		formData.append('qty', values.qty);
 
 		if (file) {
@@ -93,8 +92,9 @@ const Page = () => {
 		if (router.query.id) {
 			axios.get(`/api/admin/buy-item?id=${router.query.id}`).then((response) => {
 				if (response.data.code === 0) {
-					if (response.data.data.date)
+					if (response.data.data.date) {
 						response.data.data.date = dayjs(response.data.data.date);
+					}
 
 					if (response.data.data.image) {
 						setImage(response.data.data.image);
@@ -109,9 +109,17 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Beli Item Detail" active="admin" access="item_history" isAdmin>
 			<ContainerAdmin>
-				<Title>
-					<div className="flex justify-between items-center">
-						<Breadcrumb data={breadcrumb} />
+				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6">
+					<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+						<div>
+							<Breadcrumb data={breadcrumb} />
+							<h1 className="mt-3 text-2xl font-bold text-slate-800">
+								{isEditMode ? 'Detail Pembelian Item' : 'Tambah Pembelian Item'}
+							</h1>
+							<p className="text-sm text-slate-600">
+								Catat item masuk beserta harga dan bukti transaksi pembelian.
+							</p>
+						</div>
 						<LinkButton
 							href="/admin/buy-item"
 							size="small"
@@ -119,69 +127,88 @@ const Page = () => {
 							icon={<CloseOutline />}
 							className="text-base"
 						>
-							Tutup
+							Kembali
 						</LinkButton>
 					</div>
-				</Title>
+				</div>
 
-				<Form
-					form={form}
-					onFinish={onFinish}
-					initialValues={{ itemId: undefined, date: null, price: 0, qty: 0 }}
-				>
-					<Select
-						options={item}
-						name="itemId"
-						label="Pilih Item"
-						labelKey="name"
-						valueKey="id"
-						required
-						rules={[{ required: true, message: 'item harus dipilih' }]}
-						disabled={router.query.id ? true : false}
-					/>
-					<DatePicker
-						name="date"
-						label="Tanggal Beli"
-						required
-						rules={[{ required: true, message: 'tanggal harus dipilih' }]}
-						disabled={router.query.id ? true : false}
-					/>
-					<InputNumber
-						name="price"
-						label="Harga"
-						required
-						rules={[{ required: true, message: 'harga harus diisi' }]}
-						input={{ disabled: router.query.id ? true : false }}
-					/>
-					<InputNumber
-						name="qty"
-						label="Qty"
-						required
-						rules={[{ required: true, message: 'qty harus diisi' }]}
-						input={{ disabled: router.query.id ? true : false }}
-					/>
-					<Upload
-						file={file}
-						image={image}
-						disabled={!router.query.id ? false : true}
-						showPreview={router.query.id ? true : false}
-						onRemoveImage={removeImage}
-						beforeUpload={beforeUpload}
-					/>
+				<div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+					<Form
+						layout="vertical"
+						form={form}
+						onFinish={onFinish}
+						initialValues={{ itemId: undefined, date: null, price: 0, qty: 0 }}
+					>
+						<div className="mb-4">
+							<h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+								Informasi Pembelian
+							</h2>
+							<div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+								<Select
+									options={item}
+									name="itemId"
+									label="Pilih Item"
+									labelKey="name"
+									valueKey="id"
+									required
+									className="mb-0 md:col-span-2"
+									rules={[{ required: true, message: 'item harus dipilih' }]}
+									disabled={isEditMode}
+								/>
+								<DatePicker
+									name="date"
+									label="Tanggal Beli"
+									required
+									className="mb-0"
+									rules={[{ required: true, message: 'tanggal harus dipilih' }]}
+									disabled={isEditMode}
+								/>
+								<InputNumber
+									name="qty"
+									label="Qty"
+									required
+									className="mb-0"
+									rules={[{ required: true, message: 'qty harus diisi' }]}
+									input={{ disabled: isEditMode }}
+								/>
+								<InputNumber
+									name="price"
+									label="Harga"
+									required
+									className="mb-0 md:col-span-2"
+									rules={[{ required: true, message: 'harga harus diisi' }]}
+									input={{ disabled: isEditMode }}
+								/>
+							</div>
+						</div>
 
-					{!router.query.id && (
-						<Button
-							type="submit"
-							className="w-full"
-							buttonType="primary"
-							loading={loading}
-							icon={<RightOutline />}
-							iconLocation="right"
-						>
-							Simpan
-						</Button>
-					)}
-				</Form>
+						<div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3">
+							<Upload
+								file={file}
+								image={image}
+								disabled={isEditMode}
+								showPreview={isEditMode}
+								onRemoveImage={removeImage}
+								beforeUpload={beforeUpload}
+							/>
+						</div>
+
+						{!isEditMode && (
+							<div className="mt-6 flex items-center justify-end border-t border-slate-100 pt-4">
+								<Button
+									type="submit"
+									className="w-full md:w-auto md:min-w-40"
+									buttonType="primary"
+									loading={loading}
+									icon={<RightOutline />}
+									iconLocation="right"
+								>
+									Simpan Data
+								</Button>
+							</div>
+						)}
+					</Form>
+				</div>
 			</ContainerAdmin>
 		</Navigation>
 	);
