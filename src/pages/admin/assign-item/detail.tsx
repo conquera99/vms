@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CloseOutline, RightOutline } from 'antd-mobile-icons';
+import { AppOutline, CloseOutline, RightOutline } from 'antd-mobile-icons';
 import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -37,6 +37,7 @@ const Page = () => {
 	const [loading, setLoading] = useState(false);
 
 	const isViewMode = Boolean(router.query.locId && router.query.itemId);
+	const remainingQty = Math.max(maxQty, 0);
 
 	const onFinish = (values: any) => {
 		setLoading(true);
@@ -94,41 +95,85 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Atur Lokasi Detail" active="admin" access="item_history" isAdmin>
 			<ContainerAdmin>
-				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6">
-					<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-						<div>
+				<div className="mt-6 overflow-hidden rounded-[2rem] border border-cyan-200/80 bg-linear-to-br from-cyan-50 via-white to-sky-50 shadow-sm">
+					<div className="flex flex-col gap-6 p-6 md:p-7 lg:flex-row lg:items-end lg:justify-between">
+						<div className="max-w-2xl">
 							<Breadcrumb data={breadcrumb} />
-							<h1 className="mt-3 text-2xl font-bold text-slate-800">
+							<div className="mt-4 inline-flex items-center gap-2 rounded-full border border-cyan-200 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-700">
+								<AppOutline />
+								Distribusi Lokasi
+							</div>
+							<h1 className="mt-4 text-3xl font-black tracking-tight text-slate-800 sm:text-4xl">
 								{isViewMode ? 'Detail Penempatan Item' : 'Tambah Penempatan Item'}
 							</h1>
-							<p className="text-sm text-slate-600">
-								Atur lokasi penempatan item agar distribusi inventaris tetap akurat.
+							<p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+								Atur distribusi item per lokasi dengan tampilan yang memudahkan pengecekan
+								kapasitas dan penempatan aktif.
 							</p>
 						</div>
-						<LinkButton
-							href="/admin/assign-item"
-							size="small"
-							buttonType="warning"
-							icon={<CloseOutline />}
-							className="text-base"
-						>
-							Kembali
-						</LinkButton>
+						<div className="flex flex-col gap-3 sm:min-w-80">
+							<div className="grid grid-cols-3 gap-3">
+								<div className="rounded-2xl border border-cyan-200 bg-white/90 px-4 py-3 text-center shadow-sm">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+										Item
+									</p>
+									<p className="mt-2 text-2xl font-black text-slate-800">{item.length}</p>
+								</div>
+								<div className="rounded-2xl border border-cyan-200 bg-white/90 px-4 py-3 text-center shadow-sm">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+										Lokasi
+									</p>
+									<p className="mt-2 text-2xl font-black text-slate-800">{location.length}</p>
+								</div>
+								<div className="rounded-2xl border border-cyan-200 bg-white/90 px-4 py-3 text-center shadow-sm">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+										Sisa Qty
+									</p>
+									<p className="mt-2 text-2xl font-black text-slate-800">{remainingQty}</p>
+								</div>
+							</div>
+							<LinkButton
+								href="/admin/assign-item"
+								size="small"
+								buttonType="warning"
+								icon={<CloseOutline />}
+								className="w-full justify-center text-base"
+							>
+								Kembali
+							</LinkButton>
+						</div>
 					</div>
 				</div>
 
-				<div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-					<Form
-						layout="vertical"
-						form={form}
-						onFinish={onFinish}
-						initialValues={{ itemId: undefined, locId: undefined, qty: 0 }}
-					>
-						<div className="mb-4">
-							<h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
-								Informasi Penempatan
-							</h2>
-							<div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+				<div className="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+					<div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-7">
+						<Form
+							layout="vertical"
+							form={form}
+							onFinish={onFinish}
+							initialValues={{ itemId: undefined, locId: undefined, qty: 0 }}
+						>
+							<div className="mb-6 flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+								<div>
+									<p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-600">
+										Form Penempatan
+									</p>
+									<h2 className="mt-2 text-xl font-bold text-slate-800">Distribusi Item</h2>
+									<p className="mt-1 text-sm text-slate-500">
+										Tentukan item, lokasi tujuan, dan jumlah yang akan ditempatkan.
+									</p>
+								</div>
+								<div className="rounded-2xl bg-cyan-50 px-4 py-3 text-right">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-700">
+										Mode
+									</p>
+									<p className="mt-1 text-sm font-bold text-slate-800">
+										{isViewMode ? 'Lihat Penempatan' : 'Tambah Penempatan'}
+									</p>
+								</div>
+							</div>
+
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<Select
 									options={item}
 									name="itemId"
@@ -159,28 +204,9 @@ const Page = () => {
 									input={{ disabled: isViewMode }}
 								/>
 							</div>
-						</div>
 
-						{!isViewMode && (
-							<div className="mb-2 rounded-xl border border-slate-200 bg-slate-50 p-4">
-								<p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-									Kapasitas Item
-								</p>
-								<div className="mt-2 grid grid-cols-2 gap-3">
-									<div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-center">
-										<p className="text-xs text-slate-500">Sisa Qty Tersedia</p>
-										<p className="text-xl font-bold text-slate-800">{maxQty}</p>
-									</div>
-									<div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-center">
-										<p className="text-xs text-slate-500">Qty Sudah Ditempatkan</p>
-										<p className="text-xl font-bold text-slate-800">{usedQty}</p>
-									</div>
-								</div>
-							</div>
-						)}
-
-						{!isViewMode && (
-							<div className="mt-6 flex items-center justify-end border-t border-slate-100 pt-4">
+							{!isViewMode && (
+								<div className="mt-8 flex items-center justify-end border-t border-slate-100 pt-5">
 								<Button
 									type="submit"
 									className="w-full md:w-auto md:min-w-40"
@@ -191,9 +217,39 @@ const Page = () => {
 								>
 									Simpan Data
 								</Button>
+								</div>
+							)}
+						</Form>
+					</div>
+
+					<aside className="space-y-5">
+						<div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
+							<p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+								Kapasitas Item
+							</p>
+							<div className="mt-4 space-y-3">
+								<div className="rounded-2xl border border-cyan-200 bg-cyan-50 px-4 py-3">
+									<p className="text-xs text-cyan-700">Sisa Qty Tersedia</p>
+									<p className="mt-1 text-2xl font-black text-cyan-900">{remainingQty}</p>
+								</div>
+								<div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+									<p className="text-xs text-slate-500">Qty Sudah Ditempatkan</p>
+									<p className="mt-1 text-2xl font-black text-slate-800">{usedQty}</p>
+								</div>
 							</div>
-						)}
-					</Form>
+						</div>
+
+						<div className="rounded-[1.75rem] border border-cyan-200 bg-cyan-50/80 p-5 shadow-sm">
+							<p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-700">
+								Panduan Penempatan
+							</p>
+							<ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate-600">
+								<li>Pilih item lebih dulu untuk memunculkan sisa kapasitas yang relevan.</li>
+								<li>Gunakan lokasi yang benar agar perhitungan stok per ruang tetap sesuai.</li>
+								<li>Mode lihat dipakai untuk mengecek data penempatan yang sudah tersimpan.</li>
+							</ul>
+						</div>
+					</aside>
 				</div>
 			</ContainerAdmin>
 		</Navigation>

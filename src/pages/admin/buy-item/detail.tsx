@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CloseOutline, RightOutline } from 'antd-mobile-icons';
+import { CloseOutline, RightOutline, ShopbagOutline } from 'antd-mobile-icons';
 import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -109,41 +109,81 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Beli Item Detail" active="admin" access="item_history" isAdmin>
 			<ContainerAdmin>
-				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6">
-					<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-						<div>
+				<div className="mt-6 overflow-hidden rounded-[2rem] border border-amber-200/80 bg-linear-to-br from-orange-50 via-white to-amber-50 shadow-sm">
+					<div className="flex flex-col gap-6 p-6 md:p-7 lg:flex-row lg:items-end lg:justify-between">
+						<div className="max-w-2xl">
 							<Breadcrumb data={breadcrumb} />
-							<h1 className="mt-3 text-2xl font-bold text-slate-800">
+							<div className="mt-4 inline-flex items-center gap-2 rounded-full border border-orange-200 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-orange-700">
+								<ShopbagOutline />
+								Pembelian Stok
+							</div>
+							<h1 className="mt-4 text-3xl font-black tracking-tight text-slate-800 sm:text-4xl">
 								{isEditMode ? 'Detail Pembelian Item' : 'Tambah Pembelian Item'}
 							</h1>
-							<p className="text-sm text-slate-600">
-								Catat item masuk beserta harga dan bukti transaksi pembelian.
+							<p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+								Catat stok masuk, harga pembelian, dan bukti visual agar histori barang
+								lebih lengkap dan mudah diaudit.
 							</p>
 						</div>
-						<LinkButton
-							href="/admin/buy-item"
-							size="small"
-							buttonType="warning"
-							icon={<CloseOutline />}
-							className="text-base"
-						>
-							Kembali
-						</LinkButton>
+						<div className="flex flex-col gap-3 sm:min-w-72">
+							<div className="grid grid-cols-2 gap-3">
+								<div className="rounded-2xl border border-orange-200 bg-white/90 px-4 py-3 shadow-sm">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+										Mode
+									</p>
+									<p className="mt-2 text-sm font-bold text-slate-800">
+										{isEditMode ? 'Lihat Riwayat' : 'Input Baru'}
+									</p>
+								</div>
+								<div className="rounded-2xl border border-orange-200 bg-white/90 px-4 py-3 shadow-sm">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+										Item Aktif
+									</p>
+									<p className="mt-2 text-sm font-bold text-slate-800">{item.length}</p>
+								</div>
+							</div>
+							<LinkButton
+								href="/admin/buy-item"
+								size="small"
+								buttonType="warning"
+								icon={<CloseOutline />}
+								className="w-full justify-center text-base"
+							>
+								Kembali ke Riwayat
+							</LinkButton>
+						</div>
 					</div>
 				</div>
 
-				<div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-					<Form
-						layout="vertical"
-						form={form}
-						onFinish={onFinish}
-						initialValues={{ itemId: undefined, date: null, price: 0, qty: 0 }}
-					>
-						<div className="mb-4">
-							<h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
-								Informasi Pembelian
-							</h2>
-							<div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+				<div className="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+					<div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-7">
+						<Form
+							layout="vertical"
+							form={form}
+							onFinish={onFinish}
+							initialValues={{ itemId: undefined, date: null, price: 0, qty: 0 }}
+						>
+							<div className="mb-6 flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+								<div>
+									<p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-orange-600">
+										Form Pembelian
+									</p>
+									<h2 className="mt-2 text-xl font-bold text-slate-800">Informasi Transaksi</h2>
+									<p className="mt-1 text-sm text-slate-500">
+										Semua data di bawah ini akan disimpan sebagai histori stok masuk.
+									</p>
+								</div>
+								<div className="rounded-2xl bg-orange-50 px-4 py-3 text-right">
+									<p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-orange-700">
+										Status
+									</p>
+									<p className="mt-1 text-sm font-bold text-slate-800">
+										{isEditMode ? 'Terkunci' : 'Siap Disimpan'}
+									</p>
+								</div>
+							</div>
+
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 								<Select
 									options={item}
 									name="itemId"
@@ -180,9 +220,8 @@ const Page = () => {
 									input={{ disabled: isEditMode }}
 								/>
 							</div>
-						</div>
 
-						<div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3">
+							<div className="mt-6 rounded-[1.5rem] border border-dashed border-orange-200 bg-orange-50/70 px-4 py-4">
 							<Upload
 								file={file}
 								image={image}
@@ -191,10 +230,10 @@ const Page = () => {
 								onRemoveImage={removeImage}
 								beforeUpload={beforeUpload}
 							/>
-						</div>
+							</div>
 
-						{!isEditMode && (
-							<div className="mt-6 flex items-center justify-end border-t border-slate-100 pt-4">
+							{!isEditMode && (
+								<div className="mt-8 flex items-center justify-end border-t border-slate-100 pt-5">
 								<Button
 									type="submit"
 									className="w-full md:w-auto md:min-w-40"
@@ -205,9 +244,41 @@ const Page = () => {
 								>
 									Simpan Data
 								</Button>
+								</div>
+							)}
+						</Form>
+					</div>
+
+					<aside className="space-y-5">
+						<div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm mb-5">
+							<p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+								Panduan Cepat
+							</p>
+							<ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate-600">
+								<li>Pilih item yang benar sebelum mencatat kuantitas pembelian.</li>
+								<li>Gunakan tanggal transaksi aktual agar histori stok tetap akurat.</li>
+								<li>Lampirkan bukti gambar untuk memudahkan verifikasi saat audit.</li>
+							</ul>
+						</div>
+
+						<div className="rounded-[1.75rem] border border-orange-200 bg-orange-50/80 p-5 shadow-sm">
+							<p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-orange-700">
+								Kondisi Halaman
+							</p>
+							<div className="mt-4 space-y-3">
+								<div className="rounded-2xl border border-orange-200 bg-white/90 px-4 py-3">
+									<p className="text-xs text-slate-500">Form</p>
+									<p className="mt-1 text-base font-bold text-slate-800">
+										{isEditMode ? 'Mode lihat transaksi' : 'Mode tambah pembelian'}
+									</p>
+								</div>
+								<div className="rounded-2xl border border-orange-200 bg-white/90 px-4 py-3">
+									<p className="text-xs text-slate-500">Referensi Item</p>
+									<p className="mt-1 text-base font-bold text-slate-800">{item.length} item tersedia</p>
+								</div>
 							</div>
-						)}
-					</Form>
+						</div>
+					</aside>
 				</div>
 			</ContainerAdmin>
 		</Navigation>
