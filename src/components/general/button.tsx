@@ -38,7 +38,7 @@ const buttonTypeClass = {
 };
 
 const sizeClass = {
-	normal: 'px-6 py-3',
+	normal: 'px-6 py-2',
 	small: 'px-3 py-1',
 };
 

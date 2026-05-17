@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 
-import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
@@ -35,6 +34,7 @@ const Page = () => {
 	const [loading, setLoading] = useState(false);
 	const [file, setFile] = useState<File | null>(null);
 	const [image, setImage] = useState<string | undefined>(undefined);
+	const isEditMode = Boolean(router.query.id);
 
 	const removeImage = () => setFile(null);
 
@@ -108,9 +108,17 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Mendiang Detail" active="admin" access="deceased" isAdmin>
 			<ContainerAdmin>
-				<Title>
-					<div className="flex justify-between items-center">
-						<Breadcrumb data={breadcrumb} />
+				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6">
+					<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+						<div>
+							<Breadcrumb data={breadcrumb} />
+							<h1 className="mt-3 text-2xl font-bold text-slate-800">
+								{isEditMode ? 'Ubah Data Mendiang' : 'Tambah Data Mendiang'}
+							</h1>
+							<p className="text-sm text-slate-600">
+								Susun data kelahiran, wafat, dan keluarga untuk dokumentasi yang rapi.
+							</p>
+						</div>
 						<LinkButton
 							href="/admin/deceased"
 							size="small"
@@ -118,56 +126,98 @@ const Page = () => {
 							icon={<CloseOutline />}
 							className="text-base"
 						>
-							Tutup
+							Kembali
 						</LinkButton>
 					</div>
-				</Title>
+				</div>
 
-				<Form
-					form={form}
-					onFinish={onFinish}
-					initialValues={{
-						name: '',
-						dateOfBirth: null,
-						dateOfDeath: null,
-						placeOfBirth: '',
-						placeOfDeath: '',
-						birthNotes: '',
-						deathNotes: '',
-						family: '',
-					}}
-				>
-					<Input
-						name="name"
-						label="Nama Lengkap"
-						required
-						rules={[{ required: true, message: 'nama lengkap wajib diisi' }]}
-					/>
-					<Input name="placeOfBirth" label="Tempat Lahir" />
-					<DatePicker name="dateOfBirth" allowClear label="Tanggal Lahir" />
-					<Input name="birthNotes" label="Catatan Lahir" />
-					<Input name="placeOfDeath" label="Tempat Wafat" />
-					<DatePicker name="dateOfDeath" allowClear label="Tanggal Wafat" />
-					<Input name="deathNotes" label="Catatan Wafat" />
-					<Input name="family" label="Keluarga" />
-					<Upload
-						file={file}
-						image={image}
-						showPreview={router.query.id ? true : false}
-						onRemoveImage={removeImage}
-						beforeUpload={beforeUpload}
-					/>
-					<Button
-						type="submit"
-						className="w-full"
-						buttonType="primary"
-						loading={loading}
-						icon={<RightOutline />}
-						iconLocation="right"
+				<div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+					<Form
+						form={form}
+						onFinish={onFinish}
+						initialValues={{
+							name: '',
+							dateOfBirth: null,
+							dateOfDeath: null,
+							placeOfBirth: '',
+							placeOfDeath: '',
+							birthNotes: '',
+							deathNotes: '',
+							family: '',
+						}}
 					>
-						Simpan
-					</Button>
-				</Form>
+						<div className="mb-4">
+							<h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+								Identitas
+							</h2>
+							<div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+								<Input
+									name="name"
+									label="Nama Lengkap"
+									required
+									className="mb-0 md:col-span-2"
+									rules={[{ required: true, message: 'nama lengkap wajib diisi' }]}
+								/>
+								<Input name="family" label="Keluarga" className="mb-0" />
+							</div>
+						</div>
+
+						<div className="mb-4">
+							<h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+								Informasi Lahir
+							</h2>
+							<div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+								<Input name="placeOfBirth" label="Tempat Lahir" className="mb-0" />
+								<DatePicker
+									name="dateOfBirth"
+									allowClear
+									label="Tanggal Lahir"
+									className="mb-0"
+								/>
+								<Input name="birthNotes" label="Catatan Lahir" className="mb-0 md:col-span-2" />
+							</div>
+						</div>
+
+						<div className="mb-4">
+							<h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+								Informasi Wafat
+							</h2>
+							<div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+								<Input name="placeOfDeath" label="Tempat Wafat" className="mb-0" />
+								<DatePicker
+									name="dateOfDeath"
+									allowClear
+									label="Tanggal Wafat"
+									className="mb-0"
+								/>
+								<Input name="deathNotes" label="Catatan Wafat" className="mb-0 md:col-span-2" />
+							</div>
+						</div>
+
+						<div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3">
+							<Upload
+								file={file}
+								image={image}
+								showPreview={router.query.id ? true : false}
+								onRemoveImage={removeImage}
+								beforeUpload={beforeUpload}
+							/>
+						</div>
+
+						<div className="mt-6 flex items-center justify-end border-t border-slate-100 pt-4">
+							<Button
+								type="submit"
+								className="w-full md:w-auto md:min-w-40"
+								buttonType="primary"
+								loading={loading}
+								icon={<RightOutline />}
+								iconLocation="right"
+							>
+								{isEditMode ? 'Simpan Perubahan' : 'Simpan Data'}
+							</Button>
+						</div>
+					</Form>
+				</div>
 			</ContainerAdmin>
 		</Navigation>
 	);

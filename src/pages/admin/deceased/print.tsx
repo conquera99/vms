@@ -113,7 +113,7 @@ const Page = () => {
 										MENDIANG {data?.name}
 									</h2>
 									<div className="grid grid-cols-1">
-										<div className="text-xl col-6">
+										<div className="text-xl">
 											<p className="font-semibold">
 												<span className="font-normal">LAHIR:&nbsp;</span>
 												{data?.placeOfBirth ? `${data.placeOfBirth}, ` : ''}
@@ -125,7 +125,7 @@ const Page = () => {
 												{data?.birthNotes ? ` (${data.birthNotes})` : ''}
 											</p>
 										</div>
-										<div className="text-xl col-6">
+										<div className="text-xl">
 											<p className="font-semibold">
 												<span className="font-normal">WAFAT:&nbsp;</span>
 												{data?.placeOfDeath ? `${data.placeOfDeath}, ` : ''}
