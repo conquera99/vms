@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
 import Link from 'next/link';
 import Image from "next/image";
+import { toast } from 'react-toastify';
 
 import type { UrlObject } from 'url';
 
@@ -14,6 +15,7 @@ import Forbidden from 'components/display/forbidden';
 import Footer from 'components/navigation/footer';
 
 const ACTIVE_TEXT_COLOR = 'text-slate-800';
+const SW_UPDATE_TOAST_ID = 'sw-update-toast';
 
 const MenuItem: FC<{
 	icon?: ReactNode;
@@ -80,11 +82,96 @@ const Navigation: FC<BaseNavInterface> = ({
 	// This hook only run once in browser after the component is rendered for the first time.
 	// It has same effect as the old componentDidMount lifecycle callback.
 	useEffect(() => {
-		if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-			navigator.serviceWorker.register('/vsg-worker.js', { scope: '/' }).catch((error) => {
+		if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
+			return;
+		}
+
+		if (process.env.NODE_ENV !== 'production') {
+			navigator.serviceWorker
+				.getRegistrations()
+				.then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+				.catch(() => undefined);
+
+			if ('caches' in window) {
+				caches
+					.keys()
+					.then((keys) => Promise.all(keys.map((key) => caches.delete(key))))
+					.catch(() => undefined);
+			}
+
+			return;
+		}
+
+		let reloaded = false;
+
+		const onControllerChange = () => {
+			if (reloaded) {
+				return;
+			}
+
+			reloaded = true;
+			window.location.reload();
+		};
+
+		navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+
+		const askForUpdate = (registration: ServiceWorkerRegistration) => {
+			if (!registration.waiting || toast.isActive(SW_UPDATE_TOAST_ID)) {
+				return;
+			}
+
+			toast.info(
+				<div className="flex flex-col gap-2">
+					<p className="text-sm">Versi baru aplikasi tersedia.</p>
+					<button
+						type="button"
+						className="self-start rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white"
+						onClick={() => {
+							registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+							toast.dismiss(SW_UPDATE_TOAST_ID);
+						}}
+					>
+						Muat Ulang
+					</button>
+				</div>,
+				{
+					autoClose: false,
+					closeOnClick: false,
+					draggable: false,
+					toastId: SW_UPDATE_TOAST_ID,
+				},
+			);
+		};
+
+		navigator.serviceWorker
+			.register('/vsg-worker.js', { scope: '/' })
+			.then((registration) => {
+				askForUpdate(registration);
+
+				registration.addEventListener('updatefound', () => {
+					const installingWorker = registration.installing;
+
+					if (!installingWorker) {
+						return;
+					}
+
+					installingWorker.addEventListener('statechange', () => {
+						if (
+							installingWorker.state === 'installed' &&
+							navigator.serviceWorker.controller
+						) {
+							askForUpdate(registration);
+						}
+					});
+				});
+			})
+			.catch((error) => {
 				console.error('Service worker registration failed', error);
 			});
-		}
+
+		return () => {
+			navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+		};
 	}, []);
 
 	if (isSuperAdminOnly && status === 'authenticated' && session?.user?.username !== 'sysadm') {
