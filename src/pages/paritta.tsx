@@ -24,7 +24,10 @@ const TRACKS: Track[] = [
 	{ title: '11. Karaniya Metta Sutta', src: '/sounds/paritta/11-karaniya-metta-sutta.mp4' },
 	{ title: '12. Brahmavihara Pharanaa', src: '/sounds/paritta/12-brahmavihara-pharana.mp4' },
 	{ title: '13. Abhinhapaccavekkahana', src: '/sounds/paritta/13-abhinhapaccavekkahana.mp4' },
-	{ title: '14. Aradhana Tisarana Pancasila', src: '/sounds/paritta/14-aradhana-tisarana-pancasila.mp4' },
+	{
+		title: '14. Aradhana Tisarana Pancasila',
+		src: '/sounds/paritta/14-aradhana-tisarana-pancasila.mp4',
+	},
 	{ title: '15. Aradhana Dhammadesana', src: '/sounds/paritta/15-aradhana-dhammadesana.mp4' },
 	{ title: '16. Ettavatta', src: '/sounds/paritta/16-ettavatta.mp4' },
 ];
@@ -192,7 +195,9 @@ const ParittaPage = () => {
 							<p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">
 								Now Playing
 							</p>
-							<h2 className="mt-2 text-xl font-semibold text-slate-800">{currentTrack.title}</h2>
+							<h2 className="mt-2 text-xl font-semibold text-slate-800">
+								{currentTrack.title}
+							</h2>
 
 							<div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
 								<div
@@ -257,8 +262,12 @@ const ParittaPage = () => {
 								ref={audioRef}
 								src={currentTrack.src}
 								preload="metadata"
-								onLoadedMetadata={(event) => setDuration(event.currentTarget.duration || 0)}
-								onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+								onLoadedMetadata={(event) =>
+									setDuration(event.currentTarget.duration || 0)
+								}
+								onTimeUpdate={(event) =>
+									setCurrentTime(event.currentTarget.currentTime)
+								}
 								onEnded={onEnded}
 							/>
 						</div>
@@ -273,14 +282,16 @@ const ParittaPage = () => {
 										key={track.src}
 										type="button"
 										onClick={() => selectTrack(index, true)}
-										className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition ${
+										className={`w-full rounded-xl border px-3 py-2 text-left text-sm transition mb-2 ${
 											index === currentIndex
 												? 'border-[#c8dded] bg-[#edf4fa] text-[#486d92]'
 												: 'border-slate-100 bg-white text-slate-700 hover:bg-slate-50'
 										}`}
 									>
 										<div className="flex items-center justify-between gap-3">
-											<span className="truncate font-medium">{track.title}</span>
+											<span className="truncate font-medium">
+												{track.title}
+											</span>
 											{index === currentIndex && (
 												<span className="text-xs font-semibold uppercase tracking-wide">
 													{isPlaying ? 'Playing' : 'Selected'}
