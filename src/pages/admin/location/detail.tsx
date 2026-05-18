@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { CloseOutline, RightOutline } from 'antd-mobile-icons';
-import Form from 'rc-field-form';
+import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
+import { toast } from 'utils/toast';
 
-import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Input from 'components/entry/input';
@@ -30,6 +29,7 @@ const Page = () => {
 	const [form] = Form.useForm();
 
 	const [loading, setLoading] = useState(false);
+	const isEditMode = Boolean(router.query.id);
 
 	const onFinish = (values: any) => {
 		setLoading(true);
@@ -63,9 +63,17 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Lokasi Detail" active="admin" access="location" isAdmin>
 			<ContainerAdmin>
-				<Title>
-					<div className="flex justify-between items-center">
-						<Breadcrumb data={breadcrumb} />
+				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6">
+					<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+						<div>
+							<Breadcrumb data={breadcrumb} />
+							<h1 className="mt-3 text-2xl font-bold text-slate-800">
+								{isEditMode ? 'Ubah Lokasi' : 'Tambah Lokasi'}
+							</h1>
+							<p className="text-sm text-slate-600">
+								Kelola data lokasi untuk penempatan item dan kebutuhan administrasi.
+							</p>
+						</div>
 						<LinkButton
 							href="/admin/location"
 							size="small"
@@ -73,29 +81,36 @@ const Page = () => {
 							icon={<CloseOutline />}
 							className="text-base"
 						>
-							Tutup
+							Kembali
 						</LinkButton>
 					</div>
-				</Title>
+				</div>
 
-				<Form form={form} onFinish={onFinish} initialValues={{ name: '' }}>
-					<Input
-						name="name"
-						label="Nama Lokasi"
-						required
-						rules={[{ required: true, message: 'nama lokasi wajib diisi' }]}
-					/>
-					<Button
-						type="submit"
-						className="w-full"
-						buttonType="primary"
-						loading={loading}
-						icon={<RightOutline />}
-						iconLocation="right"
-					>
-						Simpan
-					</Button>
-				</Form>
+				<div className="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+					<Form layout="vertical" form={form} onFinish={onFinish} initialValues={{ name: '' }}>
+						<div className="grid grid-cols-1 gap-3">
+							<Input
+								name="name"
+								label="Nama Lokasi"
+								required
+								className="mb-0"
+								rules={[{ required: true, message: 'nama lokasi wajib diisi' }]}
+							/>
+						</div>
+						<div className="mt-6 flex items-center justify-end border-t border-slate-100 pt-4">
+							<Button
+								type="submit"
+								className="w-full md:w-auto md:min-w-40"
+								buttonType="primary"
+								loading={loading}
+								icon={<RightOutline />}
+								iconLocation="right"
+							>
+								{isEditMode ? 'Simpan Perubahan' : 'Simpan Data'}
+							</Button>
+						</div>
+					</Form>
+				</div>
 			</ContainerAdmin>
 		</Navigation>
 	);

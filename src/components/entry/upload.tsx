@@ -1,7 +1,6 @@
 import { CloseOutline } from 'antd-mobile-icons';
+import { Upload as AntUpload } from 'antd';
 import { FC } from 'react';
-import RCUpload from 'rc-upload';
-import { RcFile } from 'rc-upload/lib/interface';
 
 import Button from 'components/general/button';
 
@@ -30,8 +29,9 @@ const Upload: FC<UploadProps> = ({
 		}
 	};
 
-	const onBeforeUpload = async (file: RcFile) => {
+	const onBeforeUpload = async (file: File) => {
 		if (beforeUpload) return beforeUpload(file);
+		return false;
 	};
 
 	const uploadProps = {
@@ -65,10 +65,10 @@ const Upload: FC<UploadProps> = ({
 						</div>
 					</div>
 				) : (
-					<RCUpload
-						className="group transition-all duration-500 bg-slate-100 cursor-pointer p-5 rounded-lg flex flex-col items-center justify-center"
+					<AntUpload.Dragger
 						disabled={disabled}
 						beforeUpload={onBeforeUpload}
+						showUploadList={false}
 						{...uploadProps}
 					>
 						<svg
@@ -88,7 +88,7 @@ const Upload: FC<UploadProps> = ({
 						<a className="text-gray-400 group-hover:text-gray-600">
 							Cari file untuk di-upload
 						</a>
-					</RCUpload>
+					</AntUpload.Dragger>
 				)}
 				{showPreview && (
 					<div className="mt-4">

@@ -1,10 +1,10 @@
-import Image from 'next/image';
+import Image from "next/image";
 import Link from 'next/link';
 import { FC, ReactNode } from 'react';
 import { UrlObject } from 'url';
 import { FaFacebook, FaYoutube, FaInstagram, FaWhatsapp } from 'react-icons/fa';
 
-const ACTIVE_TEXT_COLOR_FOOTER = 'text-amber-500';
+const ACTIVE_TEXT_COLOR_FOOTER = 'text-slate-900';
 
 const MenuItemFooter: FC<{
 	href: string | UrlObject;
@@ -14,116 +14,125 @@ const MenuItemFooter: FC<{
 }> = ({ title, href, active = false, children }) => {
 	return (
 		<div>
-			<Link href={href}>
-				{children || (
-					<a
-						className={`${
-							active ? ACTIVE_TEXT_COLOR_FOOTER : 'text-gray-600'
-						} hover:text-amber-500`}
-					>
-						{title}
-					</a>
-				)}
+			<Link
+				href={href}
+				className={
+					children
+						? ''
+						: `${
+								active ? ACTIVE_TEXT_COLOR_FOOTER : 'text-slate-600'
+							} hover:text-[#6f97bd]`
+				}
+			>
+				{children || title}
 			</Link>
 		</div>
 	);
 };
 
 const Footer: FC<{ active?: string }> = ({ active }) => {
+	const socialLinks = [
+		{
+			href: 'https://www.facebook.com/vsg.nunukan',
+			label: 'Facebook',
+			icon: <FaFacebook />,
+		},
+		{
+			href: 'https://www.youtube.com/@vsg.nunukan',
+			label: 'YouTube',
+			icon: <FaYoutube />,
+		},
+		{
+			href: 'https://www.instagram.com/vsg.nunukan/',
+			label: 'Instagram',
+			icon: <FaInstagram />,
+		},
+		{
+			href: '#',
+			label: 'WhatsApp',
+			icon: <FaWhatsapp />,
+		},
+	];
+
 	return (
-		<footer className="text-gray-600 body-font pb-16 md:pb-0">
-			<div className="container px-12 py-12 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col border-t-2 border-amber-500">
-				<div className="flex-shrink-0 md:mx-0 mx-auto text-center md:text-left lg:w-1/3 md:w-1/2 w-full px-4">
-					<a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-						<Link href="/">
-							<div className="hidden md:flex items-center hover:cursor-pointer">
-								<Image src="/logo.png" width={60} height={60} alt="logo" />
-								<h1 className="ml-2 font-bold text-2xl">VSG</h1>
-							</div>
-						</Link>
-					</a>
-				</div>
-				<div className="lg:w-1/3 md:w-full w-full px-4">
-					<h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-						MENU
-					</h2>
-					<nav className="list-none mb-10">
-						<MenuItemFooter active={active === 'home'} href="/" title="Beranda" />
-						<MenuItemFooter
-							active={active === 'gallery'}
-							href="/gallery"
-							title="Galeri"
-						/>
-					</nav>
-				</div>
-				<div className="lg:w-1/3 md:w-full w-full px-4">
-					<h2 className="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">
-						Kontak Kami
-					</h2>
-					<div className="list-none mb-10">
-						<p className="text-gray-600 hover:text-gray-800">Alamat</p>
-						<p className="text-gray-600 hover:text-gray-800">
+        <footer className="pb-16 text-slate-600 md:pb-0">
+            <div className="mx-auto mt-12 max-w-5xl px-4 pb-8 pt-10 xl:max-w-7xl">
+				<div className="overflow-hidden rounded-3xl border border-slate-200 bg-white/85 shadow-xl shadow-slate-200/35 backdrop-blur-sm">
+					<div className="pointer-events-none h-1.5 w-full bg-linear-to-r from-[#c8dded]/90 via-[#f4e3bd]/85 to-[#d7e6f2]/90" />
+					<div className="grid gap-8 px-5 py-8 sm:px-8 sm:py-10 md:grid-cols-3 md:gap-6 lg:px-12">
+						<div className="text-center md:text-left">
+					<Link
+						href="/"
+						className="inline-flex items-center justify-center font-semibold text-slate-900 md:justify-start"
+					>
+						<div className="flex items-center">
+							<Image
+                                src="/logo.png"
+                                width={60}
+                                height={60}
+                                alt="logo"
+								sizes="60px"
+                                style={{
+                                    maxWidth: "100%",
+                                    height: "auto"
+                                }} />
+							<h1 className="ml-2 text-2xl font-bold">VSG</h1>
+						</div>
+					</Link>
+							<p className="mt-3 text-sm leading-relaxed text-slate-500">
+								Vihara Satya Dharma Guna, Nunukan
+							</p>
+						</div>
+
+						<div>
+							<h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+								Menu
+							</h2>
+							<nav className="space-y-2 text-sm font-medium">
+								<MenuItemFooter active={active === 'home'} href="/" title="Beranda" />
+								<MenuItemFooter
+									active={active === 'gallery'}
+									href="/gallery"
+									title="Galeri"
+								/>
+							</nav>
+						</div>
+
+						<div>
+							<h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-400">
+								Kontak
+							</h2>
+							<p className="text-sm leading-relaxed text-slate-600">
 							Jl. Cut Nyak Dien RT. 15, Kel. Nunukan Tengah
-							<br />
-							Kab. Nunukan, Kalimantan Utara
-						</p>
-						<br />
-						<p className="text-gray-600 hover:text-gray-800">Email</p>
-						<p className="text-gray-600 hover:text-gray-800">vsg@gmail.com</p>
+								<br />
+								Kab. Nunukan, Kalimantan Utara
+							</p>
+							<p className="mt-3 text-sm text-slate-600">vsg@gmail.com</p>
+							<div className="mt-4 flex flex-wrap items-center gap-2">
+								{socialLinks.map((item) => (
+									<a
+										key={item.label}
+										href={item.href}
+										rel="noopener noreferrer"
+										target="_blank"
+										aria-label={item.label}
+										className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition duration-300 hover:border-[#c8dded] hover:bg-[#edf4fa] hover:text-[#6f97bd]"
+									>
+										{item.icon}
+									</a>
+								))}
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div className="bg-amber-500">
-				<div className="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
-					<p className="text-zinc-100 text-sm text-center sm:text-left">
-						© 2022 Benny —
-						<a
-							href="https://twitter.com"
-							rel="noopener noreferrer"
-							className="text-zinc-100 ml-1"
-							target="_blank"
-						>
-							@conquera99
-						</a>
+				<div className="border-t border-slate-200 px-5 py-4 sm:px-8 lg:px-12">
+					<p className="text-center text-xs text-slate-500 sm:text-left">
+						© 2026 VSG. All rights reserved.
 					</p>
-					<span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
-						<a
-							href="https://www.facebook.com/vsg.nunukan"
-							rel="noopener noreferrer"
-							className="text-zinc-100 ml-3"
-							target="_blank"
-						>
-							<FaFacebook />
-						</a>
-						<a
-							href="https://www.youtube.com/@vsg.nunukan"
-							rel="noopener noreferrer"
-							className="text-zinc-100 ml-3"
-							target="_blank"
-						>
-							<FaYoutube />
-						</a>
-						<a
-							href="https://www.instagram.com/vsg.nunukan/"
-							rel="noopener noreferrer"
-							className="text-zinc-100 ml-3"
-							target="_blank"
-						>
-							<FaInstagram />
-						</a>
-						<a
-							href="#"
-							rel="noopener noreferrer"
-							className="text-zinc-100 ml-3"
-							target="_blank"
-						>
-							<FaWhatsapp />
-						</a>
-					</span>
 				</div>
 			</div>
-		</footer>
-	);
+        </footer>
+    );
 };
 
 export default Footer;

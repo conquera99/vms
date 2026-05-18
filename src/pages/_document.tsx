@@ -1,14 +1,50 @@
-import { Html, Head, Main, NextScript } from 'next/document';
+import { createCache, extractStyle, StyleProvider } from '@ant-design/cssinjs';
+import Document, {
+	Head,
+	Html,
+	Main,
+	NextScript,
+	DocumentContext,
+	DocumentInitialProps,
+} from 'next/document';
 
 const APP_URL = 'https://vsg.nunukan.net';
 const APP_NAME = 'VSG iApp';
 // const APP_DESC =
 // 	'Website STI Vihara Sasana Graha Nunukan yang digunakan untuk melihat kegiatan-kegiatan vihara serta dapat mengatur administrasi dan inventaris vihara';
 
-const Document = () => {
-	return (
-		<Html lang="id">
-			<Head>
+class MyDocument extends Document {
+	static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
+		const cache = createCache();
+		const originalRenderPage = ctx.renderPage;
+
+		ctx.renderPage = () =>
+			originalRenderPage({
+				enhanceApp: (App) => (props) => (
+					<StyleProvider cache={cache} hashPriority="low">
+						<App {...props} />
+					</StyleProvider>
+				),
+			});
+
+		const initialProps = await Document.getInitialProps(ctx);
+		const style = extractStyle(cache, true);
+
+		return {
+			...initialProps,
+			styles: (
+				<>
+					{initialProps.styles}
+					<style id="antd" dangerouslySetInnerHTML={{ __html: style }} />
+				</>
+			),
+		};
+	}
+
+	render() {
+		return (
+			<Html lang="id">
+				<Head>
 				<meta name="application-name" content={APP_NAME} />
 				<meta name="apple-mobile-web-app-capable" content="yes" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -119,13 +155,14 @@ const Document = () => {
 								});`,
 					}}
 				/>
-			</Head>
-			<body>
-				<Main />
-				<NextScript />
-			</body>
-		</Html>
-	);
-};
+				</Head>
+				<body>
+					<Main />
+					<NextScript />
+				</body>
+			</Html>
+		);
+	}
+}
 
-export default Document;
+export default MyDocument;

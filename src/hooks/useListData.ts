@@ -1,4 +1,4 @@
-import { LegacyRef, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
 import useOnScreen from 'hooks/useOnScreen';
@@ -19,7 +19,7 @@ const getKey = (
 };
 
 const useListData = ({ url, param, show }: { url: string; param?: string; show?: number }) => {
-	const ref = useRef() as LegacyRef<HTMLDivElement>;
+	const ref = useRef<HTMLDivElement | null>(null);
 
 	const isVisible = useOnScreen(ref);
 

@@ -1,0 +1,139 @@
+.app-form-item {
+	margin-bottom: 1rem;
+}
+
+.app-form-item .ant-form-item-label {
+	padding-bottom: 0.45rem;
+}
+
+.app-form-item .ant-form-item-label > label {
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: #64748b;
+	height: auto;
+	line-height: 1.35;
+}
+
+.app-form-item .ant-form-item-required::before {
+	color: #c08497 !important;
+	font-size: 0.7rem;
+}
+
+.app-control.ant-input,
+.app-control.ant-input-affix-wrapper,
+.app-control.ant-input-number,
+.app-control.ant-picker,
+.app-select-control .ant-select-selector {
+	border-radius: 0.5rem !important;
+	border: 1px solid #dbe5ee !important;
+	background: rgba(255, 255, 255, 0.92) !important;
+	box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08);
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease,
+		background-color 0.2s ease,
+		transform 0.2s ease;
+}
+
+.app-control.ant-input,
+.app-control.ant-input-affix-wrapper,
+.app-control.ant-picker,
+.app-select-control .ant-select-selector {
+	min-height: 3rem;
+	padding-inline: 0.95rem;
+}
+
+.app-control.ant-input,
+.app-control.ant-input-number .ant-input-number-input,
+.app-control.ant-picker input,
+.app-select-control .ant-select-selection-placeholder,
+.app-select-control .ant-select-selection-item {
+	font-size: 0.95rem;
+}
+
+.app-control.ant-input-number,
+.app-date-picker,
+.app-select-control {
+	width: 100%;
+}
+
+.app-textarea-control.ant-input {
+	min-height: 7.5rem;
+	padding-top: 0.85rem;
+	padding-bottom: 0.85rem;
+	resize: vertical;
+}
+
+.app-control.ant-input-number .ant-input-number-input-wrap input {
+	padding-inline: 0;
+}
+
+
+.app-select-control .ant-select-selector,
+.app-control.ant-picker {
+	padding-inline-end: 0.95rem !important;
+}
+
+.app-control.ant-input:hover,
+.app-control.ant-input-affix-wrapper:hover,
+.app-control.ant-input-number:hover,
+.app-control.ant-picker:hover,
+.app-select-control:not(.ant-select-disabled):hover .ant-select-selector {
+	border-color: #b8cee0 !important;
+	background: #ffffff !important;
+}
+
+.app-control.ant-input:focus,
+.app-control.ant-input-focused,
+.app-control.ant-input-affix-wrapper-focused,
+.app-control.ant-input-number-focused,
+.app-control.ant-picker-focused,
+.app-select-control.ant-select-focused .ant-select-selector,
+.app-select-control.ant-select-open .ant-select-selector {
+	border-color: #7ea7cb !important;
+	box-shadow: 0 0 0 4px rgba(126, 167, 203, 0.14) !important;
+	background: #ffffff !important;
+}
+
+.app-control.ant-input-affix-wrapper input,
+.app-control.ant-input-number input,
+.app-control.ant-picker input {
+	background: transparent;
+}
+
+.app-select-control .ant-select-arrow,
+.app-control.ant-picker .ant-picker-suffix,
+.app-control.ant-picker .ant-picker-clear,
+.app-select-control .ant-select-clear {
+	color: #8ea6ba;
+}
+
+.app-form-item .ant-form-item-explain-error {
+	font-size: 0.8rem;
+	padding-left: 0.25rem;
+}
+
+.ant-select-dropdown,
+.ant-picker-dropdown .ant-picker-panel-container {
+	border: 1px solid #dbe5ee;
+	border-radius: 1.1rem !important;
+	background: rgba(255, 255, 255, 0.97) !important;
+	backdrop-filter: blur(18px);
+	box-shadow: 0 20px 45px rgba(148, 163, 184, 0.16) !important;
+}
+
+.ant-select-item {
+	border-radius: 0.8rem;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+	background: #edf4fa !important;
+	color: #31516d;
+	font-weight: 600;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+	background: #f5f8fb !important;
+}

@@ -1,7 +1,7 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, FC, ReactNode, useState } from 'react';
+import { Popover } from 'antd';
 import Link from 'next/link';
 import { UrlObject } from 'url';
-import Tooltip from 'rc-tooltip';
 
 import { Loading } from 'components/general/icon';
 
@@ -38,7 +38,7 @@ const buttonTypeClass = {
 };
 
 const sizeClass = {
-	normal: 'px-6 py-3',
+	normal: 'px-6 py-2',
 	small: 'px-3 py-1',
 };
 
@@ -85,17 +85,17 @@ export const LinkButton: FC<LinkButtonProps> = ({
 	...rest
 }) => {
 	return (
-		<Link href={href}>
-			<a
-				className={`${defaultButtonClass} ${buttonTypeClass[buttonType]} ${sizeClass[size]} ${className}`}
-				{...rest}
-			>
-				{iconLocation === 'left' && (loading ? <Loading /> : icon)}
-				{children}
-				{iconLocation === 'right' && (loading ? <Loading /> : icon)}
-			</a>
-		</Link>
-	);
+        <Link
+            href={href}
+            className={`${defaultButtonClass} ${buttonTypeClass[buttonType]} ${sizeClass[size]} ${className}`}
+            {...rest}>
+
+            {iconLocation === 'left' && (loading ? <Loading /> : icon)}
+            {children}
+            {iconLocation === 'right' && (loading ? <Loading /> : icon)}
+
+        </Link>
+    );
 };
 
 export const ConfirmButton: FC<ConfirmButtonProps> = ({
@@ -113,14 +113,13 @@ export const ConfirmButton: FC<ConfirmButtonProps> = ({
 	};
 
 	return (
-		<Tooltip
-			visible={visible}
-			animation="zoom"
+		<Popover
+			open={visible}
 			placement="left"
 			trigger="click"
-			destroyTooltipOnHide={true}
-			onVisibleChange={setVisible}
-			overlay={
+			destroyTooltipOnHide
+			onOpenChange={setVisible}
+			content={
 				<div className="bg-white shadow-md rounded-md p-4">
 					<div>
 						<p className="font-bold text-base">{confirmTitle || 'Warning!'}</p>
@@ -144,6 +143,6 @@ export const ConfirmButton: FC<ConfirmButtonProps> = ({
 			<button className={className} type="button">
 				{children}
 			</button>
-		</Tooltip>
+		</Popover>
 	);
 };

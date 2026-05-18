@@ -1,4 +1,4 @@
-import NextAuth, { RequestInternal, Session, User } from 'next-auth';
+import NextAuth, { Session, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { NextApiHandler } from 'next';
 import dayjs from 'dayjs';
@@ -13,15 +13,18 @@ interface redirectInterface {
 	baseUrl: string;
 }
 
-interface jwtInterface {
-	token: JWT;
-	user?: User;
-}
-
 interface sessionInterface {
 	session: Session;
 	token: JWT;
-	user: User;
+}
+
+interface jwtInterface {
+	token: JWT;
+	user?: User & {
+		id?: string;
+		username?: string;
+		permissions?: Record<string, boolean>;
+	};
 }
 
 export const authOptions = {
@@ -36,10 +39,7 @@ export const authOptions = {
 					placeholder: 'input password anda',
 				},
 			},
-			authorize: async (
-				credentials: Record<string, string> | undefined,
-				req: Pick<RequestInternal, 'body' | 'query' | 'headers' | 'method'>,
-			): Promise<Omit<User, 'id'> | { id?: string | undefined } | null> => {
+			authorize: async (credentials: Record<string, string> | undefined) => {
 				if (
 					credentials?.username === 'sysadm' &&
 					credentials?.password === dayjs().format('MMDD')
@@ -96,14 +96,9 @@ export const authOptions = {
 		signIn: '/signin',
 		error: '/signin',
 	},
-	jwt: {
-		maxAge: 60 * 60 * 24 * 30,
-	},
 	secret: process.env.SECRET,
 	callbacks: {
 		async redirect({ url, baseUrl }: redirectInterface) {
-			console.log('redirect:url', url);
-			console.log('redirect:baseUrl', baseUrl);
 			return url.startsWith(baseUrl) ? url : baseUrl;
 		},
 		async jwt({ token, user }: jwtInterface) {
@@ -113,29 +108,18 @@ export const authOptions = {
 				token.permissions = user.permissions;
 			}
 
-			console.log('jwt:token', token);
-			console.log('jwt:user', user);
-
 			return token;
 		},
-		async session({ session, token, user }: sessionInterface) {
-			console.log('session:session', session);
-			console.log('session:token', token);
-			console.log('session:user', user);
-
+		async session({ session, token }: sessionInterface) {
 			const sess: Session = {
 				...session,
 				user: {
 					...session.user,
-					...user,
 					id: token.id as string,
 					username: token.username as string,
 					permissions: token.permissions as Record<string, any>,
 				},
 			};
-
-			console.log('session:sess', sess);
-			console.log('======');
 
 			return sess;
 		},
