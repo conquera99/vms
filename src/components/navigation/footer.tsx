@@ -80,7 +80,7 @@ const Footer: FC<{ active?: string }> = ({ active }) => {
 						</div>
 					</Link>
 							<p className="mt-3 text-sm leading-relaxed text-slate-500">
-								Vihara Satya Dharma Guna, Nunukan
+								Vihara Sasana Graha, Nunukan
 							</p>
 						</div>
 
