@@ -35,7 +35,6 @@ const Upload: FC<UploadProps> = ({
 	};
 
 	const uploadProps = {
-		type: 'drag',
 		accept: accept || '.png,.jpeg,.jpg',
 	};
 
