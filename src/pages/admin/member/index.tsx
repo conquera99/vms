@@ -1,7 +1,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { toast } from 'utils/toast';
-import { AddOutline, LeftOutline, TeamOutline } from 'antd-mobile-icons';
+import { AddOutline, LeftOutline, TeamOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
@@ -44,7 +44,7 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Data Anggota" active="admin" access="member" isAdmin>
 			<Container>
-				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-rose-50 via-white to-sky-50 p-5 shadow-sm md:p-6">
+				<div className="rounded-3xl border border-slate-200 bg-linear-to-br from-rose-50 via-white to-sky-50 p-5 shadow-sm md:p-6">
 					<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 						<div>
 							<Breadcrumb data={breadcrumb} />

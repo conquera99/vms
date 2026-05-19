@@ -137,3 +137,28 @@
 .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
 	background: #f5f8fb !important;
 }
+
+.app-button.ant-btn {
+	min-height: 2.75rem;
+	height: auto;
+	padding-block: 0.55rem !important;
+	padding-inline: 1.5rem !important;
+	line-height: 1.2;
+	vertical-align: middle;
+	border-width: 1px;
+}
+
+.app-button.ant-btn.ant-btn-sm {
+	min-height: 2rem;
+	padding-block: 0.35rem !important;
+	padding-inline: 0.9rem !important;
+}
+
+.app-button.ant-btn > span,
+.app-button.ant-btn .ant-btn-loading-icon,
+.app-button.ant-btn .anticon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
+}

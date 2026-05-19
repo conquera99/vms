@@ -2,7 +2,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { toast } from 'utils/toast';
-import { AddOutline, LeftOutline, UserContactOutline } from 'antd-mobile-icons';
+import { AddOutline, LeftOutline, UserContactOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
@@ -49,7 +49,7 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Data User" active="admin" isAdmin isSuperAdminOnly>
 			<Container>
-				<div className="mt-6 overflow-hidden rounded-[2rem] border border-slate-300/80 bg-linear-to-br from-slate-100 via-white to-sky-50 shadow-sm">
+				<div className="overflow-hidden rounded-[2rem] border border-slate-300/80 bg-linear-to-br from-slate-100 via-white to-sky-50 shadow-sm">
 					<div className="flex flex-col gap-6 p-6 md:p-7 lg:flex-row lg:items-end lg:justify-between">
 						<div className="max-w-2xl">
 						<Breadcrumb data={breadcrumb} />

@@ -5,7 +5,7 @@ import {
 	PicturesOutline,
 	RightOutline,
 	TagOutline,
-} from 'antd-mobile-icons';
+} from 'components/general/antd-icon';
 import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';

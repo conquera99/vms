@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AppOutline, CloseOutline, RightOutline } from 'antd-mobile-icons';
+import { AppOutline, CloseOutline, RightOutline } from 'components/general/antd-icon';
 import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';

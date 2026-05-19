@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import PageHead from 'components/general/page-head';
 import Input from 'components/entry/input';
 import Button from 'components/general/button';
-import { RightOutline } from 'antd-mobile-icons';
+import { RightOutline } from 'components/general/antd-icon';
 import { useState } from 'react';
 
 const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {

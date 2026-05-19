@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import escapeHtml from 'escape-html';
 import dayjs from 'dayjs';
-import { CalendarOutline, UserOutline } from 'antd-mobile-icons';
+import { CalendarOutline, UserOutline } from 'components/general/antd-icon';
 
 import Title from 'components/display/title';
 import Navigation from 'components/navigation';

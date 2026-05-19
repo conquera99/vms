@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'antd-mobile-icons';
+import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'components/general/antd-icon';
 import Link from 'next/link';
 import Image from "next/image";
 import { toast } from 'utils/toast';

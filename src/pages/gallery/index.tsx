@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FolderOutline } from 'antd-mobile-icons';
+import { FolderOutline } from 'components/general/antd-icon';
 import dayjs from 'dayjs';
 
 import Navigation from 'components/navigation';

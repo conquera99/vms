@@ -13,7 +13,7 @@ import useListData from 'hooks/useListData';
 
 import { prisma } from 'db';
 import { datetimeFormat } from 'utils/constant';
-import { LeftOutline, RightOutline } from 'antd-mobile-icons';
+import { LeftOutline, RightOutline } from 'components/general/antd-icon';
 
 const ImageSkeleton = () => (
 	<div className="animate-pulse overflow-hidden rounded-2xl border border-slate-200 bg-white/90 shadow-sm">

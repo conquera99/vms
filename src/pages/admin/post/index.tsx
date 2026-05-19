@@ -1,7 +1,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { toast } from 'utils/toast';
-import { AddOutline, ContentOutline, LeftOutline } from 'antd-mobile-icons';
+import { AddOutline, ContentOutline, LeftOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
@@ -55,7 +55,7 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Data Post" active="admin" access="post" isAdmin>
 			<Container>
-				<div className="mt-6 overflow-hidden rounded-[2rem] border border-rose-200/80 bg-linear-to-br from-rose-50 via-white to-orange-50 shadow-sm">
+				<div className="overflow-hidden rounded-[2rem] border border-rose-200/80 bg-linear-to-br from-rose-50 via-white to-orange-50 shadow-sm">
 					<div className="flex flex-col gap-6 p-6 md:p-7 lg:flex-row lg:items-end lg:justify-between">
 						<div className="max-w-2xl">
 						<Breadcrumb data={breadcrumb} />

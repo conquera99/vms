@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 
 const Container: FC<{ children?: ReactNode }> = ({ children }) => {
-	return <div className="px-4 max-w-5xl xl:max-w-7xl mx-auto">{children}</div>;
+	return <div className="px-4 max-w-5xl xl:max-w-7xl pt-5 mx-auto">{children}</div>;
 };
 
 export default Container;

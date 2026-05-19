@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CloseOutline } from 'antd-mobile-icons';
+import { CloseOutline } from 'components/general/antd-icon';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
