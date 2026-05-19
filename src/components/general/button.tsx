@@ -122,7 +122,7 @@ const Button: FC<ButtonProps> = ({
 			size={sizeClass[size]}
 			className={getButtonClasses({ buttonType, className })}
 			style={getButtonStyle({ size, style })}
-			{...rest}
+			{...(rest as any)}
 		>
 			{renderContent({ children, icon, iconLocation, loading })}
 		</AntButton>
@@ -144,13 +144,13 @@ export const LinkButton: FC<LinkButtonProps> = ({
 	...rest
 }) => {
 	return (
-		<Link href={href} legacyBehavior passHref>
+		<Link href={href} passHref>
 			<AntButton
 				loading={loading}
 				size={sizeClass[size]}
 				className={getButtonClasses({ buttonType, className })}
 				style={getButtonStyle({ size, style })}
-				{...rest}
+				{...(rest as any)}
 			>
 				{renderContent({ children, icon, iconLocation, loading })}
 			</AntButton>
@@ -179,7 +179,7 @@ export const ConfirmButton: FC<ConfirmButtonProps> = ({
 			placement="left"
 			title={confirmTitle || 'Warning!'}
 			description={confirmText}
-			onConfirm={onClick}
+			onConfirm={(e) => onClick?.(e as any)}
 			okText="Ya"
 			cancelText="Tidak"
 			okButtonProps={{ loading }}
@@ -190,7 +190,7 @@ export const ConfirmButton: FC<ConfirmButtonProps> = ({
 				size={sizeClass[size]}
 				className={getButtonClasses({ buttonType, className })}
 				style={getButtonStyle({ size, style })}
-				{...rest}
+				{...(rest as any)}
 			>
 				{renderContent({ children, icon, iconLocation, loading })}
 			</AntButton>
