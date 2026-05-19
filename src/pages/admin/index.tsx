@@ -23,7 +23,7 @@ import {
 	TeamOutline,
 	UserAddOutline,
 	UserContactOutline,
-} from 'antd-mobile-icons';
+} from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Container from 'components/general/container';

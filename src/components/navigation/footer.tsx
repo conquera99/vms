@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from 'next/link';
 import { FC, ReactNode } from 'react';
 import { UrlObject } from 'url';
-import { FaFacebook, FaYoutube, FaInstagram, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebook, FaYoutube, FaInstagram, FaWhatsapp } from 'components/general/antd-icon';
 
 const ACTIVE_TEXT_COLOR_FOOTER = 'text-slate-900';
 

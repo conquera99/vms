@@ -1,7 +1,7 @@
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { toast } from 'utils/toast';
-import { AddOutline, LeftOutline, ShopbagOutline } from 'antd-mobile-icons';
+import { AddOutline, LeftOutline, ShopbagOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { LeftOutline, LoopOutline } from 'antd-mobile-icons';
+import { LeftOutline, LoopOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';

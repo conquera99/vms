@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 import { signOut, useSession } from 'next-auth/react';
-import { LeftOutline, MailOutline, UserContactOutline } from 'antd-mobile-icons';
+import { LeftOutline, MailOutline, UserContactOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Button from 'components/general/button';

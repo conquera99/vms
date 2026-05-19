@@ -2,7 +2,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import { toast } from 'utils/toast';
-import { AddOutline, LeftOutline, LocationOutline } from 'antd-mobile-icons';
+import { AddOutline, LeftOutline, LocationOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';

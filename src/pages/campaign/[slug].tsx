@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { GetStaticProps, GetStaticPaths } from 'next';
 import dayjs from 'dayjs';
 import axios from 'axios';
-import { CalendarOutline, UserOutline } from 'antd-mobile-icons';
+import { CalendarOutline, UserOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';

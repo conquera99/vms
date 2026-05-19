@@ -1,7 +1,8 @@
-import { CloseOutline } from 'antd-mobile-icons';
+import { CloudUploadOutlined } from '@ant-design/icons';
 import { Upload as AntUpload } from 'antd';
 import { FC } from 'react';
 
+import { CloseOutline } from 'components/general/antd-icon';
 import Button from 'components/general/button';
 
 interface UploadProps {
@@ -70,20 +71,7 @@ const Upload: FC<UploadProps> = ({
 						showUploadList={false}
 						{...uploadProps}
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="w-12 h-12 text-gray-400 mb-2 group-hover:text-gray-600"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-							/>
-						</svg>
+						<CloudUploadOutlined className="mb-2 text-5xl text-gray-400 group-hover:text-gray-600" />
 						<a className="text-gray-400 group-hover:text-gray-600">
 							Cari file untuk di-upload
 						</a>

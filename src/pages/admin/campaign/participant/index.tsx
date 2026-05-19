@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { CloseOutline, RightOutline, SendOutline } from 'antd-mobile-icons';
+import { CloseOutline, RightOutline, SendOutline } from 'components/general/antd-icon';
 import { Form } from 'antd';
 import axios from 'axios';
 import { useRouter } from 'next/router';

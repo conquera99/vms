@@ -1,3 +1,11 @@
+import {
+	PauseOutlined,
+	RedoOutlined,
+	StepBackwardOutlined,
+	StepForwardOutlined,
+	StopOutlined,
+	CaretRightFilled,
+} from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 
 import Navigation from 'components/navigation';
@@ -58,6 +66,7 @@ const ParittaPage = () => {
 	const [loopMode, setLoopMode] = useState<LoopMode>('all');
 
 	const currentTrack = TRACKS[currentIndex];
+	const loopButtonLabel = `Loop: ${loopMode}`;
 
 	const selectTrack = (index: number, autoPlay = true) => {
 		setCurrentIndex(index);
@@ -220,7 +229,7 @@ const ParittaPage = () => {
 									aria-label="Previous"
 									className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#edf4fa]"
 								>
-									<span aria-hidden="true">⏮</span>
+									<StepBackwardOutlined aria-hidden="true" />
 								</button>
 								<button
 									type="button"
@@ -228,7 +237,11 @@ const ParittaPage = () => {
 									aria-label={isPlaying ? 'Pause' : 'Play'}
 									className="rounded-xl border border-slate-200 bg-[#edf4fa] px-3 py-2 text-sm font-semibold text-[#486d92] transition hover:bg-[#dcebf7]"
 								>
-									<span aria-hidden="true">{isPlaying ? '⏸' : '⏵'}</span>
+									{isPlaying ? (
+										<PauseOutlined aria-hidden="true" />
+									) : (
+										<CaretRightFilled aria-hidden="true" />
+									)}
 								</button>
 								<button
 									type="button"
@@ -236,7 +249,7 @@ const ParittaPage = () => {
 									aria-label="Stop"
 									className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#edf4fa]"
 								>
-									<span aria-hidden="true">⏹</span>
+									<StopOutlined aria-hidden="true" />
 								</button>
 								<button
 									type="button"
@@ -244,7 +257,7 @@ const ParittaPage = () => {
 									aria-label="Next"
 									className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#edf4fa] sm:col-span-2"
 								>
-									<span aria-hidden="true">⏭</span>
+									<StepForwardOutlined aria-hidden="true" />
 								</button>
 							</div>
 
@@ -254,7 +267,10 @@ const ParittaPage = () => {
 									onClick={onToggleLoop}
 									className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 transition hover:bg-[#edf4fa]"
 								>
-									Loop: {loopMode}
+									<span className="inline-flex items-center gap-2">
+										<RedoOutlined aria-hidden="true" />
+										{loopButtonLabel}
+									</span>
 								</button>
 							</div>
 
@@ -313,7 +329,7 @@ const ParittaPage = () => {
 							aria-label="Previous"
 							className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#edf4fa]"
 						>
-							<span aria-hidden="true">⏮</span>
+							<StepBackwardOutlined aria-hidden="true" />
 						</button>
 						<button
 							type="button"
@@ -321,7 +337,11 @@ const ParittaPage = () => {
 							aria-label={isPlaying ? 'Pause' : 'Play'}
 							className="rounded-xl border border-slate-200 bg-[#edf4fa] px-3 py-2 text-sm font-semibold text-[#486d92] transition hover:bg-[#dcebf7]"
 						>
-							<span aria-hidden="true">{isPlaying ? '⏸' : '⏵'}</span>
+							{isPlaying ? (
+								<PauseOutlined aria-hidden="true" />
+							) : (
+								<CaretRightFilled aria-hidden="true" />
+							)}
 						</button>
 						<button
 							type="button"
@@ -329,7 +349,7 @@ const ParittaPage = () => {
 							aria-label="Stop"
 							className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#edf4fa]"
 						>
-							<span aria-hidden="true">⏹</span>
+							<StopOutlined aria-hidden="true" />
 						</button>
 						<button
 							type="button"
@@ -337,7 +357,7 @@ const ParittaPage = () => {
 							aria-label="Next"
 							className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-[#edf4fa]"
 						>
-							<span aria-hidden="true">⏭</span>
+							<StepForwardOutlined aria-hidden="true" />
 						</button>
 						<button
 							type="button"
@@ -345,7 +365,10 @@ const ParittaPage = () => {
 							aria-label="Toggle loop mode"
 							className="rounded-xl border border-slate-200 bg-white px-2 py-2 text-[10px] font-semibold uppercase tracking-wide text-slate-600 transition hover:bg-[#edf4fa]"
 						>
-							{loopMode}
+							<span className="inline-flex items-center gap-1">
+								<RedoOutlined aria-hidden="true" />
+								{loopMode}
+							</span>
 						</button>
 					</div>
 				</div>
