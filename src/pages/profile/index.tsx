@@ -30,7 +30,7 @@ const Profile = () => {
 	return (
 		<Navigation title="VMS: Profile" active="account" hideFooter={false}>
 			<Container>
-				<div className="mt-6 overflow-hidden rounded-[2rem] border border-sky-200/80 bg-linear-to-br from-sky-50 via-white to-cyan-50 shadow-sm">
+				<div className="overflow-hidden rounded-[2rem] border border-sky-200/80 bg-linear-to-br from-sky-50 via-white to-cyan-50 shadow-sm">
 					<div className="flex flex-col gap-6 p-6 md:p-7 lg:flex-row lg:items-end lg:justify-between">
 						<div className="max-w-2xl">
 							<div className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">

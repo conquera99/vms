@@ -32,7 +32,7 @@ const Page = () => {
 	return (
 		<Navigation title="VMS: Data Mendiang" active="admin" access="deceased" isAdmin>
 			<Container>
-				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6 print-hide">
+				<div className="rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6 print-hide">
 					<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 						<div>
 							<Breadcrumb data={breadcrumb} />

@@ -50,7 +50,7 @@ const Home = () => {
 	return (
 		<Navigation title="VMS: Data Beli Item" active="admin" access="item_history" isAdmin>
 			<Container>
-				<div className="mt-6 overflow-hidden rounded-[2rem] border border-orange-200/80 bg-linear-to-br from-orange-50 via-white to-amber-50 shadow-sm">
+				<div className="overflow-hidden rounded-[2rem] border border-orange-200/80 bg-linear-to-br from-orange-50 via-white to-amber-50 shadow-sm">
 					<div className="flex flex-col gap-6 p-6 md:p-7 lg:flex-row lg:items-end lg:justify-between">
 						<div className="max-w-2xl">
 						<Breadcrumb data={breadcrumb} />
