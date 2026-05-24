@@ -1,5 +1,5 @@
 import { useSession } from 'next-auth/react';
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'components/general/antd-icon';
 import Link from 'next/link';
@@ -16,6 +16,15 @@ import Footer from 'components/navigation/footer';
 
 const ACTIVE_TEXT_COLOR = 'text-slate-800';
 const SW_UPDATE_TOAST_ID = 'sw-update-toast';
+const PWA_BANNER_DISMISSED_KEY = 'pwa-install-banner-dismissed';
+
+interface BeforeInstallPromptEvent extends Event {
+	prompt: () => Promise<void>;
+	userChoice: Promise<{
+		outcome: 'accepted' | 'dismissed';
+		platform: string;
+	}>;
+}
 
 const MenuItem: FC<{
 	icon?: ReactNode;
@@ -66,6 +75,8 @@ const Navigation: FC<BaseNavInterface> = ({
 }) => {
 	const router = useRouter();
 	const { data: session, status } = useSession();
+	const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
+	const [showInstallBanner, setShowInstallBanner] = useState(false);
 
 	useEffect(() => {
 		if (status !== 'loading') {
@@ -174,6 +185,79 @@ const Navigation: FC<BaseNavInterface> = ({
 		};
 	}, []);
 
+	useEffect(() => {
+		if (typeof window === 'undefined') {
+			return;
+		}
+
+		const isStandalone =
+			window.matchMedia('(display-mode: standalone)').matches ||
+			window.matchMedia('(display-mode: fullscreen)').matches ||
+			('standalone' in window.navigator &&
+				Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone));
+
+		if (isStandalone) {
+			setShowInstallBanner(false);
+			return;
+		}
+
+		const dismissed = window.localStorage.getItem(PWA_BANNER_DISMISSED_KEY) === 'true';
+
+		const onBeforeInstallPrompt = (event: Event) => {
+			event.preventDefault();
+			setInstallPromptEvent(event as BeforeInstallPromptEvent);
+
+			if (!dismissed) {
+				setShowInstallBanner(true);
+			}
+		};
+
+		const onAppInstalled = () => {
+			setInstallPromptEvent(null);
+			setShowInstallBanner(false);
+			window.localStorage.removeItem(PWA_BANNER_DISMISSED_KEY);
+		};
+
+		window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
+		window.addEventListener('appinstalled', onAppInstalled);
+
+		return () => {
+			window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt);
+			window.removeEventListener('appinstalled', onAppInstalled);
+		};
+	}, []);
+
+	const onDismissInstallBanner = () => {
+		if (typeof window !== 'undefined') {
+			window.localStorage.setItem(PWA_BANNER_DISMISSED_KEY, 'true');
+		}
+
+		setShowInstallBanner(false);
+	};
+
+	const onInstallApp = async () => {
+		if (!installPromptEvent) {
+			return;
+		}
+
+		await installPromptEvent.prompt();
+		const choice = await installPromptEvent.userChoice;
+
+		setInstallPromptEvent(null);
+		setShowInstallBanner(false);
+
+		if (typeof window === 'undefined') {
+			return;
+		}
+
+		if (choice.outcome === 'dismissed') {
+			window.localStorage.setItem(PWA_BANNER_DISMISSED_KEY, 'true');
+			return;
+		}
+
+		window.localStorage.removeItem(PWA_BANNER_DISMISSED_KEY);
+	};
+
 	if (isSuperAdminOnly && status === 'authenticated' && session?.user?.username !== 'sysadm') {
 		return <Forbidden />;
 	}
@@ -181,6 +265,39 @@ const Navigation: FC<BaseNavInterface> = ({
 	return (
         <div className="bg-slate-100">
             <PageHead title={title} desc={desc} image={image} />
+            {showInstallBanner && installPromptEvent && (
+				<div className="fixed bottom-24 left-3 right-3 z-40 md:bottom-auto md:left-4 md:right-4 md:top-20">
+					<div className="mx-auto flex max-w-5xl items-start justify-between gap-3 rounded-2xl border border-white/70 bg-white/90 p-4 shadow-xl shadow-slate-400/20 backdrop-blur-md">
+						<div>
+							<p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+								PWA
+							</p>
+							<h2 className="mt-1 text-base font-semibold text-slate-800">
+								Install VSG app
+							</h2>
+							<p className="mt-1 text-sm leading-relaxed text-slate-600">
+								Pasang aplikasi ini agar bisa dibuka lebih cepat dan dipakai offline.
+							</p>
+						</div>
+						<div className="flex shrink-0 items-center gap-2">
+							<button
+								type="button"
+								onClick={onDismissInstallBanner}
+								className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+							>
+								Nanti
+							</button>
+							<button
+								type="button"
+								onClick={onInstallApp}
+								className="rounded-xl border border-[#c8dded] bg-[#edf4fa] px-3 py-2 text-sm font-semibold text-[#486d92] transition hover:bg-[#dcebf7]"
+							>
+								Install
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
             {/* <div className="hidden md:block md:h-16">&nbsp;</div> */}
 			<div className="w-full md:pt-16 lg:pt-16 pb-24 md:pb-20 min-h-screen app-content">
 				{children}
