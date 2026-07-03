@@ -162,3 +162,70 @@
 	justify-content: center;
 	vertical-align: middle;
 }
+
+/* Hero Swiper Navigation */
+.hero-swiper .swiper-button-next,
+.hero-swiper .swiper-button-prev {
+	color: white;
+	width: 40px;
+	height: 40px;
+	background: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(8px);
+	border-radius: 50%;
+	transition: background 0.2s ease;
+}
+
+.hero-swiper .swiper-button-next:hover,
+.hero-swiper .swiper-button-prev:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+
+.hero-swiper .swiper-button-next::after,
+.hero-swiper .swiper-button-prev::after {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.hero-swiper .swiper-button-next {
+	right: 16px;
+}
+
+.hero-swiper .swiper-button-prev {
+	left: 16px;
+}
+
+@media (min-width: 640px) {
+	.hero-swiper .swiper-button-next,
+	.hero-swiper .swiper-button-prev {
+		width: 44px;
+		height: 44px;
+	}
+	.hero-swiper .swiper-button-next {
+		right: 24px;
+	}
+	.hero-swiper .swiper-button-prev {
+		left: 24px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.hero-swiper .swiper-button-next,
+	.hero-swiper .swiper-button-prev {
+		width: 48px;
+		height: 48px;
+	}
+	.hero-swiper .swiper-button-next {
+		right: 32px;
+	}
+	.hero-swiper .swiper-button-prev {
+		left: 32px;
+	}
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}

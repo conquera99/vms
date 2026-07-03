@@ -1,4 +1,5 @@
 export {
+	PhoneOutlined as PhoneOutline,
 	AppstoreOutlined as AppOutline,
 	AppstoreOutlined as AppstoreOutline,
 	BarChartOutlined as HistogramOutline,
