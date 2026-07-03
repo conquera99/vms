@@ -36,6 +36,9 @@
       ],
       "contexts/*": [
         "contexts/*"
+      ],
+      "lib/*": [
+        "lib/*"
       ]
     },
     "incremental": true,

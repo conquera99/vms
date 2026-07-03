@@ -1,0 +1,4 @@
+@import '../styles/globals.css';
+@import 'antd/dist/reset.css';
+@import '../styles/antd-overrides.css';
+@import '../styles/swiper.css';

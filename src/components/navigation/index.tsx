@@ -1,16 +1,13 @@
+'use client';
+
 import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'components/general/antd-icon';
 import Link from 'next/link';
 import Image from "next/image";
 import { toast } from 'utils/toast';
 
-import type { UrlObject } from 'url';
-
-import BaseNavInterface from 'interfaces/navigation';
-
-import PageHead from 'components/general/page-head';
 import Forbidden from 'components/display/forbidden';
 import Footer from 'components/navigation/footer';
 
@@ -28,7 +25,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 const MenuItem: FC<{
 	icon?: ReactNode;
-	href: string | UrlObject;
+	href: string;
 	active?: boolean;
 	children?: ReactNode;
 	title: string;
@@ -62,7 +59,19 @@ const MenuItem: FC<{
     );
 };
 
-const Navigation: FC<BaseNavInterface> = ({
+export interface NavigationProps {
+	title?: string;
+	desc?: string;
+	image?: string;
+	active?: string;
+	access?: string;
+	children?: ReactNode;
+	isSuperAdminOnly?: boolean;
+	isAdmin?: boolean;
+	hideFooter?: boolean;
+}
+
+const Navigation: FC<NavigationProps> = ({
 	title,
 	desc,
 	image,
@@ -80,7 +89,7 @@ const Navigation: FC<BaseNavInterface> = ({
 
 	useEffect(() => {
 		if (status !== 'loading') {
-			if (isAdmin === true && router.isReady && status === 'unauthenticated') {
+			if (isAdmin === true && status === 'unauthenticated') {
 				router.push('/');
 			}
 
@@ -88,10 +97,8 @@ const Navigation: FC<BaseNavInterface> = ({
 				router.push('/');
 			}
 		}
-	}, [isAdmin, status, router, access, session?.user?.permissions, router.isReady]);
+	}, [isAdmin, status, router, access, session?.user?.permissions]);
 
-	// This hook only run once in browser after the component is rendered for the first time.
-	// It has same effect as the old componentDidMount lifecycle callback.
 	useEffect(() => {
 		if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
 			return;
@@ -264,7 +271,6 @@ const Navigation: FC<BaseNavInterface> = ({
 
 	return (
         <div className="bg-slate-100">
-            <PageHead title={title} desc={desc} image={image} />
             {showInstallBanner && installPromptEvent && (
 				<div className="fixed bottom-24 left-3 right-3 z-40 md:bottom-auto md:left-4 md:right-4 md:top-20">
 					<div className="mx-auto flex max-w-5xl items-start justify-between gap-3 rounded-2xl border border-white/70 bg-white/90 p-4 shadow-xl shadow-slate-400/20 backdrop-blur-md">
@@ -298,7 +304,6 @@ const Navigation: FC<BaseNavInterface> = ({
 					</div>
 				</div>
 			)}
-            {/* <div className="hidden md:block md:h-16">&nbsp;</div> */}
 			<div className="w-full md:pt-16 lg:pt-16 pb-24 md:pb-20 min-h-screen app-content">
 				{children}
 			</div>

