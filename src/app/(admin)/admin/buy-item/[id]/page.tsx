@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { CloseOutline, RightOutline } from 'components/general/antd-icon';
 import { Form } from 'antd';
 import axios from 'axios';
@@ -25,12 +25,13 @@ const breadcrumb = [
 	},
 ];
 
-const Page = ({ params }: { params: { id: string } }) => {
-	const [form] = Form.useForm();
+const Page = (props: { params: Promise<{ id: string }> }) => {
+    const params = use(props.params);
+    const [form] = Form.useForm();
 
-	const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-	const onFinish = (values: any) => {
+    const onFinish = (values: any) => {
 		setLoading(true);
 
 		axios
@@ -48,7 +49,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 			.finally(() => setLoading(false));
 	};
 
-	useEffect(() => {
+    useEffect(() => {
 		axios.get(`/api/admin/buy-item?id=${params.id}`).then((response) => {
 			if (response.data.code === 0) {
 				form.setFieldsValue(response.data.data);
@@ -56,7 +57,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 		});
 	}, [params.id, form]);
 
-	return (
+    return (
 		<Navigation title="VMS: Beli Item Detail" active="admin" access="buy_item" isAdmin>
 			<ContainerAdmin>
 				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6">

@@ -58,19 +58,20 @@ const serialize = (node: any, first = false) => {
 	}
 };
 
-export default async function PostPage({ params }: { params: { slug: string } }) {
-	const data = await prisma.posts.findFirst({ where: { slug: params.slug } });
+export default async function PostPage(props: { params: Promise<{ slug: string }> }) {
+    const params = await props.params;
+    const data = await prisma.posts.findFirst({ where: { slug: params.slug } });
 
-	if (!data || data?.status !== 'P') {
+    if (!data || data?.status !== 'P') {
 		return <div>Post not found</div>;
 	}
 
-	const postData = {
+    const postData = {
 		...data,
 		content: serialize(JSON.parse(data.content), true),
 		createdAt: dayjs(data.createdAt).format(datetimeFormat),
 		updatedAt: dayjs(data.updatedAt).format(datetimeFormat),
 	};
 
-	return <PostDetailClient data={postData} />;
+    return <PostDetailClient data={postData} />;
 }

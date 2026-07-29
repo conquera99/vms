@@ -8,14 +8,15 @@ export async function generateStaticParams() {
 	return campaigns.map((c) => ({ slug: c.slug }));
 }
 
-export default async function CampaignPage({ params }: { params: { slug: string } }) {
-	const data = await prisma.campaign.findFirst({ where: { slug: params.slug } });
+export default async function CampaignPage(props: { params: Promise<{ slug: string }> }) {
+    const params = await props.params;
+    const data = await prisma.campaign.findFirst({ where: { slug: params.slug } });
 
-	if (!data || data?.status !== 'A') {
+    if (!data || data?.status !== 'A') {
 		return <div>Campaign not found</div>;
 	}
 
-	const campaignData = {
+    const campaignData = {
 		...data,
 		startDate: data.startDate ? dayjs(data.startDate).format(dateFormat) : '-',
 		endDate: data.endDate ? dayjs(data.endDate).format(dateFormat) : '-',
@@ -23,5 +24,5 @@ export default async function CampaignPage({ params }: { params: { slug: string 
 		updatedAt: dayjs(data.updatedAt).format(datetimeFormat),
 	};
 
-	return <CampaignDetailClient data={campaignData} />;
+    return <CampaignDetailClient data={campaignData} />;
 }

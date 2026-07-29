@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { CloseOutline, RightOutline } from 'components/general/antd-icon';
 import { Form } from 'antd';
 import axios from 'axios';
@@ -29,24 +29,25 @@ const breadcrumb = [
 	},
 ];
 
-const Page = ({ params }: { params: { id: string } }) => {
-	const router = useRouter();
-	const [form] = Form.useForm();
+const Page = (props: { params: Promise<{ id: string }> }) => {
+    const params = use(props.params);
+    const router = useRouter();
+    const [form] = Form.useForm();
 
-	const [loading, setLoading] = useState(false);
-	const [file, setFile] = useState<File | null>(null);
-	const [image, setImage] = useState<string | undefined>(undefined);
+    const [loading, setLoading] = useState(false);
+    const [file, setFile] = useState<File | null>(null);
+    const [image, setImage] = useState<string | undefined>(undefined);
 
-	const removeImage = () => setFile(null);
+    const removeImage = () => setFile(null);
 
-	const beforeUpload = (file: File) => {
+    const beforeUpload = (file: File) => {
 		setFile(file);
 		const img = URL.createObjectURL(file);
 		setImage(img);
 		return false;
 	};
 
-	const onFinish = (values: any) => {
+    const onFinish = (values: any) => {
 		setLoading(true);
 
 		if (values.dateOfBirth) values.date = dayjs(values.dateOfBirth).toDate();
@@ -76,7 +77,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 			.finally(() => setLoading(false));
 	};
 
-	useEffect(() => {
+    useEffect(() => {
 		axios.get(`/api/admin/member?id=${params.id}`).then((response) => {
 			if (response.data.code === 0) {
 				if (response.data.data.dateOfBirth)
@@ -91,7 +92,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 		});
 	}, [params.id, form]);
 
-	return (
+    return (
 		<Navigation title="VMS: Anggota Detail" active="admin" access="member" isAdmin>
 			<ContainerAdmin>
 				<div className="mt-6 rounded-3xl border border-slate-200 bg-linear-to-br from-slate-100 via-white to-amber-50 p-5 shadow-sm md:p-6">

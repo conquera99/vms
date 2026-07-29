@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { CloseOutline, GiftOutline, RightOutline } from 'components/general/antd-icon';
 import { Form } from 'antd';
 import axios from 'axios';
@@ -27,16 +27,17 @@ const breadcrumb = [
 	},
 ];
 
-const Page = ({ params }: { params: { id: string } }) => {
-	const [form] = Form.useForm();
+const Page = (props: { params: Promise<{ id: string }> }) => {
+    const params = use(props.params);
+    const [form] = Form.useForm();
 
-	const [category, setCategory] = useState<Record<string, any>[]>([]);
-	const [totalQty, setTotalQty] = useState(0);
-	const [usedQty, setUsedQty] = useState(0);
-	const [loading, setLoading] = useState(false);
-	const availableQty = Math.max(totalQty - usedQty, 0);
+    const [category, setCategory] = useState<Record<string, any>[]>([]);
+    const [totalQty, setTotalQty] = useState(0);
+    const [usedQty, setUsedQty] = useState(0);
+    const [loading, setLoading] = useState(false);
+    const availableQty = Math.max(totalQty - usedQty, 0);
 
-	const onFinish = (values: any) => {
+    const onFinish = (values: any) => {
 		setLoading(true);
 
 		if (values.date) values.date = dayjs(values.date).toDate();
@@ -56,7 +57,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 			.finally(() => setLoading(false));
 	};
 
-	useEffect(() => {
+    useEffect(() => {
 		axios.get('/api/admin/item-category?s=10000').then((response) => {
 			if (response.data.code === 0) {
 				setCategory(response.data.data);
@@ -73,7 +74,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 		});
 	}, [params.id, form]);
 
-	return (
+    return (
 		<Navigation title="VMS: Item Detail" active="admin" access="item" isAdmin>
 			<ContainerAdmin>
 				<div className="mt-6 overflow-hidden rounded-[2rem] border border-amber-200/80 bg-linear-to-br from-amber-50 via-white to-orange-50 shadow-sm">
