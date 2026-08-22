@@ -61,22 +61,17 @@ Plan to migrate this repo from the Pages Router to the App Router. Incremental s
 7. ✅ Augmented `User` interface in `src/types/next-auth.d.ts` (Session/JWT augmentation already existed)
 8. **Verified at runtime:** sysadm sign-in → session cookie → `/api/auth/session` carries id/username/permissions; admin API 200 with cookie / 403 without; `/admin` → `/signin` redirect; `/signin` → `/` when authed; wrong password → `?error=CredentialsSignin&code=user_tidak_terdaftar`
 
-### Phase 2 — Admin API routes → route handlers (before admin pages)
+### Phase 2 — Admin API routes → route handlers (before admin pages) — ✅ DONE
 
-Mechanical conversion for all 42 `/api/admin/**` routes:
+All 44 `pages/api/admin/**` routes converted to `app/api/admin/**/route.ts` (GET for list/detail, POST for save/remove — matching the existing axios client contract, which stays unchanged):
 
-```
-pages/api/admin/item/save.ts          → app/api/admin/item/save/route.ts  (POST)
-pages/api/admin/item/remove.ts        → app/api/admin/item/remove/route.ts (POST/DELETE)
-pages/api/admin/item/index.ts         → app/api/admin/item/route.ts        (GET)
-```
-
-- `getSession({ req })` → `await auth()` (from `src/auth.ts`); same 403 JSON response
-- `req.method` switches → separate exported functions (`GET`/`POST`)
-- `req.query.x` → `searchParams.get('x')` (NextRequest)
-- The 6 formidable routes: `new IncomingForm().parse(req)` → `await req.formData()`; `files.img.filepath` → `(formData.get('img') as File)` passed to Cloudinary's upload stream (`buffer` from `arrayBuffer()`). Drop the `config.api.bodyParser` export
-- **Note:** `/api/auth` already moved in Phase 1; public API routes stay in `pages/` until Phase 5 (their consumers don't care where they live)
-- **Verify:** `tsc` + spot-check one full admin save/remove cycle with curl; then delete the old `pages/api/admin/` files in the same commit
+- `getApiSession(req)` → `await auth()`; same 403 JSON responses
+- `req.query` → `searchParams.get()`; `req.body` → `await request.json()`
+- The 6 formidable upload routes → native `request.formData()` + new `uploadBuffer()` helper in `utils/cloudinary.ts` (streams `Buffer.from(file.arrayBuffer())` via `upload_stream`); **formidable + @types/formidable removed from dependencies**
+- `res.revalidate('/gallery/album/[slug]' | '/post/[slug]')` → `revalidatePath()` (album save, post save)
+- `src/utils/api-session.ts` compat helper deleted (zero users left after conversion)
+- `auth` path alias added to tsconfig
+- **Verified at runtime:** sign-in → dashboard counts, list/detail, full create→update→remove cycle (incl. `$queryRaw` code generation), FormData member save, and 403 without cookie
 
 ### Phase 3 — Admin pages
 

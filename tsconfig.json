@@ -21,6 +21,9 @@
       "db": [
         "./src/db"
       ],
+      "auth": [
+        "./src/auth"
+      ],
       "components/*": [
         "./src/components/*"
       ],

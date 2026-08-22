@@ -1,0 +1,93 @@
+import { NextRequest, NextResponse } from 'next/server';
+import dayjs from 'dayjs';
+
+import { auth } from 'auth';
+import cloudinary, { uploadBuffer } from 'utils/cloudinary';
+import { prisma } from 'db';
+import { forbiddenResponse, successResponse } from 'utils/constant';
+
+export async function POST(request: NextRequest) {
+	const session = await auth();
+
+	if (!session) return NextResponse.json(forbiddenResponse, { status: 403 });
+
+	const formData = await request.formData();
+
+	const field = (name: string) => {
+		const value = formData.get(name);
+		return typeof value === 'string' ? value : undefined;
+	};
+
+	const img = formData.get('img');
+	const file = img instanceof File && img.size > 0 ? img : null;
+
+	// upload
+	let imageData = {};
+
+	if (file) {
+		try {
+			const response = await uploadBuffer(Buffer.from(await file.arrayBuffer()), {
+				folder: 'deceased',
+				type: 'authenticated',
+			});
+
+			imageData = {
+				image: response.secure_url,
+				imageId: response.public_id,
+			};
+		} catch (error) {
+			return NextResponse.json({ code: 500, message: (error as Error).message });
+		}
+	}
+
+	if (field('id')) {
+		const detail = await prisma.deceased.findFirst({
+			where: { id: field('id') },
+		});
+
+		if (!detail) {
+			return NextResponse.json({ code: 404, message: 'data not found' });
+		}
+
+		const update = await prisma.deceased.update({
+			where: { id: field('id') },
+			data: {
+				name: field('name'),
+				placeOfBirth: field('placeOfBirth'),
+				placeOfDeath: field('placeOfDeath'),
+				birthNotes: field('birthNotes') || '',
+				deathNotes: field('deathNotes') || '',
+				family: field('family'),
+				dateOfBirth: dayjs(field('dateOfBirth')).toDate(),
+				dateOfDeath: dayjs(field('dateOfDeath')).toDate(),
+				updatedBy: session.user.id,
+				...imageData,
+			},
+		});
+
+		let deleteImage = null;
+
+		if (file && detail.imageId) {
+			deleteImage = await cloudinary.v2.api.delete_resources([detail.imageId]);
+		}
+
+		return NextResponse.json({ ...successResponse, data: { update, deleteImage } });
+	}
+
+	const create = await prisma.deceased.create({
+		data: {
+			name: field('name') as string,
+			placeOfBirth: field('placeOfBirth'),
+			placeOfDeath: field('placeOfDeath'),
+			birthNotes: field('birthNotes') || '',
+			deathNotes: field('deathNotes') || '',
+			family: field('family'),
+			dateOfBirth: dayjs(field('dateOfBirth')).toDate(),
+			dateOfDeath: dayjs(field('dateOfDeath')).toDate(),
+			createdBy: session.user.id,
+			...imageData,
+		},
+	});
+
+	return NextResponse.json({ ...successResponse, data: create });
+}
