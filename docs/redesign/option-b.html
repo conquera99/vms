@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Option B — Zen Minimal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#F7F7F5; font-family:'Plus Jakarta Sans',sans-serif; color:#1F2937; }
+  .wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
+
+  .nav { background:#FFFFFF; border-bottom:1px solid #E5E7EB; }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand img { width:38px; height:38px; }
+  .brand b { font-size:21px; color:#1F2937; }
+  .brand .dot { width:8px; height:8px; border-radius:99px; background:#0F766E; }
+  .menu { display:flex; gap:8px; font-size:14px; font-weight:500; color:#6B7280; }
+  .menu span { padding:8px 14px; border-radius:10px; }
+  .menu .active { background:#E6F2F0; color:#0F766E; font-weight:600; }
+
+  .banner { margin-top:28px; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; background:#fff; }
+  .banner-photo { height:280px; position:relative;
+    background:linear-gradient(115deg,#334155 0%,#64748b 45%,#94a3b8 75%,#cbd5e1 100%); }
+  .banner-photo::after { content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(17,24,39,0) 35%,rgba(17,24,39,.85) 100%); }
+  .banner-body { position:absolute; left:28px; right:28px; bottom:22px; color:#fff; }
+  .kicker { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:#A7F3D0; margin-bottom:8px; }
+  h1 { font-size:30px; font-weight:700; line-height:1.2; margin-bottom:8px; }
+  .banner-body p { font-size:14px; color:#E5E7EB; max-width:520px; line-height:1.6; margin-bottom:14px; }
+  .btn { display:inline-block; background:#0F766E; color:#fff; font-weight:600; font-size:14px;
+    padding:10px 20px; border-radius:10px; }
+
+  .sec { display:flex; align-items:baseline; justify-content:space-between; margin:34px 0 16px; }
+  .sec h2 { font-size:22px; font-weight:700; color:#1F2937; }
+  .sec small { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:#9CA3AF; }
+
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .card { background:#fff; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; }
+  .card-photo { height:150px; position:relative;
+    background:linear-gradient(135deg,#d1d5db 0%,#9ca3af 50%,#6b7280 100%); }
+  .chip { position:absolute; left:12px; top:12px; background:rgba(255,255,255,.95); border:1px solid #E5E7EB;
+    font-size:11px; font-weight:600; color:#4B5563; padding:4px 10px; border-radius:99px; }
+  .card-body { padding:16px 18px 14px; }
+  .card-body h3 { font-size:18px; font-weight:700; color:#1F2937; margin-bottom:6px; }
+  .card-body p { font-size:13px; color:#6B7280; line-height:1.6; margin-bottom:14px; }
+  .foot { display:flex; align-items:center; justify-content:space-between; border-top:1px solid #F3F4F6; padding-top:12px; }
+  .foot small { font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:#9CA3AF; }
+  .more { font-size:13px; font-weight:600; color:#0F766E; background:#E6F2F0; padding:7px 12px; border-radius:9px; }
+
+  footer { margin-top:40px; border-top:1px solid #E5E7EB; padding:16px 0 30px;
+    text-align:center; font-size:12px; color:#9CA3AF; }
+</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap nav-inner">
+    <div class="brand"><img src="logo.png" alt=""><b>VSG</b><span class="dot"></span></div>
+    <div class="menu">
+      <span class="active">Beranda</span><span>Paritta</span><span>Galeri</span><span>Admin</span><span>Masuk</span>
+    </div>
+  </div></div>
+
+  <div class="wrap">
+    <div class="banner">
+      <div class="banner-photo">
+        <div class="banner-body">
+          <div class="kicker">Kegiatan Berlangsung</div>
+          <h1>Kathina 2026 di Vihara Sasana Graha</h1>
+          <p>Mari berpartisipasi dalam persembahan jubah Kathina bersama seluruh umat. Pendaftaran terbuka hingga akhir bulan November.</p>
+          <a class="btn">Lihat Selengkapnya</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec"><h2>Post Terbaru</h2><small>Kabar Vihara</small></div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-photo"><span class="chip">12 AGT 2026</span></div>
+        <div class="card-body">
+          <h3>Perayaan Waisak 2570 B.E. di Nunukan</h3>
+          <p>Rangkaian kegiatan Waisak dimulai dengan sembahyang bersama di vihara, diikuti pawai dan pentas dharma.</p>
+          <div class="foot"><small>Artikel</small><span class="more">Baca</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-photo" style="background:linear-gradient(135deg,#a8b8b4 0%,#7d938f 50%,#546b67 100%);"><span class="chip">02 AGT 2026</span></div>
+        <div class="card-body">
+          <h3>Pelatihan Paritta untuk Umat Muda</h3>
+          <p>Kegiatan belajar melafalkan paritta suci setiap Sabtu malam, dibimbing oleh pandita vihara.</p>
+          <div class="foot"><small>Artikel</small><span class="more">Baca</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>© 2026 VSG — Vihara Sasana Graha, Nunukan · Jl. Cut Nyak Dien RT. 15, Kab. Nunukan</footer>
+</body>
+</html>

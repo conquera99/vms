@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Option A — Heritage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#FAF6EE; font-family:'Inter',sans-serif; color:#292524; }
+  .wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
+
+  /* nav */
+  .nav { background:#FFFFFF; border-bottom:3px double #C08A2D; }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand img { width:38px; height:38px; }
+  .brand b { font-family:'Lora',serif; font-size:22px; color:#7C2D2D; }
+  .menu { display:flex; gap:26px; font-size:14px; font-weight:500; color:#57534E; }
+  .menu .active { color:#7C2D2D; font-weight:700; border-bottom:2px solid #C08A2D; padding-bottom:2px; }
+
+  /* banner */
+  .banner { margin-top:28px; background:#fff; border:1px solid #EADFC8; border-top:4px solid #C08A2D; }
+  .banner-photo { height:280px; position:relative;
+    background:linear-gradient(120deg,#8c5a2b 0%,#c08a2d 34%,#e3c78f 55%,#7c2d2d 100%); }
+  .banner-photo::after { content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(250,246,238,0) 30%,rgba(250,246,238,.92) 100%); }
+  .banner-body { padding:18px 32px 26px; margin-top:-70px; position:relative; }
+  .kicker { font-size:11px; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:#C08A2D; margin-bottom:8px; }
+  h1 { font-family:'Lora',serif; font-size:34px; color:#7C2D2D; line-height:1.15; margin-bottom:10px; }
+  .banner-body p { font-size:14px; color:#57534E; max-width:560px; line-height:1.6; margin-bottom:16px; }
+  .btn-gold { display:inline-block; background:#C08A2D; color:#fff; font-weight:600; font-size:14px;
+    padding:10px 22px; border-radius:10px; }
+
+  /* section title */
+  .sec { display:flex; align-items:baseline; gap:14px; margin:36px 0 18px; }
+  .sec h2 { font-family:'Lora',serif; font-size:24px; color:#292524; }
+  .sec .rule { flex:1; border-top:1px solid #EADFC8; position:relative; top:-6px; }
+  .sec .rule::after { content:''; display:block; border-top:1px solid #EADFC8; margin-top:2px; }
+
+  /* cards */
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+  .card { background:#fff; border:1px solid #EADFC8; border-top:4px solid #C08A2D; }
+  .card-photo { height:150px; position:relative;
+    background:linear-gradient(135deg,#b98d5f 0%,#e8d5b5 50%,#8c6a45 100%); }
+  .chip { position:absolute; left:12px; top:12px; background:rgba(250,246,238,.95); border:1px solid #EADFC8;
+    font-size:11px; font-weight:600; color:#57534E; padding:4px 10px; border-radius:99px; }
+  .card-body { padding:18px 20px; }
+  .card-body h3 { font-family:'Lora',serif; font-size:19px; color:#292524; margin-bottom:8px; }
+  .card-body p { font-size:13px; color:#78716C; line-height:1.6; margin-bottom:14px; }
+  .more { font-size:13px; font-weight:600; color:#7C2D2D; text-decoration:none; border-bottom:1px solid #C08A2D; padding-bottom:1px; }
+
+  footer { margin-top:40px; border-top:3px double #C08A2D; padding:16px 0 30px;
+    text-align:center; font-size:12px; color:#A8A29E; }
+</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap nav-inner">
+    <div class="brand"><img src="logo.png" alt=""><b>VSG</b></div>
+    <div class="menu">
+      <span class="active">Beranda</span><span>Paritta</span><span>Galeri</span><span>Admin</span><span>Masuk</span>
+    </div>
+  </div></div>
+
+  <div class="wrap">
+    <div class="banner">
+      <div class="banner-photo"></div>
+      <div class="banner-body">
+        <div class="kicker">Sorotan Kegiatan</div>
+        <h1>Kathina 2026 di Vihara Sasana Graha</h1>
+        <p>Mari berpartisipasi dalam persembahan jubah Kathina bersama seluruh umat. Pendaftaran terbuka hingga akhir bulan November.</p>
+        <a class="btn-gold">Lihat Selengkapnya</a>
+      </div>
+    </div>
+
+    <div class="sec"><h2>Post Terbaru</h2><div class="rule"></div></div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-photo"><span class="chip">12 AGT 2026</span></div>
+        <div class="card-body">
+          <h3>Perayaan Waisak 2570 B.E. di Nunukan</h3>
+          <p>Rangkaian kegiatan Waisak dimulai dengan sembahyang bersama di vihara, diikuti pawai dan pentas dharma.</p>
+          <a class="more">Baca Selengkapnya</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-photo" style="background:linear-gradient(135deg,#7c2d2d 0%,#c08a2d 60%,#e8d5b5 100%);"><span class="chip">02 AGT 2026</span></div>
+        <div class="card-body">
+          <h3>Pelatihan Paritta untuk Umat Muda</h3>
+          <p>Kegiatan belajar melafalkan paritta suci setiap Sabtu malam, dibimbing oleh pandita vihara.</p>
+          <a class="more">Baca Selengkapnya</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>© 2026 VSG — Vihara Sasana Graha, Nunukan · Jl. Cut Nyak Dien RT. 15, Kab. Nunukan</footer>
+</body>
+</html>

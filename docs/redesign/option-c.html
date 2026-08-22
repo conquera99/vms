@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Option C — Ceremonial Night</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#1C1917; font-family:'Inter',sans-serif; color:#F4EFE6; }
+  .wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
+
+  .nav { background:#292524; border-bottom:1px solid #44403C; }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand img { width:38px; height:38px; border-radius:10px; background:#F4EFE6; padding:3px; }
+  .brand b { font-family:'Fraunces',serif; font-size:21px; color:#E0B45C; }
+  .menu { display:flex; gap:24px; font-size:14px; font-weight:500; color:#A8A29E; }
+  .menu .active { color:#E0B45C; font-weight:600; }
+
+  .banner { margin-top:28px; border:1px solid #44403C; border-radius:18px; overflow:hidden; background:#292524; }
+  .banner-photo { height:270px; position:relative;
+    background:radial-gradient(90% 120% at 70% 0%,#c08a2d33 0%,transparent 60%),
+               linear-gradient(115deg,#3f3a35 0%,#292524 55%,#1c1917 100%); }
+  .banner-photo::after { content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(28,25,23,0) 40%,rgba(28,25,23,.95) 100%); }
+  .banner-body { position:absolute; left:28px; right:28px; bottom:22px; }
+  .kicker { font-size:11px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:#E0B45C; margin-bottom:8px; }
+  h1 { font-family:'Fraunces',serif; font-size:32px; line-height:1.15; margin-bottom:8px; color:#F4EFE6; }
+  .banner-body p { font-size:14px; color:#D6D3D1; max-width:520px; line-height:1.6; margin-bottom:14px; }
+  .btn { display:inline-block; background:#E0B45C; color:#1C1917; font-weight:600; font-size:14px;
+    padding:10px 22px; border-radius:12px; box-shadow:0 0 28px rgba(224,180,92,.35); }
+
+  .cols { display:grid; grid-template-columns:1.1fr .9fr; gap:20px; margin-top:22px; }
+
+  .panel { background:#292524; border:1px solid #44403C; border-radius:18px; padding:20px; }
+  .panel h2 { font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:#A8A29E; margin-bottom:14px; }
+  .post { display:flex; gap:14px; padding:12px; border:1px solid #33302B; border-radius:14px; background:#1C1917; margin-bottom:12px; }
+  .post-thumb { width:96px; height:72px; border-radius:10px; flex-shrink:0;
+    background:linear-gradient(135deg,#57534E,#292524); border:1px solid #44403C; }
+  .post h3 { font-size:15px; font-weight:600; color:#F4EFE6; margin-bottom:4px; }
+  .post p { font-size:12px; color:#A8A29E; line-height:1.5; }
+  .post a { font-size:12px; font-weight:600; color:#E0B45C; text-decoration:none; }
+
+  /* paritta player */
+  .now { text-align:center; padding:8px 0 16px; }
+  .disc { width:120px; height:120px; margin:0 auto 14px; border-radius:50%;
+    background:radial-gradient(circle at 50% 50%,#292524 34%,#E0B45C 36%,#E0B45C 40%,#3f3a35 42%,#2e2b27 100%);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 40px rgba(224,180,92,.35), 0 0 90px rgba(224,180,92,.15); }
+  .disc .play { color:#E0B45C; font-size:34px; }
+  .now h3 { font-family:'Fraunces',serif; font-size:19px; color:#F4EFE6; margin-bottom:4px; }
+  .now small { font-size:12px; color:#A8A29E; }
+  .eq { display:flex; align-items:flex-end; justify-content:center; gap:4px; height:22px; margin:12px 0 10px; }
+  .eq i { width:4px; border-radius:2px; background:#E0B45C; display:block; }
+  .eq i:nth-child(1){height:8px} .eq i:nth-child(2){height:16px} .eq i:nth-child(3){height:22px}
+  .eq i:nth-child(4){height:12px} .eq i:nth-child(5){height:18px} .eq i:nth-child(6){height:9px} .eq i:nth-child(7){height:14px}
+  .track { display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:9px 12px; border-radius:11px; font-size:13px; color:#D6D3D1; margin-bottom:6px; border:1px solid transparent; }
+  .track.on { background:#33302B; border-color:rgba(224,180,92,.45); color:#E0B45C; font-weight:600;
+    box-shadow:0 0 18px rgba(224,180,92,.12); }
+  .track .num { color:#78716C; font-size:11px; }
+  .track.on .num { color:#E0B45C; }
+
+  footer { margin-top:40px; border-top:1px solid #44403C; padding:16px 0 30px;
+    text-align:center; font-size:12px; color:#78716C; }
+</style>
+</head>
+<body>
+  <div class="nav"><div class="wrap nav-inner">
+    <div class="brand"><img src="logo.png" alt=""><b>VSG</b></div>
+    <div class="menu">
+      <span class="active">Beranda</span><span>Paritta</span><span>Galeri</span><span>Admin</span><span>Masuk</span>
+    </div>
+  </div></div>
+
+  <div class="wrap">
+    <div class="banner">
+      <div class="banner-photo">
+        <div class="banner-body">
+          <div class="kicker">Sorotan Kegiatan</div>
+          <h1>Kathina 2026 di Vihara Sasana Graha</h1>
+          <p>Mari berpartisipasi dalam persembahan jubah Kathina bersama seluruh umat. Pendaftaran terbuka hingga akhir November.</p>
+          <a class="btn">Lihat Selengkapnya</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="cols">
+      <div class="panel">
+        <h2>Post Terbaru</h2>
+        <div class="post">
+          <div class="post-thumb"></div>
+          <div>
+            <h3>Perayaan Waisak 2570 B.E.</h3>
+            <p>Rangkaian kegiatan Waisak dimulai dengan sembahyang bersama di vihara…</p>
+            <a>Baca →</a>
+          </div>
+        </div>
+        <div class="post">
+          <div class="post-thumb" style="background:linear-gradient(135deg,#c08a2d55,#292524);"></div>
+          <div>
+            <h3>Pelatihan Paritta Umat Muda</h3>
+            <p>Belajar melafalkan paritta suci setiap Sabtu malam bersama pandita…</p>
+            <a>Baca →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Paritta Suci · Diputar</h2>
+        <div class="now">
+          <div class="disc"><span class="play">▶</span></div>
+          <h3>04. Saranagamana Patha</h3>
+          <small>02:41 / 05:12</small>
+          <div class="eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="track on"><span><span class="num">04 ·</span> Saranagamana Patha</span><span>●</span></div>
+        <div class="track"><span><span class="num">05 ·</span> Pancasila</span></div>
+        <div class="track"><span><span class="num">06 ·</span> Buddhanussati</span></div>
+        <div class="track"><span><span class="num">07 ·</span> Dhammanussati</span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>© 2026 VSG — Vihara Sasana Graha, Nunukan · Jl. Cut Nyak Dien RT. 15, Kab. Nunukan</footer>
+</body>
+</html>
