@@ -1,31 +1,31 @@
-import type { GetServerSidePropsContext, NextPage } from 'next';
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { getSession, getCsrfToken, signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 import { Form } from 'antd';
-import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 
-import PageHead from 'components/general/page-head';
 import Input from 'components/entry/input';
 import Button from 'components/general/button';
 import { RightOutline } from 'components/general/antd-icon';
-import { useState } from 'react';
 
-const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
-	const router = useRouter();
+const SignInForm = () => {
+	const searchParams = useSearchParams();
+	const errorParam = searchParams?.get('error');
 	const [form] = Form.useForm();
 
 	const [loading, setLoading] = useState(false);
 
 	const onFinish = (values: any) => {
 		setLoading(true);
-		signIn('credentials', { username: values.username, password: values.password }).finally(
-			() => setLoading(false),
+		signIn('credentials', { username: values.username, password: values.password }).finally(() =>
+			setLoading(false),
 		);
 	};
 
-	const errorMessage =
-		typeof router.query.error === 'string' ? router.query.error.replace(/_/g, ' ') : '';
+	const errorMessage = typeof errorParam === 'string' ? errorParam.replace(/_/g, ' ') : '';
 
 	return (
 		<div className="relative min-h-screen overflow-hidden py-10 sm:px-6 lg:px-8">
@@ -33,8 +33,6 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 			<div className="pointer-events-none absolute -left-20 bottom-6 h-48 w-48 rounded-full bg-[#c8dded]/55 blur-3xl sm:h-64 sm:w-64" />
 
 			<div className="relative mx-auto w-full max-w-md">
-				<PageHead title="Sign In" />
-
 				<div className="mb-5 text-center sm:mb-6">
 					<Link href="/">
 						<Image
@@ -65,18 +63,8 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 						</p>
 					</div>
 
-					<Form
-						layout="vertical"
-						form={form}
-						onFinish={onFinish}
-						initialValues={{ username: '', password: '', csrfToken }}
-					>
-						<Input name="csrfToken" type="hidden" />
-						<Input
-							name="username"
-							label="Username"
-							input={{ autoComplete: 'username' }}
-						/>
+					<Form layout="vertical" form={form} onFinish={onFinish} initialValues={{ username: '', password: '' }}>
+						<Input name="username" label="Username" input={{ autoComplete: 'username' }} />
 						<Input
 							name="password"
 							type="password"
@@ -116,18 +104,4 @@ const SignIn: NextPage<{ csrfToken: string | undefined }> = ({ csrfToken }) => {
 	);
 };
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-	const session = await getSession(context);
-
-	if (session) {
-		return { redirect: { permanent: false, destination: '/' } };
-	}
-
-	const csrfToken = await getCsrfToken({ req: context.req });
-
-	return {
-		props: { csrfToken },
-	};
-}
-
-export default SignIn;
+export default SignInForm;

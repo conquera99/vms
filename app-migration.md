@@ -50,14 +50,16 @@ Plan to migrate this repo from the Pages Router to the App Router. Incremental s
 4. ✅ Created `src/app/not-found.tsx`; extracted the antd theme to `src/styles/antd-theme.ts` (imported by both `_app.tsx` and `providers.tsx` — single source of truth during coexistence)
 5. **Verified:** `tsc` clean, lint 0 errors (font warning is a Pages-Router-rule false positive, annotated in code), build passes, and runtime smoke test: `/` still served by Pages Router unchanged; unmatched routes render the new app `not-found` with PWA metadata correctly hoisted
 
-### Phase 1 — Auth (blocking prerequisite)
+### Phase 1 — Auth (blocking prerequisite) — ✅ DONE (next-auth 5.0.0-beta.32)
 
-1. Port `authOptions` → `src/auth.ts` (v5 `NextAuth()` config; same credentials provider, callbacks, pages, secret). Export `{ handlers, auth, signIn, signOut }`
-2. `src/app/api/auth/[...nextauth]/route.ts` → `export const { GET, POST } = handlers` — then **delete** `pages/api/auth/[...nextauth].ts`
-3. Add `src/middleware.ts`: protect `/admin/:path*` and `/profile` (check JWT, redirect to `/signin`). This replaces the navigation component's redirect as the first gate; keep the client-side permission check (`access` prop) as-is
-4. `src/app/signin/page.tsx` — port as client component. v5's `signIn('credentials', ...)` from `next-auth/react` needs no manual csrfToken; delete the `getServerSideProps`; the "already signed in" redirect moves to middleware or a server wrapper. Delete `pages/signin.tsx`
-5. Module augmentation for the custom session fields (`id`, `username`, `permissions`) in `src/types/next-auth.d.ts`
-6. **Verify:** sign in/out works, `/admin` blocked when signed out, session payload still carries permissions
+1. ✅ `src/auth.config.ts` — edge-safe base config (no prisma): pages, callbacks, `trustHost: true`, v4 cookie names (scheme-based `__Secure-` prefix), secret resolved as `SECRET ?? NEXTAUTH_SECRET ?? AUTH_SECRET` (v4 read NEXTAUTH_SECRET implicitly; v5 only reads AUTH_SECRET — the local `.env` uses NEXTAUTH_SECRET)
+2. ✅ `src/auth.ts` — full `NextAuth()` config with the credentials provider (same sysadm/db logic, prisma-backed), custom sign-in errors via `CredentialsSignin` subclasses (`user_tidak_terdaftar`, `password_tidak_sesuai` — codes land in the redirect URL like v4's thrown messages)
+3. ✅ `src/app/api/auth/[...nextauth]/route.ts` exports `handlers`; deleted `pages/api/auth/[...nextauth].ts`
+4. ✅ `src/proxy.ts` (not `middleware.ts` — Next 16 deprecated the middleware convention) protects `/admin/:path*` + `/profile` and bounces authed users off `/signin`
+5. ✅ **Pulled forward from Phase 2:** all 44 pages API routes converted from `getSession({ req })` to a compat helper `src/utils/api-session.ts` that decodes the session cookie via v5 `decode()` — required because installing v5 removes `getSession`; the helper dies with Phase 2
+6. ✅ `src/app/signin/page.tsx` (server, metadata) + `sign-in-form.tsx` (client, Suspense-wrapped `useSearchParams`, no csrfToken plumbing); deleted `pages/signin.tsx`
+7. ✅ Augmented `User` interface in `src/types/next-auth.d.ts` (Session/JWT augmentation already existed)
+8. **Verified at runtime:** sysadm sign-in → session cookie → `/api/auth/session` carries id/username/permissions; admin API 200 with cookie / 403 without; `/admin` → `/signin` redirect; `/signin` → `/` when authed; wrong password → `?error=CredentialsSignin&code=user_tidak_terdaftar`
 
 ### Phase 2 — Admin API routes → route handlers (before admin pages)
 

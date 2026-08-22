@@ -11,6 +11,13 @@ declare module 'next-auth' {
 			permissions?: Record<string, boolean>;
 		} & DefaultSession['user'];
 	}
+
+	interface User {
+		id?: string;
+		username?: string | null;
+		password?: string;
+		permissions?: Record<string, boolean>;
+	}
 }
 
 /** Example on how to extend the built-in types for JWT */

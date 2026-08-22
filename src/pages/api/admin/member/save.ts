@@ -1,4 +1,4 @@
-import { getSession } from 'next-auth/react';
+import { getApiSession } from 'utils/api-session';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { IncomingForm } from 'formidable';
 import dayjs from 'dayjs';
@@ -14,7 +14,7 @@ export const config = {
 };
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const session = await getSession({ req });
+	const session = await getApiSession(req);
 
 	if (!session) return res.status(403).json(forbiddenResponse);
 
