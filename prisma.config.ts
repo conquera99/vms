@@ -15,6 +15,7 @@ export default defineConfig({
 		path: 'src/db/migrations',
 	},
 	datasource: {
-		url: process.env.DATABASE_URL ?? '',
+		// the runtime adapter requires mariadb://, but the CLI engine only accepts mysql://
+		url: (process.env.DATABASE_URL ?? '').replace(/^mariadb:\/\//, 'mysql://'),
 	},
 });
