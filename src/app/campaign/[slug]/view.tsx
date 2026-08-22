@@ -1,5 +1,6 @@
+'use client';
+
 import { FC, useEffect, useState } from 'react';
-import { GetStaticProps, GetStaticPaths } from 'next';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import { CalendarOutline, UserOutline } from 'components/general/antd-icon';
@@ -10,7 +11,6 @@ import Container from 'components/general/container';
 import BlurImage from 'components/display/BlurImage';
 import Empty from 'components/display/empty';
 
-import { prisma } from 'db';
 import { dateFormat, datetimeFormat } from 'utils/constant';
 
 const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
@@ -125,47 +125,6 @@ const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 			</Container>
 		</Navigation>
 	);
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-	return {
-		paths: [{ params: { slug: 'spanduk' } }],
-		fallback: 'blocking',
-	};
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-	const { slug } = params as Record<string, any>;
-
-	// redirect
-	if (!slug) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
-		};
-	}
-
-	const data = await prisma.campaign.findFirst({ where: { slug: slug as string } });
-
-	if (!data || data?.status !== 'A') {
-		return {
-			notFound: true,
-		};
-	}
-
-	return {
-		props: {
-			data: {
-				...data,
-				startDate: data.startDate ? dayjs(data.startDate).format(dateFormat) : '-',
-				endDate: data.endDate ? dayjs(data.endDate).format(dateFormat) : '-',
-				createdAt: dayjs(data.createdAt).format(datetimeFormat),
-				updatedAt: dayjs(data.updatedAt).format(datetimeFormat),
-			},
-		},
-	};
 };
 
 export default Page;

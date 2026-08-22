@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, ReactNode } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { LeftOutline, MailOutline, UserContactOutline } from 'components/general/antd-icon';

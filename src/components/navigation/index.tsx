@@ -1,5 +1,8 @@
+'use client';
+
 import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'components/general/antd-icon';
 import Link from 'next/link';
 import Image from "next/image";
@@ -9,7 +12,6 @@ import type { UrlObject } from 'url';
 
 import BaseNavInterface from 'interfaces/navigation';
 
-import PageHead from 'components/general/page-head';
 import Forbidden from 'components/display/forbidden';
 import Footer from 'components/navigation/footer';
 
@@ -62,9 +64,6 @@ const MenuItem: FC<{
 };
 
 const Navigation: FC<BaseNavInterface> = ({
-	title,
-	desc,
-	image,
 	active,
 	access,
 	children,
@@ -72,25 +71,22 @@ const Navigation: FC<BaseNavInterface> = ({
 	isAdmin,
 	hideFooter = true,
 }) => {
+	const router = useRouter();
 	const { data: session, status } = useSession();
 	const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
 	const [showInstallBanner, setShowInstallBanner] = useState(false);
 
 	useEffect(() => {
 		if (status !== 'loading') {
-			// full reload is intentional: clears client state on auth failure.
-			// temporary bridge while pages and app router coexist (migration phase 3-5)
 			if (isAdmin === true && status === 'unauthenticated') {
-				// eslint-disable-next-line @next/next/no-location-assign-relative-destination
-				window.location.assign('/');
+				router.push('/');
 			}
 
 			if (typeof access !== 'undefined' && !session?.user?.permissions?.[access as string]) {
-				// eslint-disable-next-line @next/next/no-location-assign-relative-destination
-				window.location.assign('/');
+				router.push('/');
 			}
 		}
-	}, [isAdmin, status, access, session?.user?.permissions]);
+	}, [isAdmin, status, access, session?.user?.permissions, router]);
 
 	// This hook only run once in browser after the component is rendered for the first time.
 	// It has same effect as the old componentDidMount lifecycle callback.
@@ -266,7 +262,6 @@ const Navigation: FC<BaseNavInterface> = ({
 
 	return (
         <div className="bg-slate-100">
-            <PageHead title={title} desc={desc} image={image} />
             {showInstallBanner && installPromptEvent && (
 				<div className="fixed bottom-24 left-3 right-3 z-40 md:bottom-auto md:left-4 md:right-4 md:top-20">
 					<div className="mx-auto flex max-w-5xl items-start justify-between gap-3 rounded-2xl border border-white/70 bg-white/90 p-4 shadow-xl shadow-slate-400/20 backdrop-blur-md">

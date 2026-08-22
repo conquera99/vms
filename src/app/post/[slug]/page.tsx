@@ -1,10 +1,9 @@
-import { FC } from 'react';
-import { GetStaticProps, GetStaticPaths } from 'next';
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import escapeHtml from 'escape-html';
 import dayjs from 'dayjs';
 import { CalendarOutline, UserOutline } from 'components/general/antd-icon';
 
-import Title from 'components/display/title';
 import Navigation from 'components/navigation';
 import Breadcrumb from 'components/display/breadcrumb';
 import Container from 'components/general/container';
@@ -13,7 +12,15 @@ import { prisma } from 'db';
 import { datetimeFormat } from 'utils/constant';
 import BlurImage from 'components/display/BlurImage';
 
-const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
+const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
+	const { slug } = await params;
+
+	const data = await getPost(slug);
+
+	if (!data) {
+		notFound();
+	}
+
 	const breadcrumb = [
 		{
 			title: 'Home',
@@ -28,8 +35,8 @@ const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 	return (
 		<Navigation
 			title={data.title}
-			desc={data.summary}
-			image={data.image}
+			desc={data.summary ?? undefined}
+			image={data.image ?? undefined}
 			active="home"
 			hideFooter={false}
 		>
@@ -42,7 +49,7 @@ const Page: FC<{ data: Record<string, any> }> = ({ data }) => {
 
 					<div className="relative z-10">
 						<BlurImage
-							src={data.image}
+							src={data.image ?? ''}
 							alt={data.title}
 							className="rounded-2xl"
 							sizes="(max-width: 640px) 100vw, (max-width: 1280px) 92vw, 1100px"
@@ -128,44 +135,49 @@ const serialize = (node: any, first = false) => {
 	}
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-	return {
-		paths: [{ params: { slug: 'Perayaan-Magha-Puja-2565-BE-2022' } }],
-		fallback: 'blocking',
-	};
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-	const { slug } = params as Record<string, any>;
-
-	// redirect
-	if (!slug) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
-		};
-	}
-
-	const data = await prisma.posts.findFirst({ where: { slug: slug as string } });
+async function getPost(slug: string) {
+	const data = await prisma.posts.findFirst({ where: { slug } });
 
 	if (!data || data?.status !== 'P') {
-		return {
-			notFound: true,
-		};
+		return null;
 	}
 
 	return {
-		props: {
-			data: {
-				...data,
-				content: serialize(JSON.parse(data.content), true),
-				createdAt: dayjs(data.createdAt).format(datetimeFormat),
-				updatedAt: dayjs(data.updatedAt).format(datetimeFormat),
-			},
+		...data,
+		content: serialize(JSON.parse(data.content), true),
+		createdAt: dayjs(data.createdAt).format(datetimeFormat),
+		updatedAt: dayjs(data.updatedAt).format(datetimeFormat),
+	};
+}
+
+export async function generateStaticParams() {
+	return [{ slug: 'Perayaan-Magha-Puja-2565-BE-2022' }];
+}
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+	const { slug } = await params;
+	const data = await getPost(slug);
+
+	if (!data) return {};
+
+	return {
+		title: { absolute: data.title },
+		description: data.summary,
+		openGraph: {
+			title: data.title,
+			description: data.summary ?? undefined,
+			images: [data.image || '/icons/apple-touch-icon.png'],
+		},
+		twitter: {
+			title: data.title,
+			description: data.summary,
+			images: [data.image || '/icons/android-chrome-192x192.png'],
 		},
 	};
-};
+}
 
 export default Page;

@@ -1,5 +1,6 @@
+'use client';
+
 import { FC, useState } from 'react';
-import { GetStaticPaths, GetStaticProps } from 'next';
 import dayjs from 'dayjs';
 
 import Navigation from 'components/navigation';
@@ -11,7 +12,6 @@ import BlurImage from 'components/display/BlurImage';
 
 import useListData from 'hooks/useListData';
 
-import { prisma } from 'db';
 import { datetimeFormat } from 'utils/constant';
 import { LeftOutline, RightOutline } from 'components/general/antd-icon';
 
@@ -216,42 +216,4 @@ const Page: FC<{ detail: Record<string, any> }> = ({ detail }) => {
 	);
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-	return {
-		paths: [{ params: { slug: 'Magha-Puja-2022' } }],
-		fallback: 'blocking',
-	};
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-	const { slug } = params as Record<string, any>;
-
-	// redirect
-	if (!slug) {
-		return {
-			redirect: {
-				destination: '/gallery',
-				permanent: false,
-			},
-		};
-	}
-
-	const data = await prisma.albums.findFirst({ where: { slug: slug as string } });
-
-	if (!data) {
-		return {
-			notFound: true,
-		};
-	}
-
-	return {
-		props: {
-			detail: {
-				...data,
-				createdAt: dayjs(data.createdAt).format(datetimeFormat),
-				updatedAt: dayjs(data.updatedAt).format(datetimeFormat),
-			},
-		},
-	};
-};
 export default Page;

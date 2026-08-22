@@ -1,3 +1,4 @@
+'use client';
 export {
 	AppstoreOutlined as AppOutline,
 	AppstoreOutlined as AppstoreOutline,

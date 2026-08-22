@@ -84,22 +84,23 @@ All 30 `pages/admin/**` pages moved to `src/app/admin/**/page.tsx` (`index.tsx` 
 - `admin/post/detail`: `next/head` stylesheet link → React 19 hoisted `<link precedence="default">`; Slate editor's `dynamic(..., { ssr: false })` works as-is in a client page
 - **Verified at runtime:** sign-in → dashboard, list pages, detail page in create + edit mode, post editor page, homepage (pages router) unaffected, `/admin` unauthenticated still redirected by proxy. `tsc`/lint/build clean
 
-### Phase 4 — Public pages
+### Phase 4 — Public pages — ✅ DONE
 
 | Pages Router | App Router | Notes |
 |---|---|---|
-| `pages/index.tsx` | `app/page.tsx` | Keep as client component (Swiper + axios) — lowest-risk port; optionally server-componentize later |
-| `pages/gallery/index.tsx` | `app/gallery/page.tsx` | Client component (SWR) |
-| `pages/campaign/[slug].tsx` | `app/campaign/[slug]/page.tsx` | Server component: `generateStaticParams` (port hardcoded paths, `dynamicParams = true` replaces `fallback: 'blocking'`), Prisma call inline, `getStaticProps` redirect → `redirect()`. **`params` is a Promise in Next 16: `const { slug } = await params`** |
-| `pages/post/[slug].tsx` | `app/post/[slug]/page.tsx` | Same as above + `export const revalidate = 3600` if ISR desired |
-| `pages/gallery/album/[slug].tsx` | `app/gallery/album/[slug]/page.tsx` | Same pattern |
-| `pages/paritta.tsx` | `app/paritta/page.tsx` | Static client page |
-| `pages/profile/index.tsx` | `app/profile/page.tsx` | Client component (`useSession`) |
-| `components/general/page-head.tsx` | delete | Each page exports `generateMetadata()`; `PageHead` props map 1:1 (title/desc/image). Viewport meta → `export const viewport` |
+| `pages/index.tsx` | `app/page.tsx` | `'use client'` (Swiper + axios + useListData unchanged); root default title covers it |
+| `pages/gallery/index.tsx` | `app/gallery/page.tsx` + `view.tsx` | server page exports title metadata; view is the client component |
+| `pages/campaign/[slug].tsx` | `app/campaign/[slug]/page.tsx` + `view.tsx` | server page: `generateStaticParams` (seed slug `spanduk` — now stale in DB, prerenders a 404 like the old `fallback: 'blocking'` did), `generateMetadata` (title/desc/image), `await params`, inline Prisma, `notFound()`; view keeps participant loading client-side |
+| `pages/post/[slug].tsx` | `app/post/[slug]/page.tsx` | full server component (no hooks) — serialize/dates at build, metadata from DB |
+| `pages/gallery/album/[slug].tsx` | `app/gallery/album/[slug]/page.tsx` + `view.tsx` | same pattern; infinite-scroll gallery stays client |
+| `pages/paritta.tsx` | `app/paritta/page.tsx` + `view.tsx` | title metadata + client audio player view |
+| `pages/profile/index.tsx` | `app/profile/page.tsx` + `view.tsx` | proxy still guards auth |
 
-Interactive subtrees (Swiper carousel, audio player on paritta, infinite scroll) extract into `'use client'` child components; the page shell stays a server component.
+Additional changes:
 
-**Verify:** all public routes render, static generation works (`○`/`●` in build output), metadata in `<head>`, GA pageviews fire.
+- `components/navigation`: removed the embedded `PageHead` (next/head is inert in the app router) — metadata now comes from each page's `generateMetadata`/`metadata` export; switched the auth-fallback redirect from the phase-3 `window.location.assign` bridge to `useRouter` from `next/navigation` (no pages-router consumers remain). `components/general/page-head.tsx` deleted
+- `'use client'` added to shared components that the pages router had implicitly client-rendered: `navigation`, `display/BlurImage`, `general/antd-icon` (re-exports `@ant-design/icons` → `createContext` at module scope), `entry/text-editor`
+- **Verified at runtime:** homepage/gallery/paritta 200; post & album SSG pages serve DB-driven titles; active campaign renders on demand (dynamicParams), closed campaign 404s; unknown slug 404; `/profile` unauthenticated redirects to `/signin`; public API routes still served from `pages/api`. `tsc`/lint/build clean
 
 ### Phase 5 — Cleanup & delete Pages Router
 
