@@ -1,6 +1,5 @@
 import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'components/general/antd-icon';
 import Link from 'next/link';
 import Image from "next/image";
@@ -73,22 +72,25 @@ const Navigation: FC<BaseNavInterface> = ({
 	isAdmin,
 	hideFooter = true,
 }) => {
-	const router = useRouter();
 	const { data: session, status } = useSession();
 	const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
 	const [showInstallBanner, setShowInstallBanner] = useState(false);
 
 	useEffect(() => {
 		if (status !== 'loading') {
-			if (isAdmin === true && router.isReady && status === 'unauthenticated') {
-				router.push('/');
+			// full reload is intentional: clears client state on auth failure.
+			// temporary bridge while pages and app router coexist (migration phase 3-5)
+			if (isAdmin === true && status === 'unauthenticated') {
+				// eslint-disable-next-line @next/next/no-location-assign-relative-destination
+				window.location.assign('/');
 			}
 
 			if (typeof access !== 'undefined' && !session?.user?.permissions?.[access as string]) {
-				router.push('/');
+				// eslint-disable-next-line @next/next/no-location-assign-relative-destination
+				window.location.assign('/');
 			}
 		}
-	}, [isAdmin, status, router, access, session?.user?.permissions, router.isReady]);
+	}, [isAdmin, status, access, session?.user?.permissions]);
 
 	// This hook only run once in browser after the component is rendered for the first time.
 	// It has same effect as the old componentDidMount lifecycle callback.

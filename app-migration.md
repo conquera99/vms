@@ -73,18 +73,16 @@ All 44 `pages/api/admin/**` routes converted to `app/api/admin/**/route.ts` (GET
 - `auth` path alias added to tsconfig
 - **Verified at runtime:** sign-in → dashboard counts, list/detail, full create→update→remove cycle (incl. `$queryRaw` code generation), FormData member save, and 403 without cookie
 
-### Phase 3 — Admin pages
+### Phase 3 — Admin pages — ✅ DONE
 
-All are client components — mostly mechanical (≈30 files, same list/detail pattern):
+All 30 `pages/admin/**` pages moved to `src/app/admin/**/page.tsx` (`index.tsx` → `page.tsx`, `detail.tsx` → `detail/page.tsx`):
 
-1. `src/app/admin/layout.tsx` — server component rendering `Navigation` (client) so every admin page keeps its chrome; the permission gate stays inside Navigation
-2. Every page: add `'use client'`; `useRouter` (next/router) → `useRouter` + `useSearchParams` + `usePathname` (next/navigation)
-   - `router.query.id` → `useSearchParams().get('id')` — pages reading search params must be wrapped in `<Suspense>` (Next 16 requirement)
-   - `router.push('/admin/item')` → `router.push('/admin/item')` (same API)
-3. `Link` and `Image` imports unchanged
-4. `pages/admin/post/detail.tsx`: `dynamic(..., { ssr: false })` is **only legal inside a client component** — since the page becomes `'use client'`, it works as-is (Slate editor stays client-only)
-5. Delete each `pages/admin/**` file as its `app/` counterpart lands. Commit per resource group (item, member, campaign, …) to keep PRs reviewable
-6. **Verify per group:** list renders, create/edit/save/remove round-trips, permission gating, breadcrumb/links
+- Every page is a `'use client'` component (antd/SWR/axios unchanged)
+- The 15 query-reading pages: `useRouter`/`router.query.X` → `useSearchParams()` with `query.get('X')`, wrapped in `<Suspense>` via a `PageWrapper` default export (Next 16 requirement); hook dependency arrays reference `query` instead of call expressions
+- **No `admin/layout.tsx` was created** (plan deviation): every page renders `Navigation` itself with a resource-specific `access` prop for permission gating — a shared layout would break that contract
+- `components/navigation` made **dual-router compatible**: its only router use (`router.push('/')` on auth failure + `router.isReady` guard) replaced with `window.location.assign('/')` (full reload is desirable on auth failure; annotated eslint-disable). It still serves the 7 public pages in `pages/` until Phase 4
+- `admin/post/detail`: `next/head` stylesheet link → React 19 hoisted `<link precedence="default">`; Slate editor's `dynamic(..., { ssr: false })` works as-is in a client page
+- **Verified at runtime:** sign-in → dashboard, list pages, detail page in create + edit mode, post editor page, homepage (pages router) unaffected, `/admin` unauthenticated still redirected by proxy. `tsc`/lint/build clean
 
 ### Phase 4 — Public pages
 
