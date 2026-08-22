@@ -25,7 +25,7 @@ module.exports = [
 		},
 	},
 	{
-		ignores: ['coverage/**'],
+		ignores: ['coverage/**', 'src/generated/**'],
 	},
 	prettierConfig,
 ];

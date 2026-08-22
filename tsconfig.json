@@ -17,25 +17,27 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src",
     "paths": {
+      "db": [
+        "./src/db"
+      ],
       "components/*": [
-        "components/*"
+        "./src/components/*"
       ],
       "hooks/*": [
-        "hooks/*"
+        "./src/hooks/*"
       ],
       "utils/*": [
-        "utils/*"
+        "./src/utils/*"
       ],
       "interfaces/*": [
-        "interfaces/*"
+        "./src/interfaces/*"
       ],
       "styles/*": [
-        "styles/*"
+        "./src/styles/*"
       ],
       "contexts/*": [
-        "contexts/*"
+        "./src/contexts/*"
       ]
     },
     "incremental": true,

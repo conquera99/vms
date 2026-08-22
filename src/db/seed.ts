@@ -1,5 +1,10 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+
+import { PrismaClient } from '../generated/client/client';
+
+const prisma = new PrismaClient({
+	adapter: new PrismaMariaDb(process.env.DATABASE_URL ?? ''),
+});
 
 const permissions = [
 	'album',
