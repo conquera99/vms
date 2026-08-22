@@ -1,5 +1,10 @@
 export const DEFAULT_LIMIT = 10;
 
+export const SITE_URL = 'https://vsg.nunukan.net';
+export const SITE_NAME = 'Vihara Sasana Graha Nunukan';
+export const SITE_DESCRIPTION =
+	'Situs resmi Vihara Sasana Graha (VSG) Nunukan — kabar dan kegiatan vihara, paritta suci, galeri dokumentasi, serta informasi umat Buddha di Kalimantan Utara.';
+
 export const successResponse = {
 	code: 0,
 	message: 'success',

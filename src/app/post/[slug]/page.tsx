@@ -9,7 +9,7 @@ import Breadcrumb from 'components/display/breadcrumb';
 import Container from 'components/general/container';
 
 import { prisma } from 'db';
-import { datetimeFormat } from 'utils/constant';
+import { SITE_URL, datetimeFormat } from 'utils/constant';
 import BlurImage from 'components/display/BlurImage';
 
 const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
@@ -32,6 +32,33 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
 		},
 	];
 
+	const articleJsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'Article',
+		headline: data.title,
+		description: data.summary ?? undefined,
+		image: data.image ? [data.image] : undefined,
+		datePublished: data.publishedAt,
+		dateModified: data.modifiedAt,
+		author: { '@type': 'Person', name: data.authorName ?? data.createdBy },
+		publisher: {
+			'@type': 'Organization',
+			name: 'VSG',
+			logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png` },
+		},
+		mainEntityOfPage: `${SITE_URL}/post/${data.slug}`,
+		inLanguage: 'id',
+	};
+
+	const breadcrumbJsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{ '@type': 'ListItem', position: 1, name: 'Beranda', item: SITE_URL },
+			{ '@type': 'ListItem', position: 2, name: data.title, item: `${SITE_URL}/post/${data.slug}` },
+		],
+	};
+
 	return (
 		<Navigation
 			title={data.title}
@@ -40,6 +67,14 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
 			active="home"
 			hideFooter={false}
 		>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+			/>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+			/>
 			<Container>
 				<section className="relative mt-4 overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-4 shadow-xl shadow-slate-200/35 backdrop-blur-sm sm:mt-6 sm:p-6 lg:p-8">
 					<div className="pointer-events-none absolute -right-16 top-0 h-44 w-44 rounded-full bg-[#f3deb1]/45 blur-3xl" />
@@ -48,13 +83,15 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
 					<Breadcrumb data={breadcrumb} variant="post" />
 
 					<div className="relative z-10">
-						<BlurImage
-							src={data.image ?? ''}
-							alt={data.title}
-							className="rounded-2xl"
-							sizes="(max-width: 640px) 100vw, (max-width: 1280px) 92vw, 1100px"
-							preview
-						/>
+						{data.image && (
+							<BlurImage
+								src={data.image}
+								alt={data.title}
+								className="rounded-2xl"
+								sizes="(max-width: 640px) 100vw, (max-width: 1280px) 92vw, 1100px"
+								preview
+							/>
+						)}
 
 						<div className="my-5 sm:my-6">
 							<h1 className="text-3xl font-semibold leading-tight text-slate-800 sm:text-4xl lg:text-5xl">
@@ -66,7 +103,7 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
 							<div className="mt-4 flex flex-wrap items-center gap-2 sm:gap-3">
 								<div className="inline-flex items-center rounded-full border border-slate-200 bg-white/85 px-3 py-1.5 text-xs font-medium text-slate-600 sm:text-sm">
 									<UserOutline className="mr-2" />
-									{data.createdBy}
+									{data.authorName ?? data.createdBy}
 								</div>
 								<div className="inline-flex items-center rounded-full border border-slate-200 bg-white/85 px-3 py-1.5 text-xs font-medium text-slate-600 sm:text-sm">
 									<CalendarOutline className="mr-2" />
@@ -102,7 +139,7 @@ const serialize = (node: any, first = false) => {
 			string = `<em>${string}</em>`;
 		}
 
-		if (node.udnerline) {
+		if (node.underline) {
 			string = `<u>${string}</u>`;
 		}
 
@@ -119,9 +156,9 @@ const serialize = (node: any, first = false) => {
 		case 'bulleted-list':
 			return `<ul class='my-3 list-inside list-disc space-y-1'>${children}</ul>`;
 		case 'heading-one':
-			return `<h1 class='my-4 text-2xl font-semibold text-slate-800'>${children}</h1>`;
+			return `<h2 class='my-4 text-2xl font-semibold text-slate-800'>${children}</h2>`;
 		case 'heading-two':
-			return `<h2 class='my-3 text-xl font-semibold text-slate-800'>${children}</h2>`;
+			return `<h3 class='my-3 text-xl font-semibold text-slate-800'>${children}</h3>`;
 		case 'list-item':
 			return `<li>${children}</li>`;
 		case 'numbered-list':
@@ -142,11 +179,21 @@ async function getPost(slug: string) {
 		return null;
 	}
 
+	const author = data.createdBy
+		? await prisma.user.findUnique({
+				where: { id: data.createdBy },
+				select: { name: true },
+			})
+		: null;
+
 	return {
 		...data,
 		content: serialize(JSON.parse(data.content), true),
 		createdAt: dayjs(data.createdAt).format(datetimeFormat),
 		updatedAt: dayjs(data.updatedAt).format(datetimeFormat),
+		publishedAt: data.createdAt.toISOString(),
+		modifiedAt: data.updatedAt.toISOString(),
+		authorName: author?.name ?? null,
 	};
 }
 
@@ -165,17 +212,27 @@ export async function generateMetadata({
 	if (!data) return {};
 
 	return {
-		title: { absolute: data.title },
-		description: data.summary,
+		title: data.title,
+		description: data.summary ?? undefined,
+		keywords: data.keywords ?? undefined,
+		alternates: {
+			canonical: `/post/${data.slug}`,
+		},
 		openGraph: {
+			type: 'article',
 			title: data.title,
 			description: data.summary ?? undefined,
-			images: [data.image || '/icons/apple-touch-icon.png'],
+			url: `/post/${data.slug}`,
+			publishedTime: data.publishedAt,
+			modifiedTime: data.modifiedAt,
+			authors: [data.authorName ?? data.createdBy],
+			images: [data.image || '/og-default.png'],
 		},
 		twitter: {
+			card: 'summary_large_image',
 			title: data.title,
-			description: data.summary,
-			images: [data.image || '/icons/android-chrome-192x192.png'],
+			description: data.summary ?? undefined,
+			images: [data.image || '/og-default.png'],
 		},
 	};
 }

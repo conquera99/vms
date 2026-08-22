@@ -320,7 +320,7 @@ const Navigation: FC<BaseNavInterface> = ({
                                     maxWidth: "100%",
                                     height: "auto"
                                 }} />
-							<h1 className="ml-2 font-bold text-xl text-slate-800">VSG</h1>
+								<span className="ml-2 font-bold text-xl text-slate-800">VSG</span>
 						</div>
 					</Link>
 

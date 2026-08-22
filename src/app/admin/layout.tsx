@@ -1,15 +1,12 @@
 import type { Metadata } from 'next';
 
-import Profile from './view';
-
 export const metadata: Metadata = {
-	title: 'Profil',
 	robots: {
 		index: false,
 		follow: false,
 	},
 };
 
-export default function ProfilePage() {
-	return <Profile />;
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+	return children;
 }

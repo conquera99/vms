@@ -76,7 +76,7 @@ const Footer: FC<{ active?: string }> = ({ active }) => {
                                     maxWidth: "100%",
                                     height: "auto"
                                 }} />
-							<h1 className="ml-2 text-2xl font-bold">VSG</h1>
+							<span className="ml-2 text-2xl font-bold">VSG</span>
 						</div>
 					</Link>
 							<p className="mt-3 text-sm leading-relaxed text-slate-500">

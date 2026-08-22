@@ -38,17 +38,22 @@ export async function generateMetadata({
 	if (!data) return {};
 
 	return {
-		title: { absolute: data.title },
+		title: data.title,
 		description: data.desc,
+		alternates: {
+			canonical: `/campaign/${data.slug}`,
+		},
 		openGraph: {
 			title: data.title,
 			description: data.desc,
-			images: [data.image || '/icons/apple-touch-icon.png'],
+			url: `/campaign/${data.slug}`,
+			images: [data.image || '/og-default.png'],
 		},
 		twitter: {
+			card: 'summary_large_image',
 			title: data.title,
 			description: data.desc,
-			images: [data.image || '/icons/android-chrome-192x192.png'],
+			images: [data.image || '/og-default.png'],
 		},
 	};
 }

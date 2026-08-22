@@ -23,13 +23,14 @@ const AlbumSkeleton = () => (
 	</div>
 );
 
-const Gallery = () => {
+const GalleryView = ({ initialAlbums }: { initialAlbums: Record<string, any>[] }) => {
 	const { ref, data, isEmpty, isLoadingInitialData, isLoadingMore, isReachingEnd } = useListData({
 		url: '/api/gallery/album',
+		initialData: initialAlbums,
 	});
 
 	return (
-		<Navigation title="VMS: Galeri" active="gallery" hideFooter={false}>
+		<Navigation active="gallery" hideFooter={false}>
 			<Container>
 				<section className="relative mt-4 overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-4 shadow-xl shadow-slate-200/35 backdrop-blur-sm sm:mt-6 sm:p-6 lg:p-8">
 					<div className="pointer-events-none absolute -right-16 top-0 h-44 w-44 rounded-full bg-[#f3deb1]/45 blur-3xl" />
@@ -92,4 +93,4 @@ const Gallery = () => {
 	);
 };
 
-export default Gallery;
+export default GalleryView;

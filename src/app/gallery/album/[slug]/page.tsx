@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import dayjs from 'dayjs';
 
 import { prisma } from 'db';
-import { datetimeFormat } from 'utils/constant';
+import { SITE_URL, datetimeFormat } from 'utils/constant';
 
 import Page from './view';
 
@@ -36,15 +36,20 @@ export async function generateMetadata({
 	if (!detail) return {};
 
 	return {
-		title: { absolute: detail.title },
-		description: 'app for vihara sasana graha nunukan',
+		title: detail.title,
+		description: `Galeri foto ${detail.title} — dokumentasi kegiatan Vihara Sasana Graha Nunukan.`,
+		alternates: {
+			canonical: `/gallery/album/${detail.slug}`,
+		},
 		openGraph: {
 			title: detail.title,
-			images: ['/icons/apple-touch-icon.png'],
+			url: `/gallery/album/${detail.slug}`,
+			images: ['/og-default.png'],
 		},
 		twitter: {
+			card: 'summary_large_image',
 			title: detail.title,
-			images: ['/icons/android-chrome-192x192.png'],
+			images: ['/og-default.png'],
 		},
 	};
 }
@@ -55,12 +60,35 @@ export default async function AlbumPage({
 	params: Promise<{ slug: string }>;
 }) {
 	const { slug } = await params;
-
 	const detail = await getAlbum(slug);
 
 	if (!detail) {
 		notFound();
 	}
 
-	return <Page detail={detail} />;
+	const images = await prisma.images.findMany({
+		where: { albumId: detail.id },
+		select: { image: true, altText: true },
+		orderBy: { createdAt: 'asc' },
+		take: 60,
+	});
+
+	const galleryJsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'ImageGallery',
+		name: detail.title,
+		url: `${SITE_URL}/gallery/album/${detail.slug}`,
+		image: images.map((image) => image.image),
+		inLanguage: 'id',
+	};
+
+	return (
+		<>
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(galleryJsonLd) }}
+			/>
+			<Page detail={detail} />
+		</>
+	);
 }

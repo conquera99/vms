@@ -8,7 +8,7 @@ import { DEFAULT_LIMIT } from 'utils/constant';
 
 const getKey = (
 	page: number,
-	previousPageData: Record<string, any>,
+	previousPageData: Record<string, any>[] | null,
 	pageSize: number,
 	url: string,
 	param: string | undefined | null = null,
@@ -18,7 +18,17 @@ const getKey = (
 	return `${url}?s=${pageSize}&p=${page + 1}${param ? `&${param}` : ''}`;
 };
 
-const useListData = ({ url, param, show }: { url: string; param?: string; show?: number }) => {
+const useListData = ({
+	url,
+	param,
+	show,
+	initialData,
+}: {
+	url: string;
+	param?: string;
+	show?: number;
+	initialData?: Record<string, any>[];
+}) => {
 	const ref = useRef<HTMLDivElement | null>(null);
 
 	const isVisible = useOnScreen(ref);
@@ -31,7 +41,9 @@ const useListData = ({ url, param, show }: { url: string; param?: string; show?:
 		size,
 		setSize,
 		isValidating,
-	} = useSWRInfinite((...args) => getKey(...args, LIMIT, url, param), fetcher);
+	} = useSWRInfinite((...args) => getKey(...args, LIMIT, url, param), fetcher, {
+		fallbackData: initialData ? [initialData] : undefined,
+	});
 
 	const data = response ? [].concat(...response) : [];
 	const isLoadingInitialData = !response && !error;

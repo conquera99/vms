@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800&display=swap');
-
 @import './preflight.css';
 @import './utilities.css';
 
@@ -13,7 +11,7 @@
 }
 html,
 body {
-  font-family: 'Raleway', 'Segoe UI', sans-serif;
+  font-family: var(--font-raleway), 'Raleway', 'Segoe UI', sans-serif;
   background: linear-gradient(180deg, #f5f9fd 0%, #f9f7f0 48%, #ffffff 100%);
   color: #1e293b;
 }

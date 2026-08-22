@@ -1,7 +1,7 @@
 {
     "name": "VSG iApp",
     "short_name": "VSG",
-    "theme_color": "#6366F1",
+    "theme_color": "#7ea7cb",
     "background_color": "#FFFFFF",
     "display": "standalone",
     "orientation": "portrait",
