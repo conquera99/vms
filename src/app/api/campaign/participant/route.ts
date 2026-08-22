@@ -1,10 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { prisma } from 'db';
 import { successResponse } from 'utils/constant';
 
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
-	const { id } = req.query;
+export async function GET(request: NextRequest) {
+	const { searchParams } = new URL(request.url);
+	const id = searchParams.get('id');
 
 	const data = await prisma.campaignDetail.findMany({
 		where: { campaignId: id as string },
@@ -15,5 +16,5 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		},
 	});
 
-	res.json({ ...successResponse, data });
+	return NextResponse.json({ ...successResponse, data });
 }

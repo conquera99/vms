@@ -102,14 +102,20 @@ Additional changes:
 - `'use client'` added to shared components that the pages router had implicitly client-rendered: `navigation`, `display/BlurImage`, `general/antd-icon` (re-exports `@ant-design/icons` → `createContext` at module scope), `entry/text-editor`
 - **Verified at runtime:** homepage/gallery/paritta 200; post & album SSG pages serve DB-driven titles; active campaign renders on demand (dynamicParams), closed campaign 404s; unknown slug 404; `/profile` unauthenticated redirects to `/signin`; public API routes still served from `pages/api`. `tsc`/lint/build clean
 
-### Phase 5 — Cleanup & delete Pages Router
+### Phase 5 — Cleanup & delete Pages Router — ✅ DONE (MIGRATION COMPLETE)
 
-1. Port the 4 public API routes (`post`, `campaign`, `campaign/participant`, `gallery/album|images`) to route handlers; note `gallery/album.tsx`/`images.tsx` are `.tsx` API files — become `.ts`
-2. Delete `pages/` entirely, `pages/_app.tsx`, `_document.tsx`
-3. Remove dead deps: `nextjs-progressbar`, `formidable`, `@types/formidable`
-4. GA pageview: `router.events` is gone — small client component using `usePathname()` + `useEffect` calling `pageview()`
-5. Full sweep: `grep -r "next/router"` → 0 hits; `grep -r "getSession\|getServerSession"` → 0 hits
-6. **Verify:** `tsc --noEmit`, `npm run build`, `npm run lint`, full manual pass: sign-in → admin CRUD → public pages → PWA install banner → uploads (Cloudinary) → analytics
+1. ✅ Ported the 4 public API routes to `app/api/**/route.ts` (`post`, `campaign`, `campaign/participant`, `gallery/album`, `gallery/images` — the two `.tsx` API files became `.ts`)
+2. ✅ Deleted the entire `pages/` tree (`_app.tsx`, `_document.tsx`, all API routes) — the build output no longer contains a "Route (pages)" section
+3. ✅ Removed `nextjs-progressbar` (formidable was already removed in Phase 2)
+4. ✅ GA pageviews: added `components/general/ga-tracker.tsx` (`usePathname()` + `useEffect` → `pageview()`) mounted in `app/providers.tsx`, replacing `_app.tsx`'s `router.events` tracking
+5. ✅ Final sweep: zero references to `next/router`, `next/head`, `getSession`/`getServerSession`, `GetStaticProps`/`GetServerSideProps`/`NextApiRequest`, or `formidable`
+6. ✅ Verified at runtime: all 4 public APIs, sign-in, admin dashboard + API (200 with cookie / 403 + redirect without), campaign dynamic page, signin page, 404 page. `tsc`/lint/build clean
+
+**Post-migration follow-ups (optional, not blocking):**
+- `Navigation` still accepts (and ignores) `title`/`desc`/`image` props and `BaseNavInterface` still extends the unused `PageHeadInterface` — could be cleaned up
+- The stale seed slugs in `generateStaticParams` (`spanduk`, `Perayaan-Magha-Puja-2565-BE-2022`, `Magha-Puja-2022`) could be dropped entirely — `dynamicParams` renders everything on demand anyway; they only pre-render 404s for deleted records
+- Consider `export const revalidate` on the `[slug]` pages if ISR-on-a-timer is wanted (current behavior: static forever + `revalidatePath()` on admin saves, matching the old setup)
+- Manual browser pass still recommended: Swiper carousel, antd interactions, file uploads to Cloudinary, PWA install banner
 
 ---
 

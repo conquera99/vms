@@ -7,6 +7,8 @@ import { App as AntdApp, ConfigProvider } from 'antd';
 import { StyleProvider } from '@ant-design/cssinjs';
 import { AppProgressBar } from 'next-nprogress-bar';
 
+import GaTracker from 'components/general/ga-tracker';
+
 import { antdTheme } from 'styles/antd-theme';
 
 ConfigProvider.config({
@@ -34,6 +36,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 							height="2px"
 							options={{ minimum: 0.1, showSpinner: false }}
 						/>
+						<GaTracker />
 						{children}
 						<Analytics />
 					</AntdApp>

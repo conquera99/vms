@@ -1,13 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
 import { prisma } from 'db';
 import { successResponse } from 'utils/constant';
 
-export default async function handle(req: NextApiRequest, res: NextApiResponse) {
+export async function GET() {
 	const data = await prisma.campaign.findMany({
 		where: { status: 'A', visible: 'Y' },
 		orderBy: { createdAt: 'desc' },
 	});
 
-	res.json({ ...successResponse, data });
+	return NextResponse.json({ ...successResponse, data });
 }
