@@ -51,9 +51,6 @@ const Page = () => {
 	const onFinish = (values: any) => {
 		setLoading(true);
 
-		if (values.dateOfBirth) values.date = dayjs(values.dateOfBirth).toDate();
-		if (values.dateOfDeath) values.date = dayjs(values.dateOfDeath).toDate();
-
 		const formData = new FormData();
 
 		if (query.get('id')) formData.append('id', query.get('id') as string);
@@ -61,8 +58,10 @@ const Page = () => {
 		formData.append('name', values.name);
 		formData.append('placeOfBirth', values.placeOfBirth);
 		formData.append('placeOfDeath', values.placeOfDeath);
-		formData.append('dateOfBirth', values.dateOfBirth);
-		formData.append('dateOfDeath', values.dateOfDeath);
+
+		if (values.dateOfBirth) formData.append('dateOfBirth', values.dateOfBirth.toISOString());
+		if (values.dateOfDeath) formData.append('dateOfDeath', values.dateOfDeath.toISOString());
+
 		formData.append('deathNotes', values.deathNotes);
 		formData.append('birthNotes', values.birthNotes);
 		formData.append('family', values.family);

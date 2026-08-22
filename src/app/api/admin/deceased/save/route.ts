@@ -21,6 +21,14 @@ export async function POST(request: NextRequest) {
 	const img = formData.get('img');
 	const file = img instanceof File && img.size > 0 ? img : null;
 
+	// date inputs can arrive empty or as "null" when the picker is cleared
+	const toDate = (value?: string) => {
+		if (!value) return null;
+
+		const date = dayjs(value);
+		return date.isValid() ? date.toDate() : null;
+	};
+
 	// upload
 	let imageData = {};
 
@@ -58,8 +66,8 @@ export async function POST(request: NextRequest) {
 				birthNotes: field('birthNotes') || '',
 				deathNotes: field('deathNotes') || '',
 				family: field('family'),
-				dateOfBirth: dayjs(field('dateOfBirth')).toDate(),
-				dateOfDeath: dayjs(field('dateOfDeath')).toDate(),
+				dateOfBirth: toDate(field('dateOfBirth')),
+				dateOfDeath: toDate(field('dateOfDeath')),
 				updatedBy: session.user.id,
 				...imageData,
 			},
@@ -82,8 +90,8 @@ export async function POST(request: NextRequest) {
 			birthNotes: field('birthNotes') || '',
 			deathNotes: field('deathNotes') || '',
 			family: field('family'),
-			dateOfBirth: dayjs(field('dateOfBirth')).toDate(),
-			dateOfDeath: dayjs(field('dateOfDeath')).toDate(),
+			dateOfBirth: toDate(field('dateOfBirth')),
+			dateOfDeath: toDate(field('dateOfDeath')),
 			createdBy: session.user.id,
 			...imageData,
 		},

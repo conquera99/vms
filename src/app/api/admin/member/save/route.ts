@@ -21,6 +21,14 @@ export async function POST(request: NextRequest) {
 	const img = formData.get('img');
 	const file = img instanceof File && img.size > 0 ? img : null;
 
+	// date inputs can arrive empty or as "null" when the picker is cleared
+	const toDate = (value?: string) => {
+		if (!value) return null;
+
+		const date = dayjs(value);
+		return date.isValid() ? date.toDate() : null;
+	};
+
 	// upload
 	let imageData = {};
 
@@ -52,7 +60,7 @@ export async function POST(request: NextRequest) {
 			where: { id: field('id') },
 			data: {
 				name: field('name'),
-				dateOfBirth: dayjs(field('dateOfBirth')).toDate(),
+				dateOfBirth: toDate(field('dateOfBirth')),
 				address: field('address'),
 				phone: field('phone'),
 				email: field('email'),
@@ -73,7 +81,7 @@ export async function POST(request: NextRequest) {
 	const create = await prisma.member.create({
 		data: {
 			name: field('name') as string,
-			dateOfBirth: dayjs(field('dateOfBirth')).toDate(),
+			dateOfBirth: toDate(field('dateOfBirth')),
 			address: field('address'),
 			phone: field('phone'),
 			email: field('email'),

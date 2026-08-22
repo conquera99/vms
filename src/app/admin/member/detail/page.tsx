@@ -51,14 +51,14 @@ const Page = () => {
 	const onFinish = (values: any) => {
 		setLoading(true);
 
-		if (values.dateOfBirth) values.date = dayjs(values.dateOfBirth).toDate();
-
 		const formData = new FormData();
 
 		if (query.get('id')) formData.append('id', query.get('id') as string);
 
 		formData.append('name', values.name);
-		formData.append('dateOfBirth', values.dateOfBirth);
+
+		if (values.dateOfBirth) formData.append('dateOfBirth', values.dateOfBirth.toISOString());
+
 		formData.append('address', values.address);
 		formData.append('phone', values.phone);
 		formData.append('email', values.email);
