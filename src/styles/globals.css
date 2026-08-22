@@ -1,137 +1,114 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800&display=swap');
 
-@import 'tailwindcss';
-@plugin '@tailwindcss/aspect-ratio';
-
-@reference "tailwindcss";
+@import './preflight.css';
+@import './utilities.css';
 
 :root {
-	--brand-primary: #7ea7cb;
-	--brand-primary-soft: #bcd3e6;
-	--brand-secondary: #f2d9a4;
-	--brand-secondary-soft: #f8ebc9;
-	--brand-accent-soft: #e6eff7;
-	--brand-nav-gradient: linear-gradient(110deg, #bed5e7 0%, #f7e7c1 52%, #f2d8a1 100%);
+  --brand-primary: #7ea7cb;
+  --brand-primary-soft: #bcd3e6;
+  --brand-secondary: #f2d9a4;
+  --brand-secondary-soft: #f8ebc9;
+  --brand-accent-soft: #e6eff7;
+  --brand-nav-gradient: linear-gradient(110deg, #bed5e7 0%, #f7e7c1 52%, #f2d8a1 100%);
 }
-
 html,
 body {
-	font-family: 'Raleway', 'Segoe UI', sans-serif;
-	background: linear-gradient(180deg, #f5f9fd 0%, #f9f7f0 48%, #ffffff 100%);
-	color: #1e293b;
+  font-family: 'Raleway', 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #f5f9fd 0%, #f9f7f0 48%, #ffffff 100%);
+  color: #1e293b;
 }
-
 .breadcrumb .breadcrumb-item {
-	position: relative;
+  position: relative;
 }
 .breadcrumb .breadcrumb-item:first-child {
-	margin-left: 0 !important;
+  margin-left: 0 !important;
 }
 .breadcrumb .breadcrumb-item:not(:last-child):after {
-	content: '/';
+  content: '/';
 }
-
-/* purgecss start ignore */
-
 pre {
-	padding: 10px;
-	background-color: #eee;
-	white-space: pre-wrap;
-	@apply rounded-md;
+  padding: 10px;
+  background-color: #eee;
+  white-space: pre-wrap;
+  border-radius: var(--radius-md, 0.375rem);
 }
-
 :not(pre) > code {
-	font-family: monospace;
-	background-color: #eee;
-	padding: 3px;
-	@apply rounded-md;
+  font-family: monospace;
+  background-color: #eee;
+  padding: 3px;
+  border-radius: var(--radius-md, 0.375rem);
 }
-
 .img-modal {
-	max-height: 34rem;
+  max-height: 34rem;
 }
-
 blockquote {
-	border-left: 2px solid #ddd;
-	margin-left: 0;
-	margin-right: 0;
-	padding-left: 10px;
-	color: #aaa;
-	font-style: italic;
+  border-left: 2px solid #ddd;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 10px;
+  color: #aaa;
+  font-style: italic;
 }
-
 blockquote[dir='rtl'] {
-	border-left: none;
-	padding-left: 0;
-	padding-right: 10px;
-	border-right: 2px solid #ddd;
+  border-left: none;
+  padding-left: 0;
+  padding-right: 10px;
+  border-right: 2px solid #ddd;
 }
-
 table {
-	border-collapse: collapse;
+  border-collapse: collapse;
 }
-
 td {
-	padding: 10px;
-	border: 2px solid #ddd;
+  padding: 10px;
+  border: 2px solid #ddd;
 }
-
 iframe {
-	width: 100%;
-	border: 1px solid #eee;
+  width: 100%;
+  border: 1px solid #eee;
 }
-
 [data-slate-editor] > * + * {
-	margin-top: 1em;
+  margin-top: 1em;
 }
-
 .print {
-	-webkit-touch-callout: none; /* iOS Safari */
-	-webkit-user-select: none; /* Safari */
-	-khtml-user-select: none; /* Konqueror HTML */
-	-moz-user-select: none; /* Old versions of Firefox */
-	-ms-user-select: none; /* Internet Explorer/Edge */
-	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-
 .print-container {
-	border: 50px solid transparent;
-	border-image: url(/images/border1.png) 33% round;
+  border: 50px solid transparent;
+  border-image: url(/images/border1.png) 33% round;
 }
-
 .print-show {
-	display: block;
+  display: block;
 }
-
 @media screen and (max-width: 767px) {
-	.print-show {
-		display: none;
-	}
+  .print-show {
+    display: none;
+  }
 }
-
 @media print {
-	@page {
-		margin: 0.5mm;
-		size: A4;
-	}
-
-	body {
-		margin: 0;
-	}
-	.print-hide,
+  @page {
+    margin: 0.5mm;
+    size: A4;
+  }
+  body {
+    margin: 0;
+  }
+  .print-hide,
 	.page-title,
 	.app-nav {
-		display: none;
-	}
-	.app-content {
-		padding: 1cm 0;
-	}
-
-	table {
-		box-shadow: none !important;
-	}
-	.print-show {
-		display: block !important;
-	}
+    display: none;
+  }
+  .app-content {
+    padding: 1cm 0;
+  }
+  table {
+    box-shadow: none !important;
+  }
+  .print-show {
+    display: block !important;
+  }
 }
-/* purgecss end ignore */

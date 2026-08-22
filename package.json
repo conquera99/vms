@@ -43,13 +43,9 @@
         "slate-react": "^0.126.0",
         "slugify": "^1.6.9",
         "swiper": "^14.1.0",
-        "swr": "^2.5.1",
-        "tailwindcss": "^4.3.3"
+        "swr": "^2.5.1"
     },
     "devDependencies": {
-        "@fullhuman/postcss-purgecss": "^8.0.0",
-        "@tailwindcss/aspect-ratio": "^0.4.2",
-        "@tailwindcss/postcss": "^4.3.3",
         "@types/escape-html": "^1.0.4",
         "@types/lodash": "^4.17.25",
         "@types/node": "^26.2.0",
