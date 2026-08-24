@@ -134,7 +134,7 @@ const Page = () => {
 												<img
 													src={
 														item.image ||
-														'/images/placeholder.png'
+														'/images/placeholder.jpg'
 													}
 													alt="deceased-image"
 													className="object-cover w-28 h-40 rounded-md"
