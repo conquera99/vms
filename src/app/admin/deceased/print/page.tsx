@@ -102,7 +102,7 @@ const Page = () => {
 						<div className="print-container p-4">
 							<div className="px-20 pt-16 pb-8">
 								<BlurImage
-									src={data?.image || '/images/buddha-placeholder.png'}
+									src={data?.image || '/images/placeholder.png'}
 									alt={data?.name}
 									className="aspect-w-3 aspect-h-4"
 								/>
