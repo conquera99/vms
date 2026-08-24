@@ -86,7 +86,7 @@ const Page = () => {
 								>
 									<div className="flex gap-3">
 										<img
-											src={item.image || '/images/buddha-placeholder.png'}
+											src={item.image || '/images/placeholder.png'}
 											alt="member-image"
 											className="h-20 w-14 rounded-md object-cover"
 										/>
@@ -149,7 +149,7 @@ const Page = () => {
 											<tr key={item.id} className="align-top transition hover:bg-slate-50/70">
 												<td className="px-4 py-3">
 													<img
-														src={item.image || '/images/buddha-placeholder.png'}
+														src={item.image || '/images/placeholder.png'}
 														alt="member-image"
 														className="h-16 w-12 rounded-md object-cover ring-1 ring-slate-200"
 													/>
