@@ -9,18 +9,71 @@ generator client {
 }
 
 model User {
-    id        String   @id @default(cuid()) @map("user_id")
-    name      String?  @map("user_name")
-    username  String?  @unique @map("user_username") @db.VarChar(25)
-    password  String   @map("user_password") @db.VarChar(255)
-    email     String?  @map("user_email") @db.VarChar(254)
-    image     String?  @map("user_image")
-    createdAt DateTime @default(now()) @map("user_created_at")
-    createdBy String   @map("user_created_by")
-    updatedAt DateTime @default(now()) @map("user_updated_at")
-    updatedBy String?  @map("user_updated_by")
+    id            String   @id @default(cuid()) @map("user_id")
+    name          String   @map("user_name")
+    username      String?  @unique @map("user_username") @db.VarChar(25)
+    email         String   @unique @map("user_email") @db.VarChar(254)
+    emailVerified Boolean  @default(false) @map("user_email_verified")
+    image         String?  @map("user_image")
+    createdAt     DateTime @default(now()) @map("user_created_at")
+    createdBy     String   @map("user_created_by")
+    updatedAt     DateTime @default(now()) @map("user_updated_at")
+    updatedBy     String?  @map("user_updated_by")
+
+    sessions Session[]
+    accounts Account[]
 
     @@map("users")
+}
+
+model Session {
+    id        String   @id @map("session_id")
+    userId    String   @map("session_user_id")
+    token     String   @unique @map("session_token")
+    expiresAt DateTime @map("session_expires_at")
+    ipAddress String?  @map("session_ip_address")
+    userAgent String?  @map("session_user_agent") @db.Text
+    createdAt DateTime @default(now()) @map("session_created_at")
+    updatedAt DateTime @default(now()) @updatedAt @map("session_updated_at")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@map("sessions")
+}
+
+model Account {
+    id                    String    @id @map("account_id")
+    userId                String    @map("account_user_id")
+    accountId             String    @map("account_account_id")
+    providerId            String    @map("account_provider_id")
+    password              String?   @map("account_password") @db.VarChar(255)
+    accessToken           String?   @map("account_access_token") @db.Text
+    refreshToken          String?   @map("account_refresh_token") @db.Text
+    idToken               String?   @map("account_id_token") @db.Text
+    accessTokenExpiresAt  DateTime? @map("account_access_token_expires_at")
+    refreshTokenExpiresAt DateTime? @map("account_refresh_token_expires_at")
+    scope                 String?   @map("account_scope")
+    createdAt             DateTime  @default(now()) @map("account_created_at")
+    updatedAt             DateTime  @default(now()) @updatedAt @map("account_updated_at")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([providerId, accountId])
+    @@index([userId])
+    @@map("accounts")
+}
+
+model Verification {
+    id         String   @id @map("verification_id")
+    identifier String   @map("verification_identifier")
+    value      String   @map("verification_value") @db.Text
+    expiresAt  DateTime @map("verification_expires_at")
+    createdAt  DateTime @default(now()) @map("verification_created_at")
+    updatedAt  DateTime @default(now()) @updatedAt @map("verification_updated_at")
+
+    @@index([identifier])
+    @@map("verifications")
 }
 
 model Permissions {

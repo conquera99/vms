@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { auth } from 'auth';
+import { getSession } from 'auth';
 import { prisma } from 'db';
 import { forbiddenResponse, successResponse } from 'utils/constant';
 
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
 	const id = searchParams.get('id');
 
-	const session = await auth();
+	const session = await getSession();
 
 	if (!session) return NextResponse.json(forbiddenResponse, { status: 403 });
 

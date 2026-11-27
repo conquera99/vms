@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { auth } from 'auth';
+import { getSession } from 'auth';
 import { prisma } from 'db';
 import { forbiddenResponse, stillInUseResponse, successResponse } from 'utils/constant';
 
 export async function POST(request: NextRequest) {
 	const { name } = await request.json();
 
-	const session = await auth();
+	const session = await getSession();
 
 	if (!session) return NextResponse.json(forbiddenResponse, { status: 403 });
 

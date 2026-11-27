@@ -4,7 +4,6 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import axios from 'axios';
-import { useSession } from 'next-auth/react';
 import { UrlObject } from 'url';
 import {
 	AppOutline,
@@ -29,6 +28,8 @@ import {
 
 import Navigation from 'components/navigation';
 import Container from 'components/general/container';
+
+import { authClient } from '../../auth-client';
 
 type CountState = {
 	location: number;
@@ -177,7 +178,7 @@ const Section: FC<{
 };
 
 const AdminHome = () => {
-	const { data: session } = useSession();
+	const { data: session } = authClient.useSession();
 	const permissions = session?.user?.permissions || {};
 	const isSysAdm = session?.user?.id === 'sysadm';
 

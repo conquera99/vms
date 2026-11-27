@@ -65,8 +65,6 @@ const Page = () => {
 
 			axios.get(`/api/admin/user?id=${query.get('id')}`).then((response) => {
 				if (response.data.code === 0) {
-					delete response.data.data.password;
-
 					form.setFieldsValue(response.data.data);
 
 					form.setFieldsValue({ access: response.data.permissions });

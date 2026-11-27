@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { auth } from 'auth';
+import { getSession } from 'auth';
 import { uploadBuffer } from 'utils/cloudinary';
 import { prisma } from 'db';
 import { forbiddenResponse, successResponse } from 'utils/constant';
 
 export async function POST(request: NextRequest) {
-	const session = await auth();
+	const session = await getSession();
 
 	if (!session) return NextResponse.json(forbiddenResponse, { status: 403 });
 

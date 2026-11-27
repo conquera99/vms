@@ -1,85 +1,73 @@
-import NextAuth, { CredentialsSignin } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import dayjs from 'dayjs';
+import { betterAuth } from 'better-auth';
+import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { nextCookies } from 'better-auth/next-js';
+import { customSession, username } from 'better-auth/plugins';
+import { headers } from 'next/headers';
 import bcrypt from 'bcryptjs';
 
-import authConfig from './auth.config';
+import { sysadm } from './auth-sysadm';
+import { prisma } from './db';
+import { publicEmail, SYSADM_ID } from './utils/account';
 
-import { prisma } from 'db';
+const getPermissions = async (userId: string) => {
+	const rows =
+		userId === SYSADM_ID
+			? await prisma.permissions.findMany()
+			: await prisma.userPermissions.findMany({ where: { userId } });
 
-class InvalidPassword extends CredentialsSignin {
-	code = 'password_tidak_sesuai';
-}
+	return Object.fromEntries(rows.map((row) => [row.name, true])) as Record<string, boolean>;
+};
 
-class UserNotFound extends CredentialsSignin {
-	code = 'user_tidak_terdaftar';
-}
-
-export const { handlers, auth, signIn, signOut } = NextAuth({
-	...authConfig,
-	providers: [
-		CredentialsProvider({
-			name: 'credentials',
-			credentials: {
-				username: { label: 'Username', type: 'text', placeholder: 'input username anda' },
-				password: {
-					label: 'Password',
-					type: 'password',
-					placeholder: 'input password anda',
-				},
-			},
-			authorize: async (credentials: Partial<Record<'username' | 'password', unknown>>) => {
-				const username = credentials?.username as string | undefined;
-				const password = credentials?.password as string | undefined;
-
-				if (username === 'sysadm' && password === dayjs().format('MMDD')) {
-					const permissions = await prisma.permissions.findMany();
-
-					const permissionsData: Record<string, boolean> = {};
-
-					for (let i = 0; i < permissions.length; i++) {
-						permissionsData[permissions[i].name] = true;
-					}
-
-					const user = {
-						id: 'sysadm',
-						name: 'System Administrator',
-						username: 'sysadm',
-						email: 'admin@vsg.com',
-						permissions: permissionsData,
-					};
-
-					// Any object returned will be saved in `user` property of the JWT
-					return user;
-				} else {
-					// find in database
-					const user = await prisma.user.findUnique({
-						where: { username },
-					});
-
-					if (user) {
-						if (!bcrypt.compareSync(password || '', user.password)) {
-							throw new InvalidPassword();
-						}
-
-						const permissions = await prisma.userPermissions.findMany({
-							where: { userId: user.id },
-						});
-
-						const permissionsData: Record<string, boolean> = {};
-
-						for (let i = 0; i < permissions.length; i++) {
-							permissionsData[permissions[i].name] = true;
-						}
-
-						return { ...user, permissions: permissionsData };
-					}
-
-					// Returning null signals that the user was not found;
-					// a thrown error puts its code in the redirect URL.
-					throw new UserNotFound();
-				}
-			},
+export const auth = betterAuth({
+	// the NEXTAUTH_* fallbacks keep existing deployments' env vars working
+	secret: process.env.BETTER_AUTH_SECRET || process.env.SECRET || process.env.NEXTAUTH_SECRET,
+	baseURL: process.env.BETTER_AUTH_URL || process.env.NEXTAUTH_URL,
+	database: prismaAdapter(prisma, { provider: 'mysql' }),
+	session: { expiresIn: 60 * 60 * 24 * 30 },
+	emailAndPassword: {
+		enabled: true,
+		disableSignUp: true,
+		// existing password hashes are bcrypt
+		password: {
+			hash: (password) => bcrypt.hash(password, 10),
+			verify: ({ hash, password }) => bcrypt.compare(password, hash),
+		},
+	},
+	// users are managed from /admin/user only
+	disabledPaths: [
+		'/sign-up/email',
+		'/sign-in/email',
+		'/is-username-available',
+		'/update-user',
+		'/change-email',
+		'/change-password',
+		'/delete-user',
+	],
+	plugins: [
+		username({
+			displayUsername: false,
+			usernameNormalization: false,
+			usernameValidator: () => true,
+			minUsernameLength: 1,
+			maxUsernameLength: 25,
 		}),
+		sysadm(),
+		customSession(async ({ user, session }) => {
+			const { username: loginName } = user as typeof user & { username?: string | null };
+
+			return {
+				session,
+				user: {
+					...user,
+					username: user.id === SYSADM_ID ? SYSADM_ID : loginName,
+					email: publicEmail(user.email),
+					permissions: await getPermissions(user.id),
+				},
+			};
+		}),
+		// must stay last
+		nextCookies(),
 	],
 });
+
+export const getSession = async () => auth.api.getSession({ headers: await headers() });

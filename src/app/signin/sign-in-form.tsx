@@ -2,30 +2,44 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { Form } from 'antd';
-import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 
 import Input from 'components/entry/input';
 import Button from 'components/general/button';
 import { RightOutline } from 'components/general/antd-icon';
 
+import { authClient } from '../../auth-client';
+
 const SignInForm = () => {
-	const searchParams = useSearchParams();
-	const errorParam = searchParams?.get('error');
 	const [form] = Form.useForm();
 
 	const [loading, setLoading] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 
-	const onFinish = (values: any) => {
+	const onFinish = async (values: any) => {
 		setLoading(true);
-		signIn('credentials', { username: values.username, password: values.password }).finally(() =>
-			setLoading(false),
-		);
-	};
+		setErrorMessage('');
 
-	const errorMessage = typeof errorParam === 'string' ? errorParam.replace(/_/g, ' ') : '';
+		const { error } = await authClient.signIn.username({
+			username: values.username ?? '',
+			password: values.password ?? '',
+		});
+
+		if (!error) {
+			// full reload so every component picks up the new session
+			// eslint-disable-next-line @next/next/no-location-assign-relative-destination
+			window.location.assign('/');
+			return;
+		}
+
+		setErrorMessage(
+			error.status === 429
+				? 'Terlalu banyak percobaan, coba lagi sebentar'
+				: 'Username atau password salah',
+		);
+		setLoading(false);
+	};
 
 	return (
 		<div className="relative min-h-screen overflow-hidden py-10 sm:px-6 lg:px-8">

@@ -1,6 +1,5 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AppstoreOutline, FolderOutline, PictureOutline, UserOutline } from 'components/general/antd-icon';
@@ -14,6 +13,8 @@ import BaseNavInterface from 'interfaces/navigation';
 
 import Forbidden from 'components/display/forbidden';
 import Footer from 'components/navigation/footer';
+
+import { authClient } from '../../auth-client';
 
 const ACTIVE_TEXT_COLOR = 'text-slate-800';
 const SW_UPDATE_TOAST_ID = 'sw-update-toast';
@@ -72,7 +73,8 @@ const Navigation: FC<BaseNavInterface> = ({
 	hideFooter = true,
 }) => {
 	const router = useRouter();
-	const { data: session, status } = useSession();
+	const { data: session, isPending } = authClient.useSession();
+	const status = isPending ? 'loading' : session ? 'authenticated' : 'unauthenticated';
 	const [installPromptEvent, setInstallPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
 	const [showInstallBanner, setShowInstallBanner] = useState(false);
 

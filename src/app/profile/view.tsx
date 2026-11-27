@@ -1,12 +1,13 @@
 'use client';
 
 import { FC, ReactNode } from 'react';
-import { signOut, useSession } from 'next-auth/react';
 import { LeftOutline, MailOutline, UserContactOutline } from 'components/general/antd-icon';
 
 import Navigation from 'components/navigation';
 import Button from 'components/general/button';
 import Container from 'components/general/container';
+
+import { authClient } from '../../auth-client';
 
 const Desc: FC<{ label: string; value?: string; children?: ReactNode }> = ({
 	label,
@@ -22,12 +23,16 @@ const Desc: FC<{ label: string; value?: string; children?: ReactNode }> = ({
 };
 
 const Profile = () => {
-	const { data: session } = useSession();
+	const { data: session } = authClient.useSession();
 	const profileName = session?.user?.name || 'Pengguna VMS';
 	const username = session?.user?.username || '-';
 	const email = session?.user?.email || '-';
 
-	const onSignOut = () => signOut({ redirect: true, callbackUrl: '/' });
+	const onSignOut = async () => {
+		await authClient.signOut();
+		// eslint-disable-next-line @next/next/no-location-assign-relative-destination
+		window.location.assign('/');
+	};
 
 	return (
 		<Navigation title="VMS: Profile" active="account" hideFooter={false}>

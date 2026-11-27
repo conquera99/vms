@@ -1,18 +1,32 @@
+import { randomUUID } from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 
-import { auth } from 'auth';
+import { getSession } from 'auth';
 import { prisma } from 'db';
 import { forbiddenResponse, successResponse } from 'utils/constant';
+import { placeholderEmail, SYSADM_ID } from 'utils/account';
 
 export async function POST(request: NextRequest) {
 	const { id, name, username, password, email, access } = await request.json();
 
-	const session = await auth();
+	const session = await getSession();
 
 	if (!session) return NextResponse.json(forbiddenResponse, { status: 403 });
 
 	let encryptedPassword = '';
+
+	if (id === SYSADM_ID || username === SYSADM_ID) {
+		return NextResponse.json({ code: 500, message: 'username sysadm tidak dapat digunakan' });
+	}
+
+	if (email) {
+		const emailOwner = await prisma.user.findUnique({ where: { email } });
+
+		if (emailOwner && emailOwner.id !== id) {
+			return NextResponse.json({ code: 500, message: 'email sudah digunakan' });
+		}
+	}
 
 	if (!id && !password) return NextResponse.json({ code: 500, message: 'password wajib diisi' });
 
@@ -25,13 +39,22 @@ export async function POST(request: NextRequest) {
 		const updatedData: Record<string, any> = {
 			name,
 			username,
-			password: undefined,
-			email,
+			email: email || placeholderEmail(id),
 			updatedBy: session.user.id,
 		};
 
 		if (password) {
-			updatedData.password = encryptedPassword;
+			await prisma.account.upsert({
+				where: { providerId_accountId: { providerId: 'credential', accountId: id } },
+				update: { password: encryptedPassword },
+				create: {
+					id: randomUUID(),
+					userId: id,
+					accountId: id,
+					providerId: 'credential',
+					password: encryptedPassword,
+				},
+			});
 		}
 
 		let permissionData = [];
@@ -63,8 +86,24 @@ export async function POST(request: NextRequest) {
 		});
 	}
 
+	const userId = randomUUID();
+
 	const create = await prisma.user.create({
-		data: { name, username, password: encryptedPassword, email, createdBy: session.user.id },
+		data: {
+			id: userId,
+			name,
+			username,
+			email: email || placeholderEmail(userId),
+			createdBy: session.user.id,
+			accounts: {
+				create: {
+					id: randomUUID(),
+					accountId: userId,
+					providerId: 'credential',
+					password: encryptedPassword,
+				},
+			},
+		},
 	});
 
 	return NextResponse.json({ ...successResponse, data: create });
